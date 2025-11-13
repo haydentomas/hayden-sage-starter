@@ -1,0 +1,40 @@
+{
+  // Treat Blade as HTML for syntax highlighting, Emmet, Tailwind etc.
+  "files.associations": {
+    "*.blade.php": "blade"
+  },
+
+  // Let Emmet work in Blade / PHP
+  "emmet.includeLanguages": {
+    "blade": "html",
+    "php": "html"
+  },
+
+  // Tailwind CSS IntelliSense: make sure it runs in these languages
+  "tailwindCSS.includeLanguages": {
+    "blade": "html",
+    "php": "html",
+    "javascript": "javascript",
+    "typescript": "typescriptreact"
+  },
+
+  // Tailwind: allow completions inside strings (class="...")
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+
+  // Use Tailwind’s syntax without VS Code screaming about @import/@source/@theme
+  "css.lint.unknownAtRules": "ignore",
+  "scss.lint.unknownAtRules": "ignore",
+  "less.lint.unknownAtRules": "ignore",
+
+  // (Optional) If you still get weird CSS errors, uncomment this to let Tailwind own CSS:
+  // "css.validate": false,
+
+  // Optional but nice: format Blade/HTML with Prettier if you use it
+  // "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  // Keep problems panel quieter for theme.json internal flag
+  "json.schemas": [],
+  "json.validate.enable": true
+}
