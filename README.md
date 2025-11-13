@@ -1,33 +1,184 @@
-<p align="center">
-  <a href="https://roots.io/sage/"><img alt="Sage" src="https://cdn.roots.io/app/uploads/logo-sage.svg" height="100"></a>
-</p>
+# Hayden Tomas – Custom Sage Starter Theme
 
-<p align="center">
-  <a href="https://packagist.org/packages/roots/sage"><img alt="Packagist Installs" src="https://img.shields.io/packagist/dt/roots/sage?label=projects%20created&colorB=2b3072&colorA=525ddc&style=flat-square"></a>
-  <a href="https://github.com/roots/sage/actions/workflows/main.yml"><img alt="Build Status" src="https://img.shields.io/github/actions/workflow/status/roots/sage/main.yml?branch=main&logo=github&label=CI&style=flat-square"></a>
-  <a href="https://bsky.app/profile/roots.dev"><img alt="Follow roots.dev on Bluesky" src="https://img.shields.io/badge/follow-@roots.dev-0085ff?logo=bluesky&style=flat-square"></a>
-  <a href="https://twitter.com/rootswp"><img alt="Follow Roots" src="https://img.shields.io/badge/follow%20@rootswp-1da1f2?logo=twitter&logoColor=ffffff&message=&style=flat-square"></a>
-  <a href="https://github.com/sponsors/roots"><img src="https://img.shields.io/badge/sponsor%20roots-525ddc?logo=github&style=flat-square&logoColor=ffffff&message=" alt="Sponsor Roots"></a>
-</p>
+This is my custom WordPress theme built using **Sage (Roots)**, **Laravel Blade**, **Vite**, and **Tailwind CSS**.  
+It’s designed to be a clean starting point for professional WordPress development with modern tooling, hot-reload, Blade templating, and a fully extendable structure.
 
-# Sage
+This project serves as my personal Sage starter that I can clone on any machine — including my main PC and home setup — and rebuild with Composer and NPM.
 
-**Advanced hybrid WordPress starter theme with Laravel Blade and Tailwind CSS**
+---
 
-- 🔧 Clean, efficient theme templating with Laravel Blade
-- ⚡️ Modern front-end development workflow powered by Vite
-- 🎨 Out of the box support for Tailwind CSS
-- 🚀 Harness the power of Laravel with [Acorn integration](https://github.com/roots/acorn)
-- 📦 Block editor support built-in
+## 🚀 Features
 
-Sage brings proper PHP templating and modern JavaScript tooling to WordPress themes. Write organized, component-based code using Laravel Blade, enjoy instant builds and CSS hot-reloading with Vite, and leverage Laravel's robust feature set through Acorn.
+- **Sage (Roots) dev-main**
+- **Laravel Blade templating**
+- **Vite 7 with hot reload**
+- **Tailwind CSS pre-configured**
+- **Blade components, layouts, controllers**
+- Clean folder structure for scalable WordPress development
+- Custom `.gitignore` to keep repo clean  
+  (`vendor/`, `node_modules/`, `.env`, `.vite`, public build)
 
-[Read the docs to get started](https://roots.io/sage/docs/installation/)
+---
 
-## Support us
+## 🖥️ Requirements
 
-We're dedicated to pushing modern WordPress development forward through our open source projects, and we need your support to keep building. You can support our work by purchasing [Radicle](https://roots.io/radicle/), our recommended WordPress stack, or by [sponsoring us on GitHub](https://github.com/sponsors/roots). Every contribution directly helps us create better tools for the WordPress ecosystem.
+Ensure the following are installed:
 
-### Sponsors
+- **PHP 8.2+ (Non-thread-safe NTS build)**  
+  ✔️ *I use:* `php-8.2.29-nts-Win32-vs16-x64.zip`  
+  > I keep a copy of this ZIP so I can re-create the PHP installation at home.  
+  Extract it to `C:\php\`, add to PATH, and copy in your `php.ini`.
 
-<a href="https://carrot.com/"><img src="https://cdn.roots.io/app/uploads/carrot.svg" alt="Carrot" width="120" height="90"></a> <a href="https://wordpress.com/"><img src="https://cdn.roots.io/app/uploads/wordpress.svg" alt="WordPress.com" width="120" height="90"></a> <a href="https://www.itineris.co.uk/"><img src="https://cdn.roots.io/app/uploads/itineris.svg" alt="Itineris" width="120" height="90"></a> <a href="https://kinsta.com/?kaid=OFDHAJIXUDIV"><img src="https://cdn.roots.io/app/uploads/kinsta.svg" alt="Kinsta" width="120" height="90"></a> <a href="https://40q.agency/"><img src="https://cdn.roots.io/app/uploads/40q.svg" alt="40Q" width="120" height="90"></a> <a href="https://bonsai.so/"><img src="https://cdn.roots.io/app/uploads/bonsai.svg" alt="Bonsai" width="120" height="90"></a>
+- **Composer 2**  
+  Composer 1 is deprecated and will throw warnings.
+
+- **Node.js 18+ / NPM 9+**
+
+- **Working local environment**  
+  e.g. Laragon, LocalWP, DDEV, XAMPP, or custom Bedrock-style setup.
+
+---
+
+## 📦 Installation (New Machine Setup)
+
+Clone the theme into your WordPress installation:
+
+```bash
+cd wp-content/themes
+git clone https://github.com/YOUR_USERNAME/hayden-sage-starter.git haydentomas
+cd haydentomas
+```
+
+### 1. Install PHP dependencies:
+
+```bash
+composer install
+```
+
+### 2. Install Node dependencies:
+
+```bash
+npm install
+```
+
+### 3. Create your `.env` file:
+
+```bash
+APP_URL=http://your-local-domain.test
+```
+
+Example:  
+`APP_URL=http://sage.local`
+
+### 4. Start Vite (development mode):
+
+```bash
+npm run dev
+```
+
+If Vite connects, you’ll see:
+
+```
+✓ Vite connected
+✓ Hot reload active
+```
+
+If not, reload the browser — HMR still works even without the console message.
+
+---
+
+## 🛠️ Build for Production
+
+```bash
+npm run build
+```
+
+This outputs files into:
+
+```
+public/build/
+```
+
+*(This folder is ignored by Git.)*
+
+---
+
+## 🔄 Typical Workflow
+
+1. Clone theme or pull updates  
+2. Run `composer install`  
+3. Run `npm install`  
+4. Run `npm run dev` for hot reload  
+5. Develop normally (Blade, Tailwind, PHP templates)  
+6. Push changes to GitHub  
+7. Deploy using `npm run build` + normal WordPress deployment
+
+---
+
+## 📁 File Structure Overview
+
+```
+haydentomas/
+│
+├── app/                 # Sage controllers, config, setup
+├── resources/
+│   ├── css/             # Tailwind, app.css, editor.css
+│   ├── js/              # JavaScript
+│   ├── views/           # Blade templates (layouts, partials, single, etc.)
+│   └── images/
+│
+├── public/build/        # Vite compiled assets (ignored in Git)
+├── .env                 # Local dev URL (ignored in Git)
+├── composer.json
+├── package.json
+├── vite.config.js
+└── functions.php
+```
+
+---
+
+## 🧹 Git Ignore Rules
+
+The repo excludes:
+
+```
+vendor/
+node_modules/
+public/build/
+.vite/
+.env
+```
+
+This ensures the repo stays clean and installable.
+
+---
+
+## 📦 PHP Installation Note (Important)
+
+On any new machine, install the exact PHP build I use:
+
+**php-8.2.29-nts-Win32-vs16-x64.zip**
+
+1. Extract to: `C:\php\`
+2. Copy over your existing `php.ini` (or configure a new one)
+3. Add `C:\php\` to PATH
+4. Ensure these extensions are enabled:
+   - `extension=fileinfo`
+   - `extension=openssl`
+   - `extension=mbstring`
+   - `extension=exif`
+
+This ensures Sage, Composer, and Acorn run perfectly.
+
+---
+
+## 📬 Author
+
+**Hayden Tomas**  
+Modern WordPress & Laravel-based theme development with Tailwind, Blade, and AI-assisted tooling.
+
+---
+
+## 📝 License
+
+MIT — feel free to extend or fork this starter theme for your own projects.
