@@ -1,0 +1,14 @@
+@theme {
+  /* Breakpoints */
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 976px;
+
+  /* Colours */
+  --color-primary: #4c00b0;
+  --color-secondary: #999999;
+
+  /* Fonts */
+  --font-sans: "Cabin", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Merriweather", Georgia, "Times New Roman", serif;
+}
