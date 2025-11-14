@@ -1,4 +1,6 @@
-<header class="banner">
+<header class="banner bg-amber-500 ">
+<div class="max-w-7xl mx-auto px-4 py-4">
+    <h1>I am the header</h1>
   <a class="brand" href="{{ home_url('/') }}">
     {!! $siteName !!}
   </a>
@@ -8,4 +10,5 @@
       {!! wp_nav_menu(['theme_location' => 'primary_navigation', 'menu_class' => 'nav', 'echo' => false]) !!}
     </nav>
   @endif
+</div>
 </header>
