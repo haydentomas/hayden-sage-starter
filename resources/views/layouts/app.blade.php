@@ -46,8 +46,8 @@
       {{-- Global footer --}}
       @include('sections.footer')
     </div>
-    <script src="{{ get_theme_file_uri('public/js/smartmenus.browser.min.js') }}" defer></script>
-    <script src="{{ get_theme_file_uri('public/js/smartmenus-init.js') }}" defer></script>
+<script src="{{ get_theme_file_uri('resources/js/smartmenus.browser.min.js') }}" defer></script>
+<script src="{{ get_theme_file_uri('resources/js/smartmenus-init.js') }}" defer></script>
 
     @php(do_action('get_footer'))
     @php(wp_footer())
