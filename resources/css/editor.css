@@ -1,1 +1,66 @@
-@import "tailwindcss";
+@import "tailwindcss" theme(static);
+@import "./fonts.css";
+
+/* Same content sources as app.css so we get the same utilities */
+@source "../views/";
+@source "../../app/";
+
+/* Scan your custom plugins so Tailwind sees Fancoolio block classes */
+@source "../../../../plugins/fancoolo/**/*.{php,html,js,ts,vue,twig}";
+@source "../../../../plugins/fancoolo-blocks/**/*.{php,html,js,ts,vue,twig}";
+
+/* Shared design tokens */
+@theme {
+  --color-primary: #f97316;
+}
+
+@layer base {
+  /* Body text in editor iframe = Cabin */
+  body.block-editor-iframe__body.editor-styles-wrapper {
+    font-family: 'Cabin', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    @apply text-base leading-relaxed text-slate-900;
+  }
+
+  /* Headings in editor iframe = Merriweather */
+  body.block-editor-iframe__body.editor-styles-wrapper h1,
+  body.block-editor-iframe__body.editor-styles-wrapper h2,
+  body.block-editor-iframe__body.editor-styles-wrapper h3,
+  body.block-editor-iframe__body.editor-styles-wrapper h4,
+  body.block-editor-iframe__body.editor-styles-wrapper h5,
+  body.block-editor-iframe__body.editor-styles-wrapper h6 {
+    font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
+    @apply font-bold text-slate-900 mb-4;
+  }
+
+  /* Basic heading scale (tweak as you like) */
+  body.block-editor-iframe__body.editor-styles-wrapper h1 { @apply text-4xl; }
+  body.block-editor-iframe__body.editor-styles-wrapper h2 { @apply text-3xl; }
+  body.block-editor-iframe__body.editor-styles-wrapper h3 { @apply text-2xl; }
+  body.block-editor-iframe__body.editor-styles-wrapper h4 { @apply text-xl; }
+  body.block-editor-iframe__body.editor-styles-wrapper h5 { @apply text-lg; }
+  body.block-editor-iframe__body.editor-styles-wrapper h6 { @apply text-base; }
+
+  body.block-editor-iframe__body.editor-styles-wrapper p {
+    @apply mb-4;
+  }
+
+  body.block-editor-iframe__body.editor-styles-wrapper a {
+    @apply text-primary underline-offset-2;
+  }
+
+  body.block-editor-iframe__body.editor-styles-wrapper a:hover {
+    @apply underline;
+  }
+}
+
+/* Make core Button blocks look like your front-end buttons */
+@layer components {
+  .editor-styles-wrapper .wp-block-button__link {
+    @apply inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-medium
+           bg-primary text-white no-underline
+           transition-all duration-150
+           hover:opacity-90
+           focus-visible:outline-none focus-visible:ring-2
+           focus-visible:ring-offset-2 focus-visible:ring-primary;
+  }
+}

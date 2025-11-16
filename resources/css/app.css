@@ -1,32 +1,32 @@
+/* -----------------------------------------------------
+   Tailwind imports (TW4 syntax)
+----------------------------------------------------- */
 @import "tailwindcss" theme(static);
+
+/* Your custom CSS files */
 @import "./smartmenus.css";
 @import "./fonts.css";
-@source "../views/";
-@source "../../app/";
 @import "./parts/theme.css";
 
+@theme {
+  --color-primary: #f97316;
+}
 
-/* --- Explicitly scan your two custom plugin folders --- */
+/* Tell Tailwind to scan theme + plugin folders */
+@source "../views/";
+@source "../../app/";
+
+/* Plugins */
 @source "../../../../plugins/fancoolo/**/*.{php,html,js,ts,vue,twig}";
 @source "../../../../plugins/fancoolo-blocks/**/*.{php,html,js,ts,vue,twig}";
 
 
-
+/* -----------------------------------------------------
+   Base Styles (global typography & structure)
+----------------------------------------------------- */
 @layer base {
   body {
-    @apply font-sans;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-serif;
-  }
-}
-
-
-
-@layer base {
-  body {
-    @apply font-sans text-base leading-relaxed text-white/90;
+    @apply font-sans text-base leading-relaxed text-white/90 bg-black;
   }
 
   h1, h2, h3, h4, h5, h6 {
