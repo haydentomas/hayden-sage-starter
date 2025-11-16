@@ -8,6 +8,7 @@ const config: Config = {
           DEFAULT: '#1f2933',   // primary brand color
           light: '#3b4a5a',
           dark: '#111827',
+          
         },
         accent: {
           DEFAULT: '#f97316',
@@ -16,6 +17,7 @@ const config: Config = {
 
         // Needed for text-primary, bg-primary, border-primary, etc.
         primary: '#f97316',
+        weirdtest: '#33ccff',
       },
 
       fontFamily: {
