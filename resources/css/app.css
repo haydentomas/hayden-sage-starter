@@ -6,6 +6,12 @@
 @import "./parts/theme.css";
 
 
+/* --- Explicitly scan your two custom plugin folders --- */
+@source "../../../../plugins/fancoolo/**/*.{php,html,js,ts,vue,twig}";
+@source "../../../../plugins/fancoolo-blocks/**/*.{php,html,js,ts,vue,twig}";
+
+
+
 @layer base {
   body {
     @apply font-sans;
