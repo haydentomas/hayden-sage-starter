@@ -4,7 +4,7 @@
   font-family: 'Merriweather';
   font-style: normal;
   font-weight: 400;
-  src: url('../fonts/merriweather-v32-latin-regular.woff2') format('woff2');
+  src: url('/wp-content/themes/hayden-sage-starter/resources/fonts/merriweather-v32-latin-regular.woff2') format('woff2');
 }
 
 /* Merriweather – bold */
@@ -13,7 +13,7 @@
   font-family: 'Merriweather';
   font-style: normal;
   font-weight: 700;
-  src: url('../fonts/merriweather-v32-latin-700.woff2') format('woff2');
+  src: url('/wp-content/themes/hayden-sage-starter/resources/fonts/merriweather-v32-latin-700.woff2') format('woff2');
 }
 
 /* Cabin – regular */
@@ -22,7 +22,7 @@
   font-family: 'Cabin';
   font-style: normal;
   font-weight: 400;
-  src: url('../fonts/cabin-v34-latin-regular.woff2') format('woff2');
+  src: url('/wp-content/themes/hayden-sage-starter/resources/fonts/cabin-v34-latin-regular.woff2') format('woff2');
 }
 
 /* Cabin – bold */
@@ -31,5 +31,5 @@
   font-family: 'Cabin';
   font-style: normal;
   font-weight: 700;
-  src: url('../fonts/cabin-v34-latin-700.woff2') format('woff2');
+  src: url('/wp-content/themes/hayden-sage-starter/resources/fonts/cabin-v34-latin-700.woff2') format('woff2');
 }
