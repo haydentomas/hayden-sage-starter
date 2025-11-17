@@ -1,0 +1,201 @@
+/* ------------------------------------------------------------------
+   SmartMenus × BBI theme overrides
+   - Maps SmartMenus design tokens to our Tailwind @theme tokens
+   - Keeps vendor file intact and overridden via cascade
+------------------------------------------------------------------ */
+
+/* Base colour mapping for all nav modes (desktop + mobile) */
+.sm-navbar {
+  /* hook SmartMenus palette into our theme tokens */
+  --sm-bg: var(--color-surface);
+  --sm-bg-alt: var(--color-surface-alt);
+  --sm-bg-soft: rgba(15, 23, 42, 0.6);
+
+  --sm-text: var(--color-body);
+  --sm-text-alt: var(--color-body);
+  --sm-text-disabled: rgba(148, 163, 184, 0.6);
+
+  --sm-brand: var(--color-primary);
+  --sm-brand-contrast: var(--color-surface);
+  --sm-accent: var(--color-primary-soft);
+  --sm-accent-contrast: var(--color-surface);
+
+  --sm-separator: rgba(148, 163, 184, 0.25);
+  --sm-border: rgba(15, 23, 42, 0.6);
+
+  --sm-box-shadow: rgba(0, 0, 0, 0.45);
+  --sm-text-shadow: none;
+
+  --sm-font-family: var(--font-sans);
+}
+
+/* --------------------------------------------------------------
+   MOBILE (collapsible nav < 768px)
+-------------------------------------------------------------- */
+@media (max-width: 767.98px) {
+  .sm-navbar {
+    /* collapsible bar bg/colour (override vendor light look) */
+    --sm-collapsible-navbar-bg: var(--color-surface);
+    --sm-collapsible-navbar-color: var(--color-body);
+
+    --sm-collapsible-nav-link-hover-bg: rgba(249, 115, 22, 0.16);
+    --sm-collapsible-nav-link-hover-color: var(--color-body);
+
+    --sm-collapsible-nav-link-active-bg: var(--color-primary);
+    --sm-collapsible-nav-link-active-color: var(--color-surface);
+
+    --sm-collapsible-sub-bg: var(--color-surface-alt);
+    --sm-collapsible-sub-first-level-bg: var(--color-surface-alt);
+    --sm-collapsible-sub-link-hover-bg: rgba(249, 115, 22, 0.16);
+    --sm-collapsible-sub-link-hover-color: var(--color-body);
+  }
+
+  .sm-nav-link,
+  .sm-sub-link {
+    /* ensure links inherit our font + colour */
+    font-family: var(--font-sans);
+    color: var(--color-body);
+  }
+
+  .sm-nav-link:hover,
+  .sm-sub-link:hover {
+    text-decoration: none;
+  }
+}
+
+/* --------------------------------------------------------------
+   DESKTOP (dropdown nav ≥ 768px)
+-------------------------------------------------------------- */
+@media (min-width: 768px) {
+  .sm-navbar {
+    /* navbar + dropdown colours */
+    --sm-dropdowns-navbar-bg: var(--color-surface);
+    --sm-dropdowns-navbar-color: var(--color-body);
+
+    --sm-dropdowns-sub-bg: var(--color-surface-alt);
+    --sm-dropdowns-sub-border-color: rgba(15, 23, 42, 0.7);
+    --sm-dropdowns-sub-box-shadow: 0 18px 45px var(--sm-box-shadow);
+
+    --sm-dropdowns-nav-link-hover-bg: rgba(249, 115, 22, 0.16);
+    --sm-dropdowns-nav-link-hover-color: var(--color-body);
+
+    --sm-dropdowns-nav-link-active-bg: var(--color-primary);
+    --sm-dropdowns-nav-link-active-color: var(--color-surface);
+
+    --sm-dropdowns-sub-link-hover-bg: rgba(249, 115, 22, 0.16);
+    --sm-dropdowns-sub-link-hover-color: var(--color-body);
+
+    --sm-dropdowns-sub-link-active-bg: var(--color-primary);
+    --sm-dropdowns-sub-link-active-color: var(--color-surface);
+
+    border-color: var(--sm-dropdowns-navbar-border-color);
+    background: var(--sm-dropdowns-navbar-bg);
+    color: var(--sm-dropdowns-navbar-color);
+  }
+
+  /* Main top-level links */
+  .sm-nav-link {
+    grid-area: link/link/link/link-split-toggler;
+    border-radius: var(--sm-dropdowns-nav-link-border-radius);
+    padding: var(--sm-dropdowns-nav-link-padding-y)
+      var(--sm-dropdowns-nav-link-padding-x);
+    background: transparent;
+    color: var(--sm-dropdowns-nav-link-color);
+    font-family: var(--font-sans);
+    font-size: var(--sm-font-size);
+    font-weight: var(--sm-dropdowns-nav-link-font-weight);
+    line-height: var(--sm-line-height);
+    text-decoration: none;
+    transition: background 150ms ease, color 150ms ease;
+  }
+
+  /* Hover / active for main links */
+  @media (hover: hover) and (pointer: fine) {
+    .sm-nav-link:hover {
+      background: var(--color-primary);
+      color: var(--color-surface);
+    }
+  }
+
+  .sm-nav-link:active {
+    background: var(--color-primary);
+    color: var(--color-surface);
+  }
+
+  .sm-nav-link.sm-selected {
+    background: var(--color-primary-soft);
+    color: var(--color-surface);
+    font-weight: 600;
+  }
+
+  /* Dropdown items */
+  .sm-sub-link {
+    grid-area: link/link/link/link-split-toggler;
+    border-radius: var(--sm-dropdowns-sub-link-border-radius);
+    padding: var(--sm-dropdowns-sub-link-padding-y)
+      var(--sm-dropdowns-sub-link-padding-x);
+    background: transparent;
+    color: var(--sm-dropdowns-sub-link-color);
+    font-family: var(--font-sans);
+    font-size: var(--sm-font-size-small);
+    font-weight: var(--sm-dropdowns-sub-link-font-weight);
+    line-height: var(--sm-line-height);
+    text-decoration: none;
+    transition: background 150ms ease, color 150ms ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .sm-sub-link:hover {
+      background: rgba(249, 115, 22, 0.16);
+      color: var(--color-body);
+    }
+  }
+
+  .sm-sub-link:active,
+  .sm-sub-link.sm-selected {
+    background: var(--color-primary);
+    color: var(--color-surface);
+    font-weight: 600;
+  }
+
+  /* CTA button in nav – orange pill on the right */
+  .cta-btn a {
+    grid-area: link/link/link/link-split-toggler;
+    border-radius: 9999px;
+    padding: var(--sm-dropdowns-nav-link-padding-y)
+      var(--sm-dropdowns-nav-link-padding-x);
+    background: var(--color-primary);
+    color: var(--color-surface);
+    font-family: var(--font-sans);
+    font-size: var(--sm-font-size);
+    font-weight: 600;
+    line-height: var(--sm-line-height);
+    text-decoration: none;
+    margin-left: 1rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    transition: background 150ms ease, color 150ms ease,
+      box-shadow 150ms ease, transform 150ms ease;
+  }
+
+  .cta-btn a:hover {
+    background: var(--color-primary-soft);
+    color: var(--color-surface);
+    transform: translateY(-1px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  }
+
+  .cta-btn a:active {
+    transform: translateY(0);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* --------------------------------------------------------------
+   Submenu width tweak (unchanged from your last snippet)
+-------------------------------------------------------------- */
+@media (min-width: 768px) {
+  .sm-navbar .sm-sub {
+    min-width: unset !important;
+    width: max-content !important;
+  }
+}

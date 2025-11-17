@@ -9,7 +9,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
   </head>
 
-  <body @php(body_class('bg-slate-950 text-slate-100 antialiased'))>
+  <body @php(body_class(' antialiased'))>
     @php(wp_body_open())
     @php(do_action('get_header'))
 
