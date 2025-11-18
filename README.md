@@ -182,3 +182,5 @@ Modern WordPress & Laravel-based theme development with Tailwind, Blade, and AI-
 ## 📝 License
 
 MIT — feel free to extend or fork this starter theme for your own projects.
+
+Thanks!
