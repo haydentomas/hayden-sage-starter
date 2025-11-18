@@ -1,7 +1,7 @@
 # Hayden Tomas – Custom Sage Starter Theme
 
 This is my custom WordPress theme built using **Sage (Roots)**, **Laravel Blade**, **Vite**, and **Tailwind CSS**.  
-It’s designed to be a clean starting point for professional WordPress development with modern tooling, hot-reload, Blade templating, and a fully extendable structure.
+It’s designed to be a clean starting point for professional WordPress development with modern tooling, hot reload, Blade templating, and a fully extendable structure.
 
 This project serves as my personal Sage starter that I can clone on any machine — including my main PC and home setup — and rebuild with Composer and NPM.
 
@@ -76,15 +76,6 @@ Example:
 npm run dev
 ```
 
-If Vite connects, you’ll see:
-
-```
-✓ Vite connected
-✓ Hot reload active
-```
-
-If not, reload the browser — HMR still works even without the console message.
-
 ---
 
 ## 🛠️ Build for Production
@@ -99,8 +90,6 @@ This outputs files into:
 public/build/
 ```
 
-*(This folder is ignored by Git.)*
-
 ---
 
 ## 🔄 Typical Workflow
@@ -108,38 +97,84 @@ public/build/
 1. Clone theme or pull updates  
 2. Run `composer install`  
 3. Run `npm install`  
-4. Run `npm run dev` for hot reload  
-5. Develop normally (Blade, Tailwind, PHP templates)  
-6. Push changes to GitHub  
-7. Deploy using `npm run build` + normal WordPress deployment
+4. Run `npm run dev`  
+5. Develop normally  
+6. Push changes  
+7. Deploy using production build instructions below
 
 ---
 
-## 📁 File Structure Overview
+## 🚀 Deployment Guide
+
+This is the **exact deployment process** for taking this Sage theme from local → live server.
+
+### 1. Build production assets
+
+```bash
+npm run build
+```
+
+### 2. Install production PHP dependencies
+
+```bash
+composer install --no-dev --optimize-autoloader
+```
+
+### 3. (Optional) Remove node_modules
+
+```powershell
+Remove-Item -Recurse -Force node_modules
+```
+
+### 4. Zip the theme folder
+
+Include:
+
+- `app/`  
+- `resources/`  
+- `public/`  
+- `vendor/`  
+- PHP files  
+- composer.json / composer.lock  
+
+Exclude:
+
+- node_modules  
+- .git  
+- .env  
+- .vite  
+
+### 5. Upload to server
+
+Upload the ZIP to:
 
 ```
-haydentomas/
-│
-├── app/                 # Sage controllers, config, setup
-├── resources/
-│   ├── css/             # Tailwind, app.css, editor.css
-│   ├── js/              # JavaScript
-│   ├── views/           # Blade templates (layouts, partials, single, etc.)
-│   └── images/
-│
-├── public/build/        # Vite compiled assets (ignored in Git)
-├── .env                 # Local dev URL (ignored in Git)
-├── composer.json
-├── package.json
-├── vite.config.js
-└── functions.php
+wp-content/themes/
 ```
+
+Extract it, then activate the theme in WordPress admin.
+
+### 6. Finalise
+
+Visit:
+
+**Settings → Permalinks → Save**
+
+---
+
+## 📦 Optional: Full Site Migration (All-in-One WP Migration)
+
+Use AIO Migration only for:
+
+- Database  
+- Uploads  
+- ACF data  
+
+Upload the theme separately to avoid overwriting it.
 
 ---
 
 ## 🧹 Git Ignore Rules
-
-The repo excludes:
 
 ```
 vendor/
@@ -149,38 +184,14 @@ public/build/
 .env
 ```
 
-This ensures the repo stays clean and installable.
-
----
-
-## 📦 PHP Installation Note (Important)
-
-On any new machine, install the exact PHP build I use:
-
-**php-8.2.29-nts-Win32-vs16-x64.zip**
-
-1. Extract to: `C:\php\`
-2. Copy over your existing `php.ini` (or configure a new one)
-3. Add `C:\php\` to PATH
-4. Ensure these extensions are enabled:
-   - `extension=fileinfo`
-   - `extension=openssl`
-   - `extension=mbstring`
-   - `extension=exif`
-
-This ensures Sage, Composer, and Acorn run perfectly.
-
 ---
 
 ## 📬 Author
 
-**Hayden Tomas**  
-Modern WordPress & Laravel-based theme development with Tailwind, Blade, and AI-assisted tooling.
+**Hayden Tomas**
 
 ---
 
 ## 📝 License
 
-MIT — feel free to extend or fork this starter theme for your own projects.
-
-Thanks!
+MIT
