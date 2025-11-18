@@ -1,4 +1,4 @@
-<header class="header border-b border-white">
+<header class="site-header header border-b border-white">
   <div class="max-w-7xl mx-auto px-4 py-4">
     <nav id="navbar1" class="sm-navbar">
       <div class="flex items-center space-x-2">

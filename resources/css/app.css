@@ -23,7 +23,7 @@
 ----------------------------------------------------- */
 @layer base {
   body {
-    @apply font-serif text-base leading-relaxed text-body bg-surface;
+    @apply font-serif text-lg leading-relaxed text-body bg-surface;
   }
 
   h1,
@@ -59,3 +59,12 @@
 
 
 
+.site {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.site-content {
+  flex: 1;
+}

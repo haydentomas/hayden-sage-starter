@@ -30,4 +30,9 @@
 
   --color-primary-hover-soft: rgba(249, 115, 22, 0.16);
   --color-border-soft: rgba(148, 163, 184, 0.25);
+
+
+    --color-surface-soft: rgba(15, 23, 42, 0.6);
+  --color-surface-border-strong: rgba(15, 23, 42, 0.7);
+  --shadow-strong: 0 18px 45px rgba(0, 0, 0, 0.45);
 }

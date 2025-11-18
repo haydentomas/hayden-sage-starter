@@ -9,7 +9,7 @@
   /* hook SmartMenus palette into our theme tokens */
   --sm-bg: var(--color-surface);
   --sm-bg-alt: var(--color-surface-alt);
-  --sm-bg-soft: rgba(15, 23, 42, 0.6);
+  --sm-bg-soft: var(--color-surface-soft);
 
   --sm-text: var(--color-body);
   --sm-text-alt: var(--color-body);
@@ -21,9 +21,9 @@
   --sm-accent-contrast: var(--color-surface);
 
   --sm-separator: rgba(148, 163, 184, 0.25);
-  --sm-border: rgba(15, 23, 42, 0.6);
+  --sm-border: var(--color-border-soft);
 
-  --sm-box-shadow: rgba(0, 0, 0, 0.45);
+ --sm-box-shadow: var(--shadow-strong);
   --sm-text-shadow: none;
 
   --sm-font-family: var(--font-sans);
@@ -73,7 +73,7 @@
     --sm-dropdowns-navbar-color: var(--color-body);
 
     --sm-dropdowns-sub-bg: var(--color-surface-alt);
-    --sm-dropdowns-sub-border-color: rgba(15, 23, 42, 0.7);
+   --sm-dropdowns-sub-border-color: var(--color-surface-border-strong);
     --sm-dropdowns-sub-box-shadow: 0 18px 45px var(--sm-box-shadow);
 
     --sm-dropdowns-nav-link-hover-bg: rgba(249, 115, 22, 0.16);

@@ -60,5 +60,17 @@ collect(['setup', 'filters'])
     });
 
 
+function bbi_register_block_categories( $categories, $post ) {
+    return array_merge(
+        $categories,
+        [
+            [
+                'slug'  => 'bbi-blocks',
+                'title' => __( 'BBI Blocks', 'bbi' ),
+                'icon'  => null,
+            ],
+        ]
+    );
+}
+add_filter( 'block_categories_all', 'bbi_register_block_categories', 10, 2 );
 
-    

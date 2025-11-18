@@ -10,7 +10,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
   </head>
 
-  <body @php(body_class('bg-surface text-body antialiased'))>
+  <body @php(body_class('site bg-surface text-body antialiased'))>
     @php(wp_body_open())
     @php(do_action('get_header'))
 
@@ -23,9 +23,13 @@
       <x-nav.primary />
 
       {{-- Main content slot --}}
-      <main id="main" class=" max-w-7xl mx-auto px-4 py-4 pt-10 pb-10">
-        {{ $slot }}
-      </main>
+<div class="site-content">
+      <main id="main">
+      <div class="max-w-7xl mx-auto px-4 py-4">
+  {{ $slot }}
+      </div>
+</main>
+</div>
 
       {{-- Site footer (wraps sections.footer) --}}
       <x-footer />

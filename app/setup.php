@@ -153,3 +153,14 @@ add_action('widgets_init', function () {
         'id' => 'sidebar-footer',
     ] + $config);
 });
+
+
+add_filter('block_categories_all', function ($categories, $post) {
+    $categories[] = [
+        'slug'  => 'bbi-blocks',
+        'title' => __('BBI Blocks', 'sage'), // or your textdomain
+        'icon'  => null,
+    ];
+
+    return $categories;
+}, 10, 2);
