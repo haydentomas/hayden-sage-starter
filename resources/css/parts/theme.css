@@ -27,4 +27,7 @@
   /* Radius + Shadows */
   --radius-card: 1rem;
   --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.15);
+
+  --color-primary-hover-soft: rgba(249, 115, 22, 0.16);
+  --color-border-soft: rgba(148, 163, 184, 0.25);
 }
