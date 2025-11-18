@@ -26,8 +26,10 @@
       }
     },
     "spacing": {
-      "padding": true,
-      "units": ["px", "%", "em", "rem", "vw", "vh"]
+      "padding": false,
+      "margin": false,
+      "blockGap": false,
+      "units": ["rem"]
     },
     "typography": {
       "defaultFontSizes": false,
