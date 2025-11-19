@@ -164,3 +164,35 @@ add_filter('block_categories_all', function ($categories, $post) {
 
     return $categories;
 }, 10, 2);
+
+
+add_action('customize_register', function (\WP_Customize_Manager $wp_customize) {
+    // Section for header options
+    $wp_customize->add_section('hayden_header_section', [
+        'title'       => __('Header Layout', 'hayden'),
+        'description' => __('Choose the layout style for the main header.', 'hayden'),
+        'priority'    => 30,
+    ]);
+
+    // Setting: header layout
+    $wp_customize->add_setting('hayden_header_layout', [
+        'default'           => 'default',
+        'transport'         => 'refresh',
+        'sanitize_callback' => function ($value) {
+            $allowed = ['default', 'logo-top'];
+            return in_array($value, $allowed, true) ? $value : 'default';
+        },
+    ]);
+
+    // Control: dropdown/select
+    $wp_customize->add_control('hayden_header_layout_control', [
+        'label'    => __('Header layout style', 'hayden'),
+        'section'  => 'hayden_header_section',
+        'settings' => 'hayden_header_layout',
+        'type'     => 'select',
+        'choices'  => [
+            'default'  => __('Default – logo left, nav right', 'hayden'),
+            'logo-top' => __('Logo top, nav beneath', 'hayden'),
+        ],
+    ]);
+});
