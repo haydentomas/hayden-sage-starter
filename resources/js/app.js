@@ -14,29 +14,38 @@ import.meta.glob([
 
 
 document.addEventListener('DOMContentLoaded', () => {
-  const buttons = document.querySelectorAll('.filter-btn');
-  const cards   = Array.from(document.querySelectorAll('.project-card'));
+  // Only buttons that have a data-filter attribute are real filters
+  const buttons     = document.querySelectorAll('.filter-btn[data-filter]');
+  const cards       = Array.from(document.querySelectorAll('.project-card'));
   const loadMoreBtn = document.getElementById('projects-load-more');
-  const PAGE_SIZE = 6;
+  const PAGE_SIZE   = 6;
 
   if (!cards.length) return;
 
   let currentFilter = 'all';
   let visibleCount  = PAGE_SIZE;
 
-  function applyFilter() {
-    // Which cards match the current filter?
-    const matching = cards.filter(card => {
+  function getMatchingCards() {
+    return cards.filter(card => {
       const tech = card.dataset.tech
         ? card.dataset.tech.split(' ').filter(Boolean)
         : [];
       return currentFilter === 'all' || tech.includes(currentFilter);
     });
+  }
 
-    // Hide everything
+  function updateUI() {
+    const matching = getMatchingCards();
+
+    // Clamp visibleCount so we never go past total
+    if (visibleCount > matching.length) {
+      visibleCount = matching.length;
+    }
+
+    // Hide all cards
     cards.forEach(card => card.classList.add('hidden'));
 
-    // Show only first N matching
+    // Show only first N matching cards
     matching.slice(0, visibleCount).forEach(card => {
       card.classList.remove('hidden');
     });
@@ -44,14 +53,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Toggle Load More button
     if (loadMoreBtn) {
       if (matching.length > visibleCount) {
-        loadMoreBtn.classList.remove('hidden');
+        loadMoreBtn.style.display = 'inline-flex';
       } else {
-        loadMoreBtn.classList.add('hidden');
+        loadMoreBtn.style.display = 'none';
       }
     }
   }
 
-  // Filter button click
+  // Filter chip click
   buttons.forEach(btn => {
     btn.addEventListener('click', () => {
       const filter = btn.dataset.filter || 'all';
@@ -61,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
       buttons.forEach(b => b.classList.remove('is-active'));
       btn.classList.add('is-active');
 
-      applyFilter();
+      updateUI();
     });
   });
 
@@ -69,10 +78,10 @@ document.addEventListener('DOMContentLoaded', () => {
   if (loadMoreBtn) {
     loadMoreBtn.addEventListener('click', () => {
       visibleCount += PAGE_SIZE;
-      applyFilter();
+      updateUI();
     });
   }
 
-  // Initial state
-  applyFilter();
+  // Initial render
+  updateUI();
 });

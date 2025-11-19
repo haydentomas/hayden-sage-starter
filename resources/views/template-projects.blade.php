@@ -21,20 +21,20 @@
     ]);
   @endphp
 
-  <section class="py-section bg-surface-alt">
+  <section class="">
     <div class="max-w-7xl mx-auto px-4 space-y-8">
       <h1 class="text-4xl font-bold">Projects</h1>
 
       {{-- Filter buttons --}}
       <div class="flex flex-wrap gap-3">
-        <button class="px-4 py-2 rounded-full border text-sm filter-btn is-active"
+        <button class="px-4 py-2 rounded-full border text-sm filter-btn is-active cursor-pointer"
                 type="button"
                 data-filter="all">
           All
         </button>
 
         @foreach ($tech_terms as $term)
-          <button class="px-4 py-2 rounded-full border text-sm filter-btn"
+          <button class="px-4 py-2 rounded-full border text-sm filter-btn cursor-pointer"
                   type="button"
                   data-filter="{{ $term->slug }}">
             {{ $term->name }}

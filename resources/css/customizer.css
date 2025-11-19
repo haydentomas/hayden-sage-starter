@@ -1,6 +1,6 @@
-/* ================================
-   Customizer Controls Panel Theme
-   ================================ */
+/* =======================================
+   Customizer Controls Panel – Dark Theme
+   ======================================= */
 
 /* Main sidebar background */
 body.wp-customizer #customize-controls .wp-full-overlay-sidebar,
@@ -8,32 +8,47 @@ body.wp-customizer #customize-controls .wp-full-overlay-sidebar-content {
   background: #050505 !important;
 }
 
-/* Panel header (the bit that says "You are customizing") */
+/* Header ("You are customizing") */
 body.wp-customizer #customize-controls .customize-info {
   background: #000 !important;
   border-bottom: 1px solid #333 !important;
   color: #fff !important;
 }
 
-/* Top title text */
+/* Header title + theme name */
 body.wp-customizer #customize-controls .customize-info .panel-title,
 body.wp-customizer #customize-controls .customize-info .theme-name {
   color: #fff !important;
 }
 
-/* Section titles (Theme Settings, Menus, Widgets etc.) */
-body.wp-customizer #customize-controls .accordion-section-title {
+/* ================================
+   Section rows (Theme Settings, Menus…)
+   ================================ */
+
+/* Base state for the whole row */
+body.wp-customizer #customize-controls h3.accordion-section-title,
+body.wp-customizer #customize-controls h3.accordion-section-title > button.accordion-trigger {
   background: #111 !important;
   color: #f9fafb !important;
   border-color: #222 !important;
+  border-left: 3px solid transparent;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
-/* Section title hover */
-body.wp-customizer #customize-controls .accordion-section-title:hover {
-  background: #181818 !important;
+/* Full row hover / focus – use primary colour */
+body.wp-customizer #customize-controls li.control-section:hover > h3.accordion-section-title,
+body.wp-customizer #customize-controls li.control-section:hover > h3.accordion-section-title > button.accordion-trigger,
+body.wp-customizer #customize-controls li.control-section:focus-within > h3.accordion-section-title,
+body.wp-customizer #customize-controls li.control-section:focus-within > h3.accordion-section-title > button.accordion-trigger {
+  background: var(--color-primary) !important;
+  color: #ffffff !important;
+  border-left-color: var(--color-primary) !important;
 }
 
-/* Control labels + descriptions */
+/* ================================
+   Controls (labels + descriptions)
+   ================================ */
+
 body.wp-customizer #customize-controls .customize-control-title {
   color: #f9fafb !important;
 }
@@ -42,13 +57,16 @@ body.wp-customizer #customize-controls .customize-control-description {
   color: #9ca3af !important;
 }
 
-/* Inputs/selects */
+/* ================================
+   Inputs / fields
+   ================================ */
+
 body.wp-customizer #customize-controls .customize-control input,
 body.wp-customizer #customize-controls .customize-control select,
 body.wp-customizer #customize-controls .customize-control textarea {
   background: #111 !important;
   color: #f9fafb !important;
-  border-color: #374151 !important;
+  border: 1px solid #374151 !important;
 }
 
 /* Color picker wrapper */
@@ -56,4 +74,43 @@ body.wp-customizer #customize-controls .wp-picker-container {
   background: #000 !important;
   border-radius: 4px;
   padding: 4px 6px;
+}
+
+
+/* Remove blue focus outline + border from Customizer rows */
+body.wp-customizer #customize-controls .accordion-section-title:focus,
+body.wp-customizer #customize-controls .accordion-section-title:focus-visible,
+body.wp-customizer #customize-controls .accordion-section-title > button.accordion-trigger:focus,
+body.wp-customizer #customize-controls .accordion-section-title > button.accordion-trigger:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border-left-color: transparent !important;
+}
+
+/* Make chevron (>) white when row is hovered or focused */
+body.wp-customizer #customize-controls li.control-section:hover > h3.accordion-section-title > button.accordion-trigger,
+body.wp-customizer #customize-controls li.control-section:focus-within > h3.accordion-section-title > button.accordion-trigger {
+  color: #fff !important;
+  border-color: #fff !important;
+  fill: #fff !important;
+}
+
+/* Base chevron (the little > triangle) */
+body.wp-customizer #customize-controls h3.accordion-section-title::after {
+  border-left-color: #ccc !important; /* default grey */
+}
+
+/* Chevron on hover / focus – match text (white) */
+body.wp-customizer #customize-controls li.control-section:hover > h3.accordion-section-title::after,
+body.wp-customizer #customize-controls li.control-section:focus-within > h3.accordion-section-title::after {
+  border-left-color: #fff !important;
+}
+
+
+
+
+/* Override Customizer chevron (>) colour */
+body.wp-customizer #customize-controls #customize-theme-controls .accordion-section-title::after,
+body.wp-customizer #customize-controls #customize-outer-theme-controls .accordion-section-title::after {
+  color: #fff !important; /* or var(--color-primary) if you ever want that */
 }

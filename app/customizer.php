@@ -178,3 +178,40 @@ add_action('customize_controls_enqueue_scripts', function () {
         wp_get_theme()->get('Version')
     );
 });
+
+
+
+/**
+ * Inject primary colour into Customizer controls (left panel)
+ */
+add_action('customize_controls_print_styles', function () {
+    $primary = get_theme_mod('hayden_primary_color', '#f97316');
+    $primary = sanitize_hex_color($primary) ?: '#f97316';
+    ?>
+    <style id="hayden-customizer-primary">
+      :root {
+        --color-primary: <?php echo esc_html($primary); ?>;
+      }
+    </style>
+    <?php
+});
+
+
+
+/**
+ * Live-update the Customizer controls panel when primary colour changes.
+ */
+add_action('customize_controls_enqueue_scripts', function () {
+    wp_add_inline_script(
+        'customize-controls',
+        "(function(api) {
+            api('hayden_primary_color', function(setting) {
+                setting.bind(function(newVal) {
+                    if (!newVal) { return; }
+                    // Update CSS variable in controls frame
+                    document.documentElement.style.setProperty('--color-primary', newVal);
+                });
+            });
+        })(wp.customize);"
+    );
+});
