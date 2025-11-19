@@ -1,17 +1,11 @@
 <?php
 
-/**
- * Theme setup.
- */
-
 namespace App;
 
 use Illuminate\Support\Facades\Vite;
 
 /**
  * Inject styles into the block editor.
- *
- * @return array
  */
 add_filter('block_editor_settings_all', function ($settings) {
     $style = Vite::asset('resources/css/editor.css');
@@ -25,8 +19,6 @@ add_filter('block_editor_settings_all', function ($settings) {
 
 /**
  * Inject scripts into the block editor.
- *
- * @return void
  */
 add_filter('admin_head', function () {
     if (! get_current_screen()?->is_block_editor()) {
@@ -48,8 +40,6 @@ add_filter('admin_head', function () {
 
 /**
  * Use the generated theme.json file.
- *
- * @return string
  */
 add_filter('theme_file_path', function ($path, $file) {
     return $file === 'theme.json'
@@ -59,59 +49,24 @@ add_filter('theme_file_path', function ($path, $file) {
 
 /**
  * Register the initial theme setup.
- *
- * @return void
  */
 add_action('after_setup_theme', function () {
-    /**
-     * Disable full-site editing support.
-     *
-     * @link https://wptavern.com/gutenberg-10-5-embeds-pdfs-adds-verse-block-color-options-and-introduces-new-patterns
-     */
+    // Disable FSE block templates.
     remove_theme_support('block-templates');
 
-    /**
-     * Register the navigation menus.
-     *
-     * @link https://developer.wordpress.org/reference/functions/register_nav_menus/
-     */
+    // Menus.
     register_nav_menus([
         'primary_navigation' => __('Primary Navigation', 'sage'),
     ]);
 
-    /**
-     * Disable the default block patterns.
-     *
-     * @link https://developer.wordpress.org/block-editor/developers/themes/theme-support/#disabling-the-default-block-patterns
-     */
+    // Disable default block patterns.
     remove_theme_support('core-block-patterns');
 
-    /**
-     * Enable plugins to manage the document title.
-     *
-     * @link https://developer.wordpress.org/reference/functions/add_theme_support/#title-tag
-     */
+    // Core supports.
     add_theme_support('title-tag');
-
-    /**
-     * Enable post thumbnail support.
-     *
-     * @link https://developer.wordpress.org/themes/functionality/featured-images-post-thumbnails/
-     */
     add_theme_support('post-thumbnails');
-
-    /**
-     * Enable responsive embed support.
-     *
-     * @link https://developer.wordpress.org/block-editor/how-to-guides/themes/theme-support/#responsive-embedded-content
-     */
     add_theme_support('responsive-embeds');
 
-    /**
-     * Enable HTML5 markup support.
-     *
-     * @link https://developer.wordpress.org/reference/functions/add_theme_support/#html5
-     */
     add_theme_support('html5', [
         'caption',
         'comment-form',
@@ -122,77 +77,40 @@ add_action('after_setup_theme', function () {
         'style',
     ]);
 
-    /**
-     * Enable selective refresh for widgets in customizer.
-     *
-     * @link https://developer.wordpress.org/reference/functions/add_theme_support/#customize-selective-refresh-widgets
-     */
+    // Customizer selective refresh for widgets.
     add_theme_support('customize-selective-refresh-widgets');
 }, 20);
 
 /**
  * Register the theme sidebars.
- *
- * @return void
  */
 add_action('widgets_init', function () {
     $config = [
         'before_widget' => '<section class="widget %1$s %2$s">',
-        'after_widget' => '</section>',
-        'before_title' => '<h3>',
-        'after_title' => '</h3>',
+        'after_widget'  => '</section>',
+        'before_title'  => '<h3>',
+        'after_title'   => '</h3>',
     ];
 
+    // Primary (blog/sidebar)
     register_sidebar([
         'name' => __('Primary', 'sage'),
-        'id' => 'sidebar-primary',
+        'id'   => 'sidebar-primary',
     ] + $config);
 
-    register_sidebar([
-        'name' => __('Footer', 'sage'),
-        'id' => 'sidebar-footer',
-    ] + $config);
-});
-
-
-add_filter('block_categories_all', function ($categories, $post) {
-    $categories[] = [
-        'slug'  => 'bbi-blocks',
-        'title' => __('BBI Blocks', 'sage'), // or your textdomain
-        'icon'  => null,
+    // Footer columns 1–4
+    $footer_base = [
+        'before_widget' => '<section id="%1$s" class="widget %2$s">',
+        'after_widget'  => '</section>',
+        'before_title'  => '<h3 class="widget-title text-sm font-semibold mb-3 uppercase tracking-wide">',
+        'after_title'   => '</h3>',
     ];
 
-    return $categories;
-}, 10, 2);
-
-
-add_action('customize_register', function (\WP_Customize_Manager $wp_customize) {
-    // Section for header options
-    $wp_customize->add_section('hayden_header_section', [
-        'title'       => __('Header Layout', 'hayden'),
-        'description' => __('Choose the layout style for the main header.', 'hayden'),
-        'priority'    => 30,
-    ]);
-
-    // Setting: header layout
-    $wp_customize->add_setting('hayden_header_layout', [
-        'default'           => 'default',
-        'transport'         => 'refresh',
-        'sanitize_callback' => function ($value) {
-            $allowed = ['default', 'logo-top'];
-            return in_array($value, $allowed, true) ? $value : 'default';
-        },
-    ]);
-
-    // Control: dropdown/select
-    $wp_customize->add_control('hayden_header_layout_control', [
-        'label'    => __('Header layout style', 'hayden'),
-        'section'  => 'hayden_header_section',
-        'settings' => 'hayden_header_layout',
-        'type'     => 'select',
-        'choices'  => [
-            'default'  => __('Default – logo left, nav right', 'hayden'),
-            'logo-top' => __('Logo top, nav beneath', 'hayden'),
-        ],
-    ]);
+    for ($i = 1; $i <= 4; $i++) {
+        register_sidebar([
+            'name' => sprintf(__('Footer %d', 'hayden'), $i),
+            'id'   => "sidebar-footer-{$i}",
+        ] + $footer_base);
+    }
 });
+

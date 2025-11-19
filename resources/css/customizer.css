@@ -1,0 +1,59 @@
+/* ================================
+   Customizer Controls Panel Theme
+   ================================ */
+
+/* Main sidebar background */
+body.wp-customizer #customize-controls .wp-full-overlay-sidebar,
+body.wp-customizer #customize-controls .wp-full-overlay-sidebar-content {
+  background: #050505 !important;
+}
+
+/* Panel header (the bit that says "You are customizing") */
+body.wp-customizer #customize-controls .customize-info {
+  background: #000 !important;
+  border-bottom: 1px solid #333 !important;
+  color: #fff !important;
+}
+
+/* Top title text */
+body.wp-customizer #customize-controls .customize-info .panel-title,
+body.wp-customizer #customize-controls .customize-info .theme-name {
+  color: #fff !important;
+}
+
+/* Section titles (Theme Settings, Menus, Widgets etc.) */
+body.wp-customizer #customize-controls .accordion-section-title {
+  background: #111 !important;
+  color: #f9fafb !important;
+  border-color: #222 !important;
+}
+
+/* Section title hover */
+body.wp-customizer #customize-controls .accordion-section-title:hover {
+  background: #181818 !important;
+}
+
+/* Control labels + descriptions */
+body.wp-customizer #customize-controls .customize-control-title {
+  color: #f9fafb !important;
+}
+
+body.wp-customizer #customize-controls .customize-control-description {
+  color: #9ca3af !important;
+}
+
+/* Inputs/selects */
+body.wp-customizer #customize-controls .customize-control input,
+body.wp-customizer #customize-controls .customize-control select,
+body.wp-customizer #customize-controls .customize-control textarea {
+  background: #111 !important;
+  color: #f9fafb !important;
+  border-color: #374151 !important;
+}
+
+/* Color picker wrapper */
+body.wp-customizer #customize-controls .wp-picker-container {
+  background: #000 !important;
+  border-radius: 4px;
+  padding: 4px 6px;
+}

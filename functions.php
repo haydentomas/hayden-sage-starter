@@ -49,28 +49,15 @@ Application::configure()
 |
 */
 
-collect(['setup', 'filters'])
+collect(['setup', 'filters', 'customizer', 'post-types'])
     ->each(function ($file) {
         if (! locate_template($file = "app/{$file}.php", true, true)) {
             wp_die(
-                /* translators: %s is replaced with the relative file path */
                 sprintf(__('Error locating <code>%s</code> for inclusion.', 'sage'), $file)
             );
         }
     });
 
 
-function bbi_register_block_categories( $categories, $post ) {
-    return array_merge(
-        $categories,
-        [
-            [
-                'slug'  => 'bbi-blocks',
-                'title' => __( 'BBI Blocks', 'bbi' ),
-                'icon'  => null,
-            ],
-        ]
-    );
-}
-add_filter( 'block_categories_all', 'bbi_register_block_categories', 10, 2 );
+
 
