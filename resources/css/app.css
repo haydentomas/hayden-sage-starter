@@ -73,3 +73,95 @@
 .filter-btn.is-active {
   @apply bg-[var(--color-primary)] text-white border-transparent;
 }
+
+
+
+
+/* Wide mega panel under the parent */
+.sm-navbar .menu-item.is-mega > ul.sm-sub--mega {
+  left: 50% !important;
+  transform: translateX(-50%);
+  width: min(72rem, 100vw - 2rem);
+  padding: 1.5rem 2rem;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.5rem;
+  background: #050505;
+  border-radius: 0 0 1.25rem 1.25rem;
+}
+
+/* Mega cards */
+.sm-navbar .menu-item.is-mega > ul.sm-sub--mega > li.mega-card {
+  list-style: none;
+}
+
+/* Make the SmartMenus navbar a positioning context */
+.sm-navbar {
+  position: relative;
+}
+
+
+
+/* Mega panel – full-width bar centred under the navbar */
+.sm-sub--mega {
+  position: absolute !important;
+  /* anchor to the navbar edges */
+  left: 0 !important;
+  right: 0 !important;
+
+  /* sit just under the navbar */
+  top: 100% !important;
+  margin-top: 0.5rem; /* tweak if you want more gap */
+
+  /* visual styling */
+  background: #050505;
+  border-radius: 0 0 1rem 1rem;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+}
+
+/* Inner content layout (you can tweak this however you like) */
+.sm-sub--mega .mega-inner {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+
+
+/* Navbar is the positioning context */
+.sm-navbar {
+  position: relative;
+}
+
+/* Mega dropdown – full width of the navbar container */
+.sm-sub--mega {
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  top: 100% !important;      /* directly under the bar */
+  margin-top: 0.5rem;
+
+  width: 100% !important;    /* fill the navbar width */
+
+  background: #050505;
+  border-radius: 0 0 1rem 1rem;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+}
+
+/* Inner content matches your main layout width */
+.sm-sub--mega .mega-inner {
+  max-width: 72rem;          /* or match your --container-content */
+  margin: 0 auto;
+  padding: 2rem;
+  display: grid;
+  gap: 1.5rem;
+}
+
+
+.sm-sub--mega.sm-show {
+  width:100% !important;
+}

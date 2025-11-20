@@ -4,32 +4,41 @@ namespace App\Walkers;
 
 use Walker_Nav_Menu;
 
-class SmartMenu_Walker extends Walker_Nav_Menu {
-
-    public function start_lvl( &$output, $depth = 0, $args = [] ) {
+class SmartMenu_Walker extends Walker_Nav_Menu
+{
+    public function start_lvl( &$output, $depth = 0, $args = [] )
+    {
         $indent  = str_repeat("\t", $depth);
-        $output .= "\n$indent<ul class=\"sm-sub\">\n";
+        $output .= "\n{$indent}<ul class=\"sm-sub\" aria-hidden=\"true\">\n";
     }
 
-    public function end_lvl( &$output, $depth = 0, $args = [] ) {
+    public function end_lvl( &$output, $depth = 0, $args = [] )
+    {
         $indent  = str_repeat("\t", $depth);
-        $output .= "$indent</ul>\n";
+        $output .= "{$indent}</ul>\n";
     }
 
-    public function start_el( &$output, $item, $depth = 0, $args = [], $id = 0 ) {
+    public function start_el( &$output, $item, $depth = 0, $args = [], $id = 0 )
+    {
+        $classes      = empty( $item->classes ) ? [] : (array) $item->classes;
+        $has_children = ! empty( $args->walker->has_children );
+        $is_top_level = ( $depth === 0 );
 
-        $classes   = empty($item->classes) ? [] : (array) $item->classes;
+        // Base li classes
         $classes[] = 'sm-nav-item';
+        if ( $has_children && $is_top_level ) {
+            $classes[] = 'menu-item-has-children';
+        }
 
-        $has_children = in_array('menu-item-has-children', $classes, true);
-        $class_names  = join(' ', array_filter($classes));
-        $class_attr   = ' class="' . esc_attr($class_names) . '"';
+        $class_attr = ' class="' . esc_attr( implode( ' ', array_filter( array_unique( $classes ) ) ) ) . '"';
+        $output    .= "<li{$class_attr}>";
 
-        $output .= "<li{$class_attr}>";
+        $title = apply_filters( 'the_title', $item->title, $item->ID );
 
-        $link_class = 'sm-nav-link';
-        if ($has_children) {
-            $link_class .= ' sm-nav-link--split';
+        // Link classes
+        $link_classes = 'sm-nav-link';
+        if ( $has_children && $is_top_level ) {
+            $link_classes .= ' sm-nav-link--split sm-has-sub';
         }
 
         $atts = [
@@ -37,28 +46,29 @@ class SmartMenu_Walker extends Walker_Nav_Menu {
             'target' => $item->target ?: '',
             'rel'    => $item->xfn ?: '',
             'href'   => $item->url ?: '',
-            'class'  => $link_class,
+            'class'  => $link_classes,
         ];
 
-        $attributes = '';
-        foreach ($atts as $attr => $value) {
-            if (! empty($value)) {
-                $value       = $attr === 'href' ? esc_url($value) : esc_attr($value);
-                $attributes .= " {$attr}=\"{$value}\"";
+        $attr_str = '';
+        foreach ( $atts as $attr => $value ) {
+            if ( $value !== '' ) {
+                $value    = ( $attr === 'href' ) ? esc_url( $value ) : esc_attr( $value );
+                $attr_str .= " {$attr}=\"{$value}\"";
             }
         }
 
-        $title       = apply_filters('the_title', $item->title, $item->ID);
-        $item_output = "<a{$attributes}>{$title}</a>";
+        $item_output = "<a{$attr_str}>{$title}</a>";
 
-        if ($has_children) {
-            $item_output .= '<button class="sm-nav-link sm-nav-link--split sm-sub-toggler" aria-label="Toggle sub menu"></button>';
+        // Split button toggler for top-level items with children
+        if ( $has_children && $is_top_level ) {
+            $item_output .= '<button class="sm-nav-link sm-nav-link--split sm-sub-toggler sm-has-sub" aria-label="Toggle sub menu"></button>';
         }
 
         $output .= $item_output;
     }
 
-    public function end_el( &$output, $item, $depth = 0, $args = [] ) {
+    public function end_el( &$output, $item, $depth = 0, $args = [] )
+    {
         $output .= "</li>\n";
     }
 }
