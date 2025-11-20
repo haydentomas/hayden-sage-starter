@@ -165,3 +165,95 @@
 .sm-sub--mega.sm-show {
   width:100% !important;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* -----------------------------------
+   Mega menu layout (no ACF)
+----------------------------------- */
+
+/* Full-width panel inside the navbar */
+.sm-navbar .sm-sub--mega {
+  width: 100% !important;
+  max-width: 72rem;          /* container width – tweak */
+  margin: 0 auto;
+  padding: 1.5rem 1.75rem;
+  border-radius: 0 0 1rem 1rem;
+  background: #05070c;
+  display: grid;
+  gap: 1.5rem 2rem;
+}
+
+/* Column count based on data attribute */
+.sm-sub--mega[data-mega-cols="1"] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.sm-sub--mega[data-mega-cols="2"] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.sm-sub--mega[data-mega-cols="3"] {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.sm-sub--mega[data-mega-cols="4"] {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* Column item */
+.sm-sub--mega > .mega-col {
+  list-style: none;
+}
+
+.sm-sub--mega .mega-col-inner {
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: rgba(10, 12, 20, 0.95);
+}
+
+/* Column title */
+.sm-sub--mega .mega-col-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  color: rgba(249, 250, 251, 0.8);
+}
+
+/* Links list inside each column */
+.sm-sub--mega .mega-col-links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sm-sub--mega .mega-col-links > li {
+  margin: 0.25rem 0;
+}
+
+.sm-sub--mega .mega-col-links a {
+  display: block;
+  font-size: 0.875rem;
+  padding: 0.25rem 0;
+  color: rgba(249, 250, 251, 0.9);
+  text-decoration: none;
+}
+
+.sm-sub--mega .mega-col-links a:hover {
+  color: var(--color-primary, #f97316);
+}

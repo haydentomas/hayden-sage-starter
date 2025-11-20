@@ -116,3 +116,73 @@ add_action('widgets_init', function () {
 
 
 
+
+
+namespace App;
+
+use Walker_Nav_Menu;
+
+/**
+ * 1) Extra fields in Appearance → Menus
+ * -------------------------------------------------------------- */
+add_action('wp_nav_menu_item_custom_fields', function ($item_id, $item, $depth, $args) {
+    // Only show on top-level items
+    if ($depth !== 0) {
+        return;
+    }
+
+    $is_mega  = get_post_meta($item_id, '_menu_item_mega_parent', true) === '1';
+    $columns  = (int) get_post_meta($item_id, '_menu_item_mega_columns', true);
+    if ($columns < 1 || $columns > 4) {
+        $columns = 3;
+    }
+    ?>
+    <div class="field-mega-menu description description-wide" style="margin-top: 10px; border-top: 1px solid #ddd; padding-top: 10px;">
+        <strong>Mega menu</strong>
+
+        <p>
+            <label>
+                <input type="checkbox"
+                       name="menu-item-mega-parent[<?php echo esc_attr($item_id); ?>]"
+                       value="1" <?php checked($is_mega); ?> />
+                Enable this item as a mega menu parent
+            </label>
+        </p>
+
+        <p>
+            <label>Columns:&nbsp;
+                <select name="menu-item-mega-columns[<?php echo esc_attr($item_id); ?>]">
+                    <?php foreach ([1, 2, 3, 4] as $col) : ?>
+                        <option value="<?php echo $col; ?>" <?php selected($columns, $col); ?>>
+                            <?php echo $col; ?> column<?php echo $col > 1 ? 's' : ''; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </label>
+        </p>
+
+        <p class="description">
+            Add child items under this parent for each column, and child items
+            under those for the links inside each column.
+        </p>
+    </div>
+    <?php
+}, 10, 4);
+
+/**
+ * 2) Save the extra fields when the menu is saved
+ * -------------------------------------------------------------- */
+add_action('wp_update_nav_menu_item', function ($menu_id, $menu_item_db_id, $args) {
+    // Mega parent toggle
+    $is_mega = isset($_POST['menu-item-mega-parent'][$menu_item_db_id]) ? '1' : '0';
+    update_post_meta($menu_item_db_id, '_menu_item_mega_parent', $is_mega);
+
+    // Column count
+    if (isset($_POST['menu-item-mega-columns'][$menu_item_db_id])) {
+        $cols = (int) $_POST['menu-item-mega-columns'][$menu_item_db_id];
+        if ($cols < 1 || $cols > 4) {
+            $cols = 3;
+        }
+        update_post_meta($menu_item_db_id, '_menu_item_mega_columns', $cols);
+    }
+}, 10, 3);

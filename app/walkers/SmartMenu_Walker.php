@@ -6,69 +6,162 @@ use Walker_Nav_Menu;
 
 class SmartMenu_Walker extends Walker_Nav_Menu
 {
-    public function start_lvl( &$output, $depth = 0, $args = [] )
+    /**
+     * ID of the mega parent currently being rendered (top-level item).
+     */
+    protected ?int $currentMegaParent = null;
+
+    /**
+     * Are we currently inside a mega menu branch?
+     */
+    protected bool $inMega = false;
+
+    /**
+     * Start level (submenu wrapper).
+     */
+    public function start_lvl(&$output, $depth = 0, $args = [])
     {
-        $indent  = str_repeat("\t", $depth);
-        $output .= "\n{$indent}<ul class=\"sm-sub\" aria-hidden=\"true\">\n";
+        $indent = str_repeat("\t", $depth);
+
+        // Depth 0 sub for a mega parent – main panel wrapper
+        if ($depth === 0 && $this->inMega && $this->currentMegaParent) {
+            $cols = (int) get_post_meta($this->currentMegaParent, '_menu_item_mega_columns', true);
+            if ($cols < 1 || $cols > 4) {
+                $cols = 3;
+            }
+
+            $output .= "\n{$indent}<ul class=\"sm-sub sm-sub--mega\" data-mega-cols=\"{$cols}\">\n";
+            return;
+        }
+
+        // Depth 1 inside mega → links list within a column
+        if ($depth === 1 && $this->inMega) {
+            $output .= "\n{$indent}<ul class=\"mega-col-links\">\n";
+            return;
+        }
+
+        // Normal SmartMenus submenu
+        $output .= "\n{$indent}<ul class=\"sm-sub\">\n";
     }
 
-    public function end_lvl( &$output, $depth = 0, $args = [] )
+    /**
+     * End submenu level.
+     */
+    public function end_lvl(&$output, $depth = 0, $args = [])
     {
-        $indent  = str_repeat("\t", $depth);
+        $indent = str_repeat("\t", $depth);
         $output .= "{$indent}</ul>\n";
     }
 
-    public function start_el( &$output, $item, $depth = 0, $args = [], $id = 0 )
+    /**
+     * Start element.
+     */
+    public function start_el(&$output, $item, $depth = 0, $args = [], $id = 0)
     {
-        $classes      = empty( $item->classes ) ? [] : (array) $item->classes;
-        $has_children = ! empty( $args->walker->has_children );
-        $is_top_level = ( $depth === 0 );
-
-        // Base li classes
+        $classes   = empty($item->classes) ? [] : (array) $item->classes;
         $classes[] = 'sm-nav-item';
-        if ( $has_children && $is_top_level ) {
-            $classes[] = 'menu-item-has-children';
+
+        $has_children = in_array('menu-item-has-children', $classes, true);
+
+        // Is this a top-level mega parent?
+        $isMegaParent = ($depth === 0 && get_post_meta($item->ID, '_menu_item_mega_parent', true) === '1');
+
+        if ($isMegaParent) {
+            $classes[] = 'sm-nav-item--has-mega';
+            $this->currentMegaParent = (int) $item->ID;
+            $this->inMega = true;
         }
 
-        $class_attr = ' class="' . esc_attr( implode( ' ', array_filter( array_unique( $classes ) ) ) ) . '"';
-        $output    .= "<li{$class_attr}>";
+        // Depth 1 inside mega → treat as column wrapper
+        if ($this->inMega && $depth === 1) {
+            $classes[] = 'mega-col';
+        }
 
-        $title = apply_filters( 'the_title', $item->title, $item->ID );
+        $class_names = join(' ', array_filter($classes));
+        $class_attr  = $class_names ? ' class="' . esc_attr($class_names) . '"' : '';
 
-        // Link classes
-        $link_classes = 'sm-nav-link';
-        if ( $has_children && $is_top_level ) {
-            $link_classes .= ' sm-nav-link--split sm-has-sub';
+        $output .= "<li{$class_attr}>";
+
+        // Build link / label
+        $link_class = 'sm-nav-link';
+
+        if ($has_children && ! $isMegaParent) {
+            // Normal dropdown with split button
+            $link_class .= ' sm-nav-link--split';
+        }
+
+        // For mega parent we still want the label to look like a normal nav link
+        if ($isMegaParent) {
+            $link_class .= ' sm-nav-link--split sm-has-sub';
         }
 
         $atts = [
             'title'  => $item->attr_title ?: '',
             'target' => $item->target ?: '',
             'rel'    => $item->xfn ?: '',
-            'href'   => $item->url ?: '',
-            'class'  => $link_classes,
+            'href'   => $isMegaParent ? '#' : ($item->url ?: ''),
+            'class'  => $link_class,
         ];
 
-        $attr_str = '';
-        foreach ( $atts as $attr => $value ) {
-            if ( $value !== '' ) {
-                $value    = ( $attr === 'href' ) ? esc_url( $value ) : esc_attr( $value );
-                $attr_str .= " {$attr}=\"{$value}\"";
+        $attributes = '';
+        foreach ($atts as $attr => $value) {
+            if ($value === '') {
+                continue;
             }
+            $value       = ($attr === 'href') ? esc_url($value) : esc_attr($value);
+            $attributes .= " {$attr}=\"{$value}\"";
         }
 
-        $item_output = "<a{$attr_str}>{$title}</a>";
+        $title = apply_filters('the_title', $item->title, $item->ID);
 
-        // Split button toggler for top-level items with children
-        if ( $has_children && $is_top_level ) {
-            $item_output .= '<button class="sm-nav-link sm-nav-link--split sm-sub-toggler sm-has-sub" aria-label="Toggle sub menu"></button>';
+        // -------- Output for different depths / contexts -------- //
+
+        // TOP LEVEL
+        if ($depth === 0) {
+            // Mega parent – label acts as toggle
+            if ($isMegaParent) {
+                $output .= "<a{$attributes}>{$title}</a>";
+                // No extra button; SmartMenus will use the .sm-sub-toggler link
+            } else {
+                // Normal top-level item
+                $output .= "<a{$attributes}>{$title}</a>";
+
+                if ($has_children) {
+                    $output .= '<button class="sm-nav-link sm-nav-link--split sm-sub-toggler sm-has-sub" aria-label="Toggle sub menu"></button>';
+                }
+            }
+
+            return;
         }
 
-        $output .= $item_output;
+        // DEPTH 1 inside mega = column heading
+        if ($this->inMega && $depth === 1) {
+            $output .= '<div class="mega-col-inner">';
+            $output .= '<div class="mega-col-title">' . esc_html($title) . '</div>';
+            // Children (depth 2) will be rendered inside <ul class="mega-col-links">
+            return;
+        }
+
+        // DEPTH >= 1 normal dropdown OR depth 2 links inside mega
+        $output .= "<a{$attributes}>{$title}</a>";
     }
 
-    public function end_el( &$output, $item, $depth = 0, $args = [] )
+    /**
+     * End element.
+     */
+    public function end_el(&$output, $item, $depth = 0, $args = [])
     {
-        $output .= "</li>\n";
+        // Close column wrapper when leaving depth 1 inside a mega
+        if ($this->inMega && $depth === 1) {
+            $output .= "</div></li>\n"; // .mega-col-inner + <li>
+        } else {
+            $output .= "</li>\n";
+        }
+
+        // Leaving a top-level item → reset mega flags
+        if ($depth === 0 && $this->currentMegaParent === (int) $item->ID) {
+            $this->currentMegaParent = null;
+            $this->inMega = false;
+        }
     }
 }
