@@ -2,19 +2,18 @@
 <header class="site-header header border-b border-white">
   <div class="max-w-7xl mx-auto px-4 py-4">
     <nav id="navbar1" class="sm-navbar">
-
-      {{-- Brand --}}
-      <h1 class="sm-brand">
+      <div class="flex items-center space-x-2">
         @if (has_custom_logo())
-          {!! get_custom_logo() !!}
+          <div class="h-auto w-36">
+            {!! get_custom_logo() !!}
+          </div>
         @else
           <a href="{{ home_url('/') }}" class="text-lg font-semibold">
             {{ get_bloginfo('name') }}
           </a>
         @endif
-      </h1>
+      </div>
 
-      {{-- Toggler state --}}
       <span class="sm-toggler-state" id="sm-toggler-state-1"></span>
 
       {{-- Toggler buttons --}}
@@ -25,6 +24,7 @@
            aria-label="Open main menu">
           <span class="sm-toggler-icon sm-toggler-icon--show"></span>
         </a>
+
         <a class="sm-toggler-anchor sm-toggler-anchor--hide"
            href="#"
            role="button"
@@ -36,18 +36,22 @@
       {{-- SmartMenus nav --}}
       <div class="sm-collapse">
         @if (has_nav_menu('primary_navigation'))
-          @php
+          @php(
             wp_nav_menu([
               'theme_location' => 'primary_navigation',
               'container'      => false,
-              'menu_class'     => 'sm-nav sm-nav--right', // you can add sm-nav--right if you want alignment
+              'menu_class'     => 'sm-nav sm-nav--right',
               'walker'         => new \App\Walkers\SmartMenu_Walker(),
               'depth'          => 4,
               'fallback_cb'    => false,
-            ]);
-          @endphp
+            ])
+          )
         @endif
       </div>
     </nav>
   </div>
 </header>
+
+
+
+

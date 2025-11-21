@@ -77,183 +77,92 @@
 
 
 
-/* Wide mega panel under the parent */
-.sm-navbar .menu-item.is-mega > ul.sm-sub--mega {
-  left: 50% !important;
-  transform: translateX(-50%);
-  width: min(72rem, 100vw - 2rem);
-  padding: 1.5rem 2rem;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1.5rem;
-  background: #050505;
-  border-radius: 0 0 1.25rem 1.25rem;
-}
+/* ============================================================
+   BBI / Sage SmartMenus – Full-width mega menu (desktop)
+   ============================================================ */
 
-/* Mega cards */
-.sm-navbar .menu-item.is-mega > ul.sm-sub--mega > li.mega-card {
-  list-style: none;
-}
+@media (min-width: 768px) {
 
-/* Make the SmartMenus navbar a positioning context */
-.sm-navbar {
-  position: relative;
-}
+  /* Navbar is the positioning context */
+  .sm-navbar {
+    position: relative;
+  }
 
+  /* Mega container: full width of header container */
+  .sm-navbar .sm-sub--mega {
+    position: absolute;
+    top: 100%;          /* directly under the navbar */
+    left: 0;
+    width: 100%;
+    margin: 0;
 
+    padding: 1.5rem 1.75rem;
+    background: #05070c;
+    border-radius: 0 0 1rem 1rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+  }
 
-/* Mega panel – full-width bar centred under the navbar */
-.sm-sub--mega {
-  position: absolute !important;
-  /* anchor to the navbar edges */
-  left: 0 !important;
-  right: 0 !important;
+  /* Show/hide based on aria (SmartMenus toggles this) */
+  .sm-navbar .sm-sub--mega[aria-hidden="true"] {
+    display: none !important;
+  }
 
-  /* sit just under the navbar */
-  top: 100% !important;
-  margin-top: 0.5rem; /* tweak if you want more gap */
+  .sm-navbar .sm-sub--mega[aria-hidden="false"] {
+    display: block !important;
+    width:100% !important;
+  }
 
-  /* visual styling */
-  background: #050505;
-  border-radius: 0 0 1rem 1rem;
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
-}
+  /* Inner grid wrapper (supports either .mega-grid or .mega-inner) */
+  .sm-navbar .sm-sub--mega .mega-grid,
+  .sm-navbar .sm-sub--mega .mega-inner {
+    max-width: 72rem;        /* match your content container (e.g. ~1152px) */
+    margin: 0 auto;
+    display: grid;
+    gap: 1.5rem 2rem;
+  }
 
-/* Inner content layout (you can tweak this however you like) */
-.sm-sub--mega .mega-inner {
-  max-width: 72rem;
-  margin: 0 auto;
-  padding: 2rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
-}
+  /* Column counts – walker outputs mega-cols-[1-4] */
+  .sm-navbar .sm-sub--mega .mega-grid.mega-cols-2,
+  .sm-navbar .sm-sub--mega .mega-inner.mega-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 
+  .sm-navbar .sm-sub--mega .mega-grid.mega-cols-3,
+  .sm-navbar .sm-sub--mega .mega-inner.mega-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 
+  .sm-navbar .sm-sub--mega .mega-grid.mega-cols-4,
+  .sm-navbar .sm-sub--mega .mega-inner.mega-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 
-/* Navbar is the positioning context */
-.sm-navbar {
-  position: relative;
-}
+  /* Column card styling */
+  .sm-navbar .sm-sub--mega .mega-col {
+    background: #0d1015;
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
 
-/* Mega dropdown – full width of the navbar container */
-.sm-sub--mega {
-  position: absolute !important;
-  left: 0 !important;
-  right: 0 !important;
-  top: 100% !important;      /* directly under the bar */
-  margin-top: 0.5rem;
+  .sm-navbar .sm-sub--mega .mega-col-title {
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+  }
 
-  width: 100% !important;    /* fill the navbar width */
-
-  background: #050505;
-  border-radius: 0 0 1rem 1rem;
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
-  overflow: hidden;
-}
-
-/* Inner content matches your main layout width */
-.sm-sub--mega .mega-inner {
-  max-width: 72rem;          /* or match your --container-content */
-  margin: 0 auto;
-  padding: 2rem;
-  display: grid;
-  gap: 1.5rem;
+  /* Links inside mega columns */
+  .sm-navbar .sm-sub--mega .mega-col .sm-sub-link {
+    display: block;
+    padding: 0.25rem 0;
+  }
 }
 
 
-.sm-sub--mega.sm-show {
-  width:100% !important;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* -----------------------------------
-   Mega menu layout (no ACF)
------------------------------------ */
-
-/* Full-width panel inside the navbar */
-.sm-navbar .sm-sub--mega {
-  width: 100% !important;
-  max-width: 72rem;          /* container width – tweak */
-  margin: 0 auto;
-  padding: 1.5rem 1.75rem;
-  border-radius: 0 0 1rem 1rem;
-  background: #05070c;
-  display: grid;
-  gap: 1.5rem 2rem;
-}
-
-/* Column count based on data attribute */
-.sm-sub--mega[data-mega-cols="1"] {
-  grid-template-columns: minmax(0, 1fr);
-}
-
-.sm-sub--mega[data-mega-cols="2"] {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.sm-sub--mega[data-mega-cols="3"] {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.sm-sub--mega[data-mega-cols="4"] {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
-/* Column item */
-.sm-sub--mega > .mega-col {
-  list-style: none;
-}
-
-.sm-sub--mega .mega-col-inner {
-  border-radius: 0.75rem;
-  padding: 1rem 1.25rem;
-  background: rgba(10, 12, 20, 0.95);
-}
-
-/* Column title */
-.sm-sub--mega .mega-col-title {
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  margin-bottom: 0.75rem;
-  color: rgba(249, 250, 251, 0.8);
-}
-
-/* Links list inside each column */
-.sm-sub--mega .mega-col-links {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.sm-sub--mega .mega-col-links > li {
-  margin: 0.25rem 0;
-}
-
-.sm-sub--mega .mega-col-links a {
-  display: block;
-  font-size: 0.875rem;
-  padding: 0.25rem 0;
-  color: rgba(249, 250, 251, 0.9);
-  text-decoration: none;
-}
-
-.sm-sub--mega .mega-col-links a:hover {
-  color: var(--color-primary, #f97316);
+@media (max-width: 767.98px) {
+  .sm-nav-link.sm-expanded {
+    border-radius: var(--sm-collapsible-nav-link-expanded-border-radius);
+    background: var(--color-secondary);
+    color: inherit;
+  }
 }
