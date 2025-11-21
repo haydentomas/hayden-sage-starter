@@ -17,8 +17,10 @@
 @layer base {
   /* Body text in editor iframe = Cabin */
   body.block-editor-iframe__body.editor-styles-wrapper {
-    font-family: 'Cabin', system-ui, -apple-system, 'Segoe UI', sans-serif;
-    @apply text-base leading-relaxed text-slate-900;
+   font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
+
+
+    @apply  font-normal leading-relaxed text-slate-900;
   }
 
   /* Headings in editor iframe = Merriweather */
@@ -28,8 +30,9 @@
   body.block-editor-iframe__body.editor-styles-wrapper h4,
   body.block-editor-iframe__body.editor-styles-wrapper h5,
   body.block-editor-iframe__body.editor-styles-wrapper h6 {
-    font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
-    @apply font-bold text-slate-900 mb-4;
+      font-family: 'Cabin', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+    @apply font-semibold text-slate-900 mb-4;
   }
 
   /* Basic heading scale (tweak as you like) */

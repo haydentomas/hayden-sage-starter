@@ -103,6 +103,14 @@
     z-index: 1000;
   }
 
+   .sm-navbar .sm-sub--mega ul {
+    margin:0;
+    padding:0;
+   }
+   .sm-navbar .sm-sub--mega ul a:hover {
+    background:none;
+    color:var(--color-primary);
+   }
   /* Show/hide based on aria (SmartMenus toggles this) */
   .sm-navbar .sm-sub--mega[aria-hidden="true"] {
     display: none !important;
@@ -149,7 +157,13 @@
     font-weight: 700;
     margin-bottom: 0.75rem;
     text-transform: uppercase;
+    font-family: var(--font-sans);
+
   }
+
+   .sm-navbar .sm-sub--mega .mega-col-title a {
+    text-decoration:none;
+   }
 
   /* Links inside mega columns */
   .sm-navbar .sm-sub--mega .mega-col .sm-sub-link {
@@ -166,3 +180,5 @@
     color: inherit;
   }
 }
+
+
