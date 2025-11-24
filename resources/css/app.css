@@ -173,12 +173,40 @@
 }
 
 
-@media (max-width: 767.98px) {
+@media (max-width: 768px) {
   .sm-nav-link.sm-expanded {
     border-radius: var(--sm-collapsible-nav-link-expanded-border-radius);
     background: var(--color-secondary);
     color: inherit;
   }
+
+.mega-grid {
+
+  border-radius:5px;
+  padding-top:10px
+}
+.mega-col-title {
+  margin-left:10px;
+  margin-bottom:10px;
+  font-weight: bold;
+  text-transform:uppercase;
+font-family: "Cabin";
+}
+.mega-col-links {
+  padding:0;
+}
+
+@media (max-width: 768px) {
+
+
+  .sm-nav-link, .sm-sub-link {
+        font-family: var(--font-sans);
+        color: var(--color-body);
+        margin-right: 0 !important;
+        background: #3b3b3b;
+        margin-bottom:5px;
+    }
+}
 }
 
 

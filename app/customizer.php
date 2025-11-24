@@ -92,6 +92,56 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
     ));
 
     /**
+     * Grid Display section (Projects + Blog initial items)
+     */
+    $wp_customize->add_section('grid_display_section', [
+        'title'       => __('Grid Display', 'hayden'),
+        'description' => __('Control how many items show initially in grids.', 'hayden'),
+        'priority'    => 35,
+        'panel'       => 'hayden_theme_panel',
+    ]);
+
+    // Projects initial items
+    $wp_customize->add_setting('grid_projects_initial_items', [
+        'default'           => 6,
+        'sanitize_callback' => 'absint',
+        'transport'         => 'refresh',
+    ]);
+
+    $wp_customize->add_control('grid_projects_initial_items_control', [
+        'label'       => __('Projects: initial items', 'hayden'),
+        'description' => __('Number of projects to show before “Load more”.', 'hayden'),
+        'section'     => 'grid_display_section',
+        'settings'    => 'grid_projects_initial_items',
+        'type'        => 'number',
+        'input_attrs' => [
+            'min'  => 1,
+            'max'  => 48,
+            'step' => 1,
+        ],
+    ]);
+
+    // Blog initial items
+    $wp_customize->add_setting('grid_blog_initial_items', [
+        'default'           => 6,
+        'sanitize_callback' => 'absint',
+        'transport'         => 'refresh',
+    ]);
+
+    $wp_customize->add_control('grid_blog_initial_items_control', [
+        'label'       => __('Blog: initial items', 'hayden'),
+        'description' => __('Number of blog posts to show before “Load more”.', 'hayden'),
+        'section'     => 'grid_display_section',
+        'settings'    => 'grid_blog_initial_items',
+        'type'        => 'number',
+        'input_attrs' => [
+            'min'  => 1,
+            'max'  => 48,
+            'step' => 1,
+        ],
+    ]);
+
+    /**
      * Footer Layout section
      */
     $wp_customize->add_section('hayden_footer_section', [
@@ -166,7 +216,6 @@ add_action('wp_head', function () {
     <?php
 });
 
-
 /**
  * Customizer UI styling (left panel only)
  */
@@ -178,8 +227,6 @@ add_action('customize_controls_enqueue_scripts', function () {
         wp_get_theme()->get('Version')
     );
 });
-
-
 
 /**
  * Inject primary colour into Customizer controls (left panel)
@@ -195,8 +242,6 @@ add_action('customize_controls_print_styles', function () {
     </style>
     <?php
 });
-
-
 
 /**
  * Live-update the Customizer controls panel when primary colour changes.

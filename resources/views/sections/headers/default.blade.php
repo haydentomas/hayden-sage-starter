@@ -4,15 +4,11 @@
     <nav id="navbar1" class="sm-navbar">
 
       {{-- Brand --}}
-      <h1 class="sm-brand">
-        @if (has_custom_logo())
-          {!! get_custom_logo() !!}
-        @else
-          <a href="{{ home_url('/') }}" class="text-lg font-semibold">
-            {{ get_bloginfo('name') }}
-          </a>
-        @endif
-      </h1>
+      <div class="sm-brand">
+        @include('partials.site-logo', [
+          'fallback_classes' => 'text-lg font-semibold',
+        ])
+      </div>
 
       {{-- Toggler state --}}
       <span class="sm-toggler-state" id="sm-toggler-state-1"></span>
@@ -40,7 +36,7 @@
             wp_nav_menu([
               'theme_location' => 'primary_navigation',
               'container'      => false,
-              'menu_class'     => 'sm-nav sm-nav--right', // you can add sm-nav--right if you want alignment
+              'menu_class'     => 'sm-nav sm-nav--right',
               'walker'         => new \App\Walkers\SmartMenu_Walker(),
               'depth'          => 4,
               'fallback_cb'    => false,

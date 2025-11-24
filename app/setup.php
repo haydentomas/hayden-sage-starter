@@ -81,6 +81,17 @@ add_action('after_setup_theme', function () {
     add_theme_support('customize-selective-refresh-widgets');
 }, 20);
 
+
+// Allow a custom logo via Customizer → Site Identity
+add_theme_support('custom-logo', [
+    'height'               => 80,
+    'width'                => 240,
+    'flex-width'           => true,
+    'flex-height'          => true,
+    'unlink-homepage-logo' => true,
+]);
+
+
 /**
  * Register the theme sidebars.
  */

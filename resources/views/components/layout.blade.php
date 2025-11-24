@@ -7,6 +7,13 @@
 
     @php(wp_head())
 
+    <script>
+      window.SageGridSettings = {
+        projectsPageSize: {{ (int) get_theme_mod('grid_projects_initial_items', 6) }},
+        blogPageSize:     {{ (int) get_theme_mod('grid_blog_initial_items', 6) }},
+      };
+    </script>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
   </head>
 

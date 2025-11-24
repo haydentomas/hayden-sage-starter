@@ -1,20 +1,16 @@
 {{-- resources/views/sections/headers/logo-top.blade.php --}}
 <header class="site-header header border-b border-white">
   <div class="max-w-7xl mx-auto px-4 py-4 space-y-4">
-    {{-- Row 1: logo full width, centred (or left if you change classes) --}}
+
+    {{-- Row 1: logo full width, centred --}}
     <div class="flex justify-center md:justify-center">
-      @if (has_custom_logo())
-        <div class="h-auto w-40">
-          {!! get_custom_logo() !!}
-        </div>
-      @else
-        <a href="{{ home_url('/') }}" class="text-2xl font-semibold text-center">
-          {{ get_bloginfo('name') }}
-        </a>
-      @endif
+      @include('partials.site-logo', [
+        'logo_classes'     => 'max-h-16 w-auto object-contain',
+        'fallback_classes' => 'text-2xl font-semibold text-center',
+      ])
     </div>
 
-    {{-- Row 2: same SmartMenus nav as default --}}
+    {{-- Row 2: SmartMenus nav --}}
     <nav id="navbar1" class="sm-navbar">
       <span class="sm-toggler-state" id="sm-toggler-state-1"></span>
 
