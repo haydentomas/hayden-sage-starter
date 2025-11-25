@@ -103,11 +103,17 @@ add_action('widgets_init', function () {
         'after_title'   => '</h3>',
     ];
 
-    // Primary (blog/sidebar)
-    register_sidebar([
-        'name' => __('Primary', 'sage'),
-        'id'   => 'sidebar-primary',
-    ] + $config);
+ // Primary (blog/sidebar)
+register_sidebar([
+    'name'          => __('Primary Sidebar', 'hayden'),
+    'id'            => 'sidebar-primary',
+    'description'   => __('Main sidebar shown on blog posts and archives.', 'hayden'),
+    'before_widget' => '<section id="%1$s" class="widget %2$s sidebar-card bg-surface-soft border border-white/5 rounded-2xl p-5 mb-6">',
+    'after_widget'  => '</section>',
+    'before_title'  => '<h2 class="widget-title text-sm font-semibold tracking-wide uppercase text-white mb-3">',
+    'after_title'   => '</h2>',
+] + $config);
+
 
     // Footer columns 1–4
     $footer_base = [

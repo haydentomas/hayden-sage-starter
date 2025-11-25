@@ -134,3 +134,62 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
+
+
+
+// TOC
+
+document.addEventListener('DOMContentLoaded', () => {
+  const tocCard = document.getElementById('post-toc-card');
+  const tocContainer = document.getElementById('post-toc');
+  const content = document.querySelector('.e-content');
+
+  if (!tocCard || !tocContainer || !content) {
+    return; // not a single post or no content
+  }
+
+  // Collect headings (h2 + h3 is a nice balance)
+  const headings = Array.from(content.querySelectorAll('h2, h3'));
+
+  if (!headings.length) {
+    // No headings → hide the card entirely
+    tocCard.style.display = 'none';
+    return;
+  }
+
+  // Simple slug/ID generator
+  function makeSlug(text) {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w]+/g, '-')   // non-word to dash
+      .replace(/^-+|-+$/g, '');  // trim dashes
+  }
+
+  // Build TOC list
+  const list = document.createElement('ul');
+
+  headings.forEach((heading) => {
+    if (!heading.id) {
+      heading.id = makeSlug(heading.textContent);
+    }
+
+    const li = document.createElement('li');
+    const link = document.createElement('a');
+
+    link.href = `#${heading.id}`;
+    link.textContent = heading.textContent || heading.innerText || '';
+
+    // Mark level so we can indent h3s in CSS
+    if (heading.tagName.toLowerCase() === 'h3') {
+      li.classList.add('toc-level-3');
+    }
+
+    li.appendChild(link);
+    list.appendChild(li);
+  });
+
+  // Clear placeholder text and inject list
+  tocContainer.innerHTML = '';
+  tocContainer.appendChild(list);
+});

@@ -36,3 +36,56 @@
   --color-surface-border-strong: rgba(15, 23, 42, 0.7);
   --shadow-strong: 0 18px 45px rgba(0, 0, 0, 0.45);
 }
+
+
+@layer components {
+
+  #post-toc-card {
+    z-index: 20;              /* sit above other widgets */
+  }
+
+  #post-toc-card {
+    background-color: #020617; /* or whatever your dark surface colour is */
+    z-index: 20;
+  }
+  /* TOC basic styling */
+  #post-toc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  #post-toc li {
+    margin: 0.25rem 0;
+    font-size: 1rem; /* text-sm */
+    border-bottom: solid 1px #757373;
+    padding-bottom:5px;
+  }
+
+  #post-toc a {
+    text-decoration: none;
+    color: inherit;
+    opacity: 0.85;
+    transition: opacity 150ms ease, color 150ms ease;
+  }
+
+  #post-toc a:hover {
+    opacity: 1;
+    color: var(--color-primary);
+  }
+
+  /* Indent h3 items a bit */
+  #post-toc li.toc-level-3 {
+/*
+    font-size: 0.8rem;
+    opacity: 0.8; */
+  }
+
+  /* Sticky card on desktop */
+  @media (min-width: 1024px) {
+    #post-toc-card {
+      /* position: sticky; */
+      top: 1.5rem;
+    }
+  }
+}
