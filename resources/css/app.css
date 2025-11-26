@@ -23,7 +23,7 @@
 ----------------------------------------------------- */
 @layer base {
   body {
-    @apply font-serif text-lg leading-relaxed text-body bg-surface;
+    @apply font-serif text-lg leading-relaxed text-body;
   }
 
   h1,
@@ -32,7 +32,7 @@
   h4,
   h5,
   h6 {
-    @apply font-sans font-semibold text-body;
+    @apply font-sans font-semibold text-headings;
   }
 
   h1 { @apply text-3xl md:text-4xl mb-4; }

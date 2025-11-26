@@ -1,5 +1,5 @@
-<footer class="site-footer content-info border-t border-white/10">
-  <div class="max-w-7xl mx-auto px-4 py-8">
+<footer class="site-footer footer  content-info border-t border-white/10">
+  <div class="site-container mx-auto px-4 py-8">
     @php
       $footer_columns = (int) get_theme_mod('hayden_footer_columns', 3);
 

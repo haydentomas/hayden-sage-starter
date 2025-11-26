@@ -23,10 +23,15 @@
   --sm-separator: rgba(148, 163, 184, 0.25);
   --sm-border: var(--color-border-soft);
 
- --sm-box-shadow: var(--shadow-strong);
+  --sm-box-shadow: var(--shadow-strong);
   --sm-text-shadow: none;
 
   --sm-font-family: var(--font-sans);
+}
+
+/* Mobile hamburger / toggler icon colour follows our token */
+.sm-navbar .sm-toggler-anchor {
+  color: var(--color-nav-toggle) !important;
 }
 
 /* --------------------------------------------------------------
@@ -68,39 +73,39 @@
 -------------------------------------------------------------- */
 @media (min-width: 768px) {
   .sm-navbar {
-    /* navbar + dropdown colours */
+    /* navbar + dropdown colours wired to Customizer tokens */
     --sm-dropdowns-navbar-bg: var(--color-surface);
-    --sm-dropdowns-navbar-color: var(--color-body);
+    --sm-dropdowns-navbar-color: var(--color-nav-link);
 
-    --sm-dropdowns-sub-bg: var(--color-surface-alt);
-   --sm-dropdowns-sub-border-color: var(--color-surface-border-strong);
+    /* dropdown panel */
+    --sm-dropdowns-sub-bg: var(--color-nav-sub-bg);
+    --sm-dropdowns-sub-border-color: var(--color-surface-border-strong);
     --sm-dropdowns-sub-box-shadow: 0 18px 45px var(--sm-box-shadow);
 
-    --sm-dropdowns-nav-link-hover-bg: rgba(249, 115, 22, 0.16);
-    --sm-dropdowns-nav-link-hover-color: var(--color-body);
-
-    --sm-dropdowns-nav-link-active-bg: var(--color-primary);
+    /* these mainly feed vendor default states; we still override below */
+    --sm-dropdowns-nav-link-hover-bg: transparent;
+    --sm-dropdowns-nav-link-hover-color: var(--color-nav-link-hover);
+    --sm-dropdowns-nav-link-active-bg: var(--color-nav-link-hover);
     --sm-dropdowns-nav-link-active-color: var(--color-surface);
 
-    --sm-dropdowns-sub-link-hover-bg: rgba(249, 115, 22, 0.16);
-    --sm-dropdowns-sub-link-hover-color: var(--color-body);
-
-    --sm-dropdowns-sub-link-active-bg: var(--color-primary);
-    --sm-dropdowns-sub-link-active-color: var(--color-surface);
+    --sm-dropdowns-sub-link-hover-bg: var(--color-nav-sub-hover-bg);
+    --sm-dropdowns-sub-link-hover-color: var(--color-nav-sub-link);
+    --sm-dropdowns-sub-link-active-bg: var(--color-nav-sub-hover-bg);
+    --sm-dropdowns-sub-link-active-color: var(--color-nav-sub-link);
 
     border-color: var(--sm-dropdowns-navbar-border-color);
     background: var(--sm-dropdowns-navbar-bg);
     color: var(--sm-dropdowns-navbar-color);
   }
 
-  /* Main top-level links */
+  /* Main top-level links (parents) */
   .sm-nav-link {
     grid-area: link/link/link/link-split-toggler;
     border-radius: var(--sm-dropdowns-nav-link-border-radius);
     padding: var(--sm-dropdowns-nav-link-padding-y)
       var(--sm-dropdowns-nav-link-padding-x);
     background: transparent;
-    color: var(--sm-dropdowns-nav-link-color);
+    color: var(--color-nav-link); /* parent text colour */
     font-family: var(--font-sans);
     font-size: var(--sm-font-size);
     font-weight: var(--sm-dropdowns-nav-link-font-weight);
@@ -109,33 +114,33 @@
     transition: background 150ms ease, color 150ms ease;
   }
 
-  /* Hover / active for main links */
+  /* Hover / active for main links (uses nav-hover token as bg) */
   @media (hover: hover) and (pointer: fine) {
     .sm-nav-link:hover {
-      background: var(--color-primary);
+      background: var(--color-nav-link-hover);
       color: var(--color-surface);
     }
   }
 
   .sm-nav-link:active {
-    background: var(--color-primary);
+    background: var(--color-nav-link-hover);
     color: var(--color-surface);
   }
 
   .sm-nav-link.sm-selected {
-    background: var(--color-primary-soft);
+    background: var(--color-nav-link-hover);
     color: var(--color-surface);
     font-weight: 600;
   }
 
-  /* Dropdown items */
+  /* Dropdown items (children) */
   .sm-sub-link {
     grid-area: link/link/link/link-split-toggler;
     border-radius: var(--sm-dropdowns-sub-link-border-radius);
     padding: var(--sm-dropdowns-sub-link-padding-y)
       var(--sm-dropdowns-sub-link-padding-x);
     background: transparent;
-    color: var(--sm-dropdowns-sub-link-color);
+    color: var(--color-nav-sub-link); /* child text colour */
     font-family: var(--font-sans);
     font-size: var(--sm-font-size-small);
     font-weight: var(--sm-dropdowns-sub-link-font-weight);
@@ -146,19 +151,19 @@
 
   @media (hover: hover) and (pointer: fine) {
     .sm-sub-link:hover {
-      background: rgba(249, 115, 22, 0.16);
-      color: var(--color-body);
+      background: var(--color-nav-sub-hover-bg); /* child hover bg */
+      color: var(--color-nav-sub-link);
     }
   }
 
   .sm-sub-link:active,
   .sm-sub-link.sm-selected {
-    background: var(--color-primary);
-    color: var(--color-surface);
+    background: var(--color-nav-sub-hover-bg);
+    color: var(--color-nav-sub-link);
     font-weight: 600;
   }
 
-  /* CTA button in nav – orange pill on the right */
+  /* CTA button in nav – keep using primary token */
   .cta-btn a {
     grid-area: link/link/link/link-split-toggler;
     border-radius: 9999px;
@@ -193,9 +198,75 @@
 /* --------------------------------------------------------------
    Submenu width tweak (unchanged from your last snippet)
 -------------------------------------------------------------- */
+/* --------------------------------------------------------------
+   Submenu width tweaks
+   - Normal dropdowns = snug to content
+   - Mega menus = full navbar/container width
+-------------------------------------------------------------- */
 @media (min-width: 768px) {
-  .sm-navbar .sm-sub {
+
+  /* normal dropdowns */
+  .sm-navbar .sm-sub:not(.sm-sub--mega) {
     min-width: unset !important;
     width: max-content !important;
+  }
+
+  /* mega dropdowns */
+  .sm-navbar .sm-sub--mega {
+    left: 0 !important;
+    right: 0 !important;
+    min-width: 100% !important;
+    width: 100% !important;
+  }
+}
+
+
+
+/* --------------------------------------------------------------
+   Mega menu colours (use Customizer nav tokens)
+-------------------------------------------------------------- */
+@media (min-width: 768px) {
+
+  /* Mega panel container */
+  .sm-navbar .sm-sub--mega {
+    background: var(--color-nav-sub-bg) !important;
+    color: var(--color-nav-sub-link) !important;
+  }
+
+  /* Each mega column "card" */
+  .sm-navbar .sm-sub--mega > li {
+    background: transparent;
+  }
+
+  /* Column headings (e.g. "WordPress Development") */
+  .sm-navbar .sm-sub--mega > li > a,
+  .sm-navbar .sm-sub--mega .sm-mega-group-title {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-headings);
+  }
+
+  /* Links inside each column (Object 1, Object 2, etc.) */
+  .sm-navbar .sm-sub--mega .sm-sub-link {
+    background: transparent;
+    color: var(--color-nav-sub-link);
+  }
+
+  /* Hover/active – match normal dropdown behaviour */
+  @media (hover: hover) and (pointer: fine) {
+    .sm-navbar .sm-sub--mega .sm-sub-link:hover {
+      background: var(--color-nav-sub-hover-bg);
+      color: var(--color-nav-sub-link);
+    }
+  }
+
+  .sm-navbar .sm-sub--mega .sm-sub-link:active,
+  .sm-navbar .sm-sub--mega .sm-sub-link.sm-selected {
+    background: var(--color-nav-sub-hover-bg);
+    color: var(--color-nav-sub-link);
+    font-weight: 600;
   }
 }

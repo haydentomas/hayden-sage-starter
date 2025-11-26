@@ -9,10 +9,17 @@
   --color-primary-soft: #ffedd5;
 
   --color-body: #ffffff;
-  --color-body-muted: #e2e8f0;
+  --color-headings: #ffffff;
+  --color-body-muted: #1a1a1a;
 
-  --color-surface: #000000;
+  --color-surface: #FFFAF8;
   --color-surface-alt: #111111;
+
+  --color-footer:#333;
+
+
+   /* New: navigation links */
+  --color-nav-link: #111111; /* default, adjust as you like */
 
   /* Typography */
   --font-sans: Cabin, ui-sans-serif, system-ui, -apple-system,
@@ -39,6 +46,10 @@
 
 
 @layer components {
+
+  footer {
+    background:var(--color-footer);
+  }
 
   #post-toc-card {
     z-index: 20;              /* sit above other widgets */
@@ -88,4 +99,51 @@
       top: 1.5rem;
     }
   }
+}
+
+
+/* Align logo flush with container edge */
+.sm-navbar .sm-brand {
+  padding-left: 0;
+  margin-left: 0;
+}
+
+
+/* Remove built-in SmartMenus navbar padding */
+.sm-navbar {
+  padding: 0 !important;
+}
+
+
+.header-cta {
+  text-decoration: none !important;
+}
+
+
+.site-container { max-width: var(--site-max-width); margin-inline:auto; }
+/* Make section descriptions readable on dark customizer sidebar */
+#customize-controls .description {
+    color: #ffffff !important;
+}
+
+
+
+
+.widget,
+.wp-block-group.is-style-widget {
+  background: var(--color-widget-bg);
+  color: var(--color-widget-text);
+}
+
+.widget-title,
+.widget .wp-block-heading {
+  color: var(--color-widget-heading);
+}
+
+.widget a {
+  color: var(--color-widget-link);
+}
+
+.widget a:hover {
+  text-decoration: underline;
 }

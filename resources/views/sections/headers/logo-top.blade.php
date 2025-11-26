@@ -1,16 +1,25 @@
 {{-- resources/views/sections/headers/logo-top.blade.php --}}
-<header class="site-header header border-b border-white">
-  <div class="max-w-7xl mx-auto px-4 py-4 space-y-4">
 
-    {{-- Row 1: logo full width, centred --}}
+@php
+    // Pull logo height from Customizer (default 80px)
+    $logo_height = absint(get_theme_mod('hayden_logo_max_height', 80));
+    $inline_logo_style = $logo_height ? "max-height:{$logo_height}px; height:auto; width:auto;" : '';
+@endphp
+
+<header class="site-header header border-b border-white">
+  <div class="site-container mx-auto px-4 py-4 space-y-4">
+
+    {{-- Row 1: Centered Logo --}}
     <div class="flex justify-center md:justify-center">
       @include('partials.site-logo', [
-        'logo_classes'     => 'max-h-16 w-auto object-contain',
+        // remove Tailwind max-h-* so Customizer value wins
+        'logo_classes'     => 'w-auto object-contain',
+        'logo_style'       => $inline_logo_style,
         'fallback_classes' => 'text-2xl font-semibold text-center',
       ])
     </div>
 
-    {{-- Row 2: SmartMenus nav --}}
+    {{-- Row 2: SmartMenus --}}
     <nav id="navbar1" class="sm-navbar">
       <span class="sm-toggler-state" id="sm-toggler-state-1"></span>
 

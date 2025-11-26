@@ -28,13 +28,13 @@
     $previous_link = get_previous_post_link(
       '%link',
       '<span class="block text-xs uppercase text-body-muted">&larr; Previous Post</span>
-       <span class="block font-semibold text-white">%title</span>'
+       <span class="block font-semibold font-sans mt-1">%title</span>'
     );
 
     $next_link = get_next_post_link(
       '%link',
       '<span class="block text-xs uppercase text-body-muted">Next Post &rarr;</span>
-       <span class="block font-semibold text-white text-right">%title</span>'
+       <span class="block font-semibold  text-right font-sans mt-1">%title</span>'
     );
   @endphp
 

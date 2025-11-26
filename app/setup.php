@@ -203,3 +203,48 @@ add_action('wp_update_nav_menu_item', function ($menu_id, $menu_item_db_id, $arg
         update_post_meta($menu_item_db_id, '_menu_item_mega_columns', $cols);
     }
 }, 10, 3);
+
+
+
+
+add_action('customize_register', function ($wp_customize) {
+
+    // Section
+    $wp_customize->add_section('bbi_colors', [
+        'title'    => __('Theme Colors', 'sage'),
+        'priority' => 30,
+    ]);
+
+    // Setting
+    $wp_customize->add_setting('color_surface', [
+        'default'           => '#FFFAF8',
+        'transport'         => 'refresh',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ]);
+
+    // Control
+// Control
+$wp_customize->add_control(
+    new \WP_Customize_Color_Control(
+        $wp_customize,
+        'color_surface',
+        [
+            'label'   => __('Background Surface Color', 'sage'),
+            'section' => 'bbi_colors',
+            'settings'=> 'color_surface',
+        ]
+    )
+);
+});
+
+
+
+add_action('wp_head', function () {
+    $color_surface = get_theme_mod('color_surface', '#FFFAF8');
+
+    echo "<style>
+        :root {
+            --color-surface: {$color_surface};
+        }
+    </style>";
+});

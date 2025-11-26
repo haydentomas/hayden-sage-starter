@@ -114,3 +114,12 @@ body.wp-customizer #customize-controls #customize-theme-controls .accordion-sect
 body.wp-customizer #customize-controls #customize-outer-theme-controls .accordion-section-title::after {
   color: #fff !important; /* or var(--color-primary) if you ever want that */
 }
+
+
+
+/* Hide dummy inputs for custom heading/intro controls */
+.customize-control.customize-control-custom input,
+.customize-control.customize-control-custom select,
+.customize-control.customize-control-custom textarea {
+  display: none !important;
+}
