@@ -1,76 +1,191 @@
 # Hayden Tomas – Custom Sage Starter Theme
 
-This is my custom WordPress theme built using **Sage (Roots)**, **Laravel Blade**, **Vite**, and **Tailwind CSS**.  
-It’s designed to be a clean starting point for professional WordPress development with modern tooling, hot reload, Blade templating, and a fully extendable structure.
+A modern WordPress theme powered by **Sage (Roots)**, **Laravel Blade**, **Vite**, and **Tailwind CSS**, extended with a full **visual Customizer system**, configurable layout options, dynamic colour tokens, footer/widget systems, navigation controls, and block-ready templates.
 
-This project serves as my personal Sage starter that I can clone on any machine — including my main PC and home setup — and rebuild with Composer and NPM.
+This theme is now your **professional base theme** for all BBI and client builds. Clone it, run Composer/NPM, and you have a full modern workflow instantly.
 
 ---
 
 ## 🚀 Features
 
-- **Sage (Roots) dev-main**
-- **Laravel Blade templating**
-- **Vite 7 with hot reload**
-- **Tailwind CSS pre-configured**
-- **Blade components, layouts, controllers**
-- Clean folder structure for scalable WordPress development
-- Custom `.gitignore` to keep repo clean  
-  (`vendor/`, `node_modules/`, `.env`, `.vite`, public build)
+### 🧩 Modern Development Stack
+- **Sage (Roots)** (dev-main)
+- **Laravel Blade** templating
+- **Vite 7** with instant hot reload
+- **Tailwind CSS** fully configured
+- Blade components, controllers, layouts
+- Clean, scalable filesystem structure
+
+### 🎨 Extensive Theme Customizer Controls  
+All controls output CSS variables and update live in the preview.
+
+---
+
+## 🎨 Global Brand Colours
+- Primary colour  
+- Surface/background colour  
+- Heading text colour  
+- Body text colour  
+- Muted body text colour  
+
+---
+
+## 🧭 Navigation Colours
+- Top-level (parent) link colour  
+- Hover/active link colour  
+- Dropdown background  
+- Dropdown link colour  
+- Dropdown hover background  
+
+---
+
+## 📐 Layout Controls
+- Site container max width (with live slider)
+- Header layout selector:
+  - Default (logo left, nav right)
+  - Logo Top layout
+  - Nav-center-CTA layout
+- CTA button text + URL  
+- Custom logo max height  
+
+---
+
+## 🦶 Footer Controls
+- Footer background colour  
+- Footer text colour  
+- Footer widget column count (1–4)
+- Clean footer design (no widget card backgrounds)
+
+---
+
+## 🧱 Widget Systems
+
+### 🔹 Sidebar Widgets
+Full styling controls:
+- Sidebar widget background colour  
+- Sidebar widget title colour  
+- Sidebar widget text colour  
+- Sidebar widget link colour  
+
+Styled as “cards” using:
+- `bg-surface-soft`
+- rounded corners  
+- border  
+- variable-driven colours
+
+### 🔹 Footer Widgets (Independent System)
+Brand-new dedicated controls:
+- Footer widget title colour  
+- Footer widget text colour  
+- Footer widget link colour  
+
+Footer widgets use a **clean, non-card layout**:
+- No widget background  
+- No borders  
+- No box styling  
+- Fully independent from sidebar widget colours
+
+---
+
+## 🗂️ Content Card Controls  
+A full colour system for blog/portfolio cards:
+
+- Card background  
+- Card heading colour  
+- Card text colour  
+- Card muted/excerpt colour  
+
+---
+
+## 🎛️ Dynamic CSS Variables
+
+All customizer options output into:
+
+```css
+:root {
+  --color-primary: ...;
+  --color-surface: ...;
+  --color-headings: ...;
+  --color-body: ...;
+  --color-body-muted: ...;
+
+  --color-footer: ...;
+  --color-footer-text: ...;
+
+  --color-widget-bg: ...;
+  --color-widget-heading: ...;
+  --color-widget-text: ...;
+  --color-widget-link: ...;
+
+  --color-footer-widget-heading: ...;
+  --color-footer-widget-text: ...;
+  --color-footer-widget-link: ...;
+
+  --card-bg: ...;
+  --card-heading: ...;
+  --card-text: ...;
+  --card-text-muted: ...;
+
+  --color-nav-link: ...;
+  --color-nav-link-hover: ...;
+  --color-nav-sub-bg: ...;
+  --color-nav-sub-link: ...;
+  --color-nav-sub-hover-bg: ...;
+
+  --site-max-width: ...;
+  --site-logo-max-height: ...;
+}
+```
+
+This ensures Tailwind, components, and Blade templates all pull from a unified design system.
+
+---
+
+## 🧭 Navigation
+- SmartMenus integration  
+- Tailwind colour token overrides  
+- Automatic contrast calculation for mobile toggle  
+- Optional native mega-menu  
+- Split-nav support depending on chosen header layout  
+
+---
+
+## 🧱 Block-Ready
+Theme ships ready for:
+- Core Gutenberg blocks  
+- Widget blocks  
+- Latest Comments, Latest Posts  
+- Categories / Archives  
+- ACF blocks (via Fancoolio or new block patterns)
 
 ---
 
 ## 🖥️ Requirements
 
-Ensure the following are installed:
-
-- **PHP 8.2+ (Non-thread-safe NTS build)**  
-  ✔️ *I use:* `php-8.2.29-nts-Win32-vs16-x64.zip`  
-  > I keep a copy of this ZIP so I can re-create the PHP installation at home.  
-  Extract it to `C:\php\`, add to PATH, and copy in your `php.ini`.
-
+- **PHP 8.2+ (NTS build)**  
 - **Composer 2**  
-  Composer 1 is deprecated and will throw warnings.
-
-- **Node.js 18+ / NPM 9+**
-
-- **Working local environment**  
-  e.g. Laragon, LocalWP, DDEV, XAMPP, or custom Bedrock-style setup.
+- **Node.js 18+ / NPM 9+**  
+- Local environment (LocalWP, Laragon, DDEV, XAMPP, etc.)
 
 ---
 
-## 📦 Installation (New Machine Setup)
-
-Clone the theme into your WordPress installation:
+## 📦 Installation (New Machine)
 
 ```bash
 cd wp-content/themes
 git clone https://github.com/YOUR_USERNAME/hayden-sage-starter.git haydentomas
 cd haydentomas
-```
-
-### 1. Install PHP dependencies:
-
-```bash
 composer install
-```
-
-### 2. Install Node dependencies:
-
-```bash
 npm install
 ```
 
-### 3. Create your `.env` file:
+Add `.env`:
 
-```bash
+```
 APP_URL=http://your-local-domain.test
 ```
 
-Example:  
-`APP_URL=http://sage.local`
-
-### 4. Start Vite (development mode):
+Run dev mode:
 
 ```bash
 npm run dev
@@ -78,103 +193,83 @@ npm run dev
 
 ---
 
-## 🛠️ Build for Production
+## 🏭 Production Build
 
 ```bash
 npm run build
-```
-
-This outputs files into:
-
-```
-public/build/
+composer install --no-dev --optimize-autoloader
 ```
 
 ---
 
-## 🔄 Typical Workflow
+## 🔄 Development Workflow
 
-1. Clone theme or pull updates  
-2. Run `composer install`  
-3. Run `npm install`  
-4. Run `npm run dev`  
+1. Pull or clone  
+2. `composer install`  
+3. `npm install`  
+4. `npm run dev`  
 5. Develop normally  
-6. Push changes  
-7. Deploy using production build instructions below
+6. `npm run build` before deployment  
 
 ---
 
 ## 🚀 Deployment Guide
 
-This is the **exact deployment process** for taking this Sage theme from local → live server.
-
-### 1. Build production assets
-
+### 1. Build assets
 ```bash
 npm run build
 ```
 
-### 2. Install production PHP dependencies
-
+### 2. Install prod PHP deps
 ```bash
 composer install --no-dev --optimize-autoloader
 ```
 
-### 3. (Optional) Remove node_modules
-
-```powershell
-Remove-Item -Recurse -Force node_modules
+### 3. Remove node_modules (optional)
+```bash
+rm -rf node_modules
 ```
 
-### 4. Zip the theme folder
-
-Include:
-
+### 4. ZIP the theme  
+Include:  
 - `app/`  
 - `resources/`  
 - `public/`  
 - `vendor/`  
 - PHP files  
-- composer.json / composer.lock  
+- composer.json/lock  
 
-Exclude:
-
+Exclude:  
 - node_modules  
 - .git  
 - .env  
 - .vite  
 
 ### 5. Upload to server
-
-Upload the ZIP to:
+Extract into:
 
 ```
 wp-content/themes/
 ```
 
-Extract it, then activate the theme in WordPress admin.
-
-### 6. Finalise
-
-Visit:
-
-**Settings → Permalinks → Save**
+### 6. Final step
+Go to **Permalinks → Save** to refresh rewrite rules.
 
 ---
 
-## 📦 Optional: Full Site Migration (All-in-One WP Migration)
+## 📦 Optional: Full Site Migration (AIO WP Migration)
 
-Use AIO Migration only for:
+AIO Migration should be used only for:
 
 - Database  
 - Uploads  
-- ACF data  
+- ACF fields  
 
-Upload the theme separately to avoid overwriting it.
+Upload the theme manually to avoid conflicts.
 
 ---
 
-## 🧹 Git Ignore Rules
+## 🧹 .gitignore
 
 ```
 vendor/
@@ -186,12 +281,11 @@ public/build/
 
 ---
 
-## 📬 Author
+## 👤 Author
 
 **Hayden Tomas**
 
 ---
 
 ## 📝 License
-
 MIT
