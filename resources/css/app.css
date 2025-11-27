@@ -203,7 +203,7 @@ font-family: "Cabin";
         font-family: var(--font-sans);
         color: var(--color-body);
         margin-right: 0 !important;
-        background: #3b3b3b;
+        background: var(--color-nav-sub-hover-bg);
         margin-bottom:5px;
     }
 }

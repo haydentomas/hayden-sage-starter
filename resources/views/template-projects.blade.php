@@ -27,14 +27,14 @@
 
       {{-- Filter buttons --}}
       <div class="flex flex-wrap gap-3">
-        <button class="px-4 py-2 rounded-full border text-sm filter-btn is-active cursor-pointer"
+        <button class="px-4 py-2 rounded-full  text-sm filter-btn is-active cursor-pointer"
                 type="button"
                 data-filter="all">
           All
         </button>
 
         @foreach ($tech_terms as $term)
-          <button class="px-4 py-2 rounded-full border text-sm filter-btn cursor-pointer"
+          <button class="px-4 py-2 rounded-full bg-gray-100 text-sm filter-btn cursor-pointer"
                   type="button"
                   data-filter="{{ $term->slug }}">
             {{ $term->name }}
@@ -58,7 +58,7 @@
             $term_slugs = implode(' ', $term_slugs_array);
           @endphp
 
-          <article class="project-card bg-surface-soft rounded-2xl overflow-hidden shadow-soft"
+          <article class="project-card rounded-2xl overflow-hidden shadow-soft"
                    data-tech="{{ $term_slugs }}">
             @if (has_post_thumbnail())
               <div class="aspect-[16/9] overflow-hidden">
@@ -82,7 +82,7 @@
         <div class="mt-8 text-center">
           <button id="projects-load-more"
                   type="button"
-                  class="inline-flex items-center px-5 py-2 rounded-full border text-sm filter-btn">
+                  class="inline-flex items-center px-5 py-2 rounded-full bg-primary text-white font-sans cursor-pointer text-sm filter-btn">
             Load more projects
           </button>
         </div>

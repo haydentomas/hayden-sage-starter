@@ -10,7 +10,7 @@
     $cta_url   = get_theme_mod('hayden_header_cta_url', home_url('/start-a-project'));
 @endphp
 
-<header class="site-header header border-b border-white">
+<header class="site-header header ">
   <div class="site-container mx-auto px-4 py-4">
     <nav id="navbar1" class="sm-navbar flex items-center justify-between gap-6 w-full">
 

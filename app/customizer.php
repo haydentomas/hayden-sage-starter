@@ -71,8 +71,8 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
         'type'            => 'text',
         'active_callback' => function ($control) {
             return $control->manager
-                ->get_setting('hayden_header_layout')
-                ->value() === 'nav-center-cta';
+                    ->get_setting('hayden_header_layout')
+                    ->value() === 'nav-center-cta';
         },
     ]);
 
@@ -90,8 +90,8 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
         'type'            => 'url',
         'active_callback' => function ($control) {
             return $control->manager
-                ->get_setting('hayden_header_layout')
-                ->value() === 'nav-center-cta';
+                    ->get_setting('hayden_header_layout')
+                    ->value() === 'nav-center-cta';
         },
     ]);
 
@@ -281,7 +281,7 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
         ]
     ));
 
-    // Widget / card background → --color-surface-soft / --color-widget-bg
+    // Widget background → --color-surface-soft / --color-widget-bg
     $wp_customize->add_setting('hayden_widget_bg_color', [
         'default'           => '#000000', // black by default
         'transport'         => 'refresh',
@@ -292,7 +292,7 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
         $wp_customize,
         'hayden_widget_bg_color_control',
         [
-            'label'    => __('Widget / Card Background Colour', 'hayden'),
+            'label'    => __('Widget Background Colour', 'hayden'),
             'section'  => 'hayden_color_section',
             'settings' => 'hayden_widget_bg_color',
         ]
@@ -368,6 +368,86 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
             'label'    => __('Widget Link Colour', 'hayden'),
             'section'  => 'hayden_color_section',
             'settings' => 'hayden_widget_link_color',
+        ]
+    ));
+
+    /**
+     * ------------------------------------------------------------
+     * CONTENT CARDS SECTION (blog / portfolio cards)
+     * ------------------------------------------------------------
+     */
+    $wp_customize->add_section('hayden_cards_section', [
+        'title'       => __('Content Cards', 'hayden'),
+        'description' => __('Colours for blog, portfolio and other content cards.', 'hayden'),
+        'priority'    => 32,
+        'panel'       => 'hayden_theme_panel',
+    ]);
+
+    // Card background → --card-bg
+    $wp_customize->add_setting('hayden_card_bg', [
+        'default'           => '#000000',
+        'transport'         => 'refresh',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ]);
+
+    $wp_customize->add_control(new \WP_Customize_Color_Control(
+        $wp_customize,
+        'hayden_card_bg_control',
+        [
+            'label'    => __('Card Background Colour', 'hayden'),
+            'section'  => 'hayden_cards_section',
+            'settings' => 'hayden_card_bg',
+        ]
+    ));
+
+    // Card heading colour → --card-heading
+    $wp_customize->add_setting('hayden_card_heading', [
+        'default'           => '#f97316',
+        'transport'         => 'refresh',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ]);
+
+    $wp_customize->add_control(new \WP_Customize_Color_Control(
+        $wp_customize,
+        'hayden_card_heading_control',
+        [
+            'label'    => __('Card Heading Colour', 'hayden'),
+            'section'  => 'hayden_cards_section',
+            'settings' => 'hayden_card_heading',
+        ]
+    ));
+
+    // Card text colour → --card-text
+    $wp_customize->add_setting('hayden_card_text', [
+        'default'           => '#f97316',
+        'transport'         => 'refresh',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ]);
+
+    $wp_customize->add_control(new \WP_Customize_Color_Control(
+        $wp_customize,
+        'hayden_card_text_control',
+        [
+            'label'    => __('Card Link Colour', 'hayden'),
+            'section'  => 'hayden_cards_section',
+            'settings' => 'hayden_card_text',
+        ]
+    ));
+
+    // Card muted text (excerpt) → --card-text-muted
+    $wp_customize->add_setting('hayden_card_text_muted', [
+        'default'           => '#e5e5e5',
+        'transport'         => 'refresh',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ]);
+
+    $wp_customize->add_control(new \WP_Customize_Color_Control(
+        $wp_customize,
+        'hayden_card_text_muted_control',
+        [
+            'label'    => __('Card Muted Text Colour', 'hayden'),
+            'section'  => 'hayden_cards_section',
+            'settings' => 'hayden_card_text_muted',
         ]
     ));
 
@@ -597,10 +677,16 @@ add_action('wp_head', function () {
     $body_text  = sanitize_hex_color(get_theme_mod('hayden_body_color', '#111111')) ?: '#111111';
     $footer     = sanitize_hex_color(get_theme_mod('hayden_footer_color', '#020617')) ?: '#020617';
 
-    $widget_bg     = sanitize_hex_color(get_theme_mod('hayden_widget_bg_color', '#000000')) ?: '#000000';
-    $widget_title  = sanitize_hex_color(get_theme_mod('hayden_widget_title_color', '#f97316')) ?: '#f97316';
-    $widget_text   = sanitize_hex_color(get_theme_mod('hayden_widget_text_color', '#ffffff')) ?: '#ffffff';
-    $widget_link   = sanitize_hex_color(get_theme_mod('hayden_widget_link_color', '#f97316')) ?: '#f97316';
+    $widget_bg    = sanitize_hex_color(get_theme_mod('hayden_widget_bg_color', '#000000')) ?: '#000000';
+    $widget_title = sanitize_hex_color(get_theme_mod('hayden_widget_title_color', '#f97316')) ?: '#f97316';
+    $widget_text  = sanitize_hex_color(get_theme_mod('hayden_widget_text_color', '#ffffff')) ?: '#ffffff';
+    $widget_link  = sanitize_hex_color(get_theme_mod('hayden_widget_link_color', '#f97316')) ?: '#f97316';
+
+    // Card colours
+    $card_bg         = sanitize_hex_color(get_theme_mod('hayden_card_bg', '#000000')) ?: '#000000';
+    $card_heading    = sanitize_hex_color(get_theme_mod('hayden_card_heading', '#ffffff')) ?: '#ffffff';
+    $card_text       = sanitize_hex_color(get_theme_mod('hayden_card_text', '#ffffff')) ?: '#ffffff';
+    $card_text_muted = sanitize_hex_color(get_theme_mod('hayden_card_text_muted', '#e5e5e5')) ?: '#e5e5e5';
 
     $nav_link         = sanitize_hex_color(get_theme_mod('hayden_nav_link_color', '#111111')) ?: '#111111';
     $nav_link_hover   = sanitize_hex_color(get_theme_mod('hayden_nav_link_hover_color', '#f97316')) ?: '#f97316';
@@ -641,6 +727,11 @@ add_action('wp_head', function () {
         --color-widget-heading: <?php echo esc_html($widget_title); ?>;
         --color-widget-text: <?php echo esc_html($widget_text); ?>;
         --color-widget-link: <?php echo esc_html($widget_link); ?>;
+
+        --card-bg: <?php echo esc_html($card_bg); ?>;
+        --card-heading: <?php echo esc_html($card_heading); ?>;
+        --card-text: <?php echo esc_html($card_text); ?>;
+        --card-text-muted: <?php echo esc_html($card_text_muted); ?>;
 
         --color-nav-link: <?php echo esc_html($nav_link); ?>;
         --color-nav-link-hover: <?php echo esc_html($nav_link_hover); ?>;

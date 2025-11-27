@@ -147,3 +147,57 @@
 .widget a:hover {
   text-decoration: underline;
 }
+
+
+/* =========================================
+   Content cards (Blog + Projects etc.)
+   ========================================= */
+
+.blog-card,
+.project-card {
+  background-color: var(--card-bg, var(--color-surface-soft));
+  color: var(--card-text, rgb(var(--color-body)));
+}
+
+/* Card headings */
+.blog-card h1,
+.blog-card h2,
+.blog-card h3,
+.blog-card h4,
+.blog-card h5,
+.blog-card h6,
+.project-card h1,
+.project-card h2,
+.project-card h3,
+.project-card h4,
+.project-card h5,
+.project-card h6 {
+  color: var(
+    --card-heading,
+    var(--card-text, rgb(var(--color-body)))
+  );
+}
+
+/* Muted text (excerpt/meta) */
+.blog-card .text-body-muted,
+.project-card .text-body-muted {
+  color: var(--card-text-muted, rgba(255, 255, 255, 0.85));
+}
+
+/* Links inside cards */
+.blog-card a,
+.project-card a {
+  color: var(--card-link, rgb(var(--color-primary)));
+}
+
+
+
+.footer {
+  background: var(--color-footer);
+  color: var(--color-footer-text);
+  border-top: 1px solid color-mix(in srgb, var(--color-footer-border) 10%, transparent);
+}
+
+.footer .footer-bottom {
+  border-top: 1px solid var(--color-footer-border);
+}
