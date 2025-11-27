@@ -2,7 +2,7 @@
 
 A modern WordPress theme powered by **Sage (Roots)**, **Laravel Blade**, **Vite**, and **Tailwind CSS**, extended with a full **visual Customizer system**, configurable layout options, dynamic colour tokens, footer/widget systems, navigation controls, and block-ready templates.
 
-This theme is now your **professional base theme** for all BBI and client builds. Clone it, run Composer/NPM, and you have a full modern workflow instantly.
+This theme is now your **professional base theme** for all builds. Clone it, run Composer/NPM, and you have a full modern workflow instantly.
 
 ---
 
