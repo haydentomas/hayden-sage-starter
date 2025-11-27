@@ -6,7 +6,7 @@
     $inline_logo_style = $logo_height ? "max-height:{$logo_height}px; height:auto; width:auto;" : '';
 @endphp
 
-<header class="site-header header">
+<header class="site-header header border-b border-white">
   <div class="site-container mx-auto px-4 py-4">
     <nav id="navbar1" class="sm-navbar">
 

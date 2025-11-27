@@ -196,17 +196,369 @@ font-family: "Cabin";
   padding:0;
 }
 
+
+}
+
+
+/* ============================================================
+   NAV COLOUR SYSTEM
+   Uses Customizer tokens for desktop, dropdown/mega and mobile
+   ------------------------------------------------------------ */
+
+/* Top-level items (desktop) */
+.site-header .sm-nav-link {
+  color: var(--color-nav-link);
+  background: transparent;
+}
+
+.site-header .sm-nav-link:hover,
+.site-header .sm-nav-link:focus,
+.site-header .sm-nav-link--current,
+.site-header .sm-nav-link--active {
+  background: var(--color-nav-link-hover); /* usually your primary */
+  color: #ffffff;
+}
+
+/* Dropdown / mega panel background */
+.site-header .sm-sub,
+.site-header .sm-sub--mega {
+  background: var(--color-nav-sub-bg);
+}
+
+/* Dropdown / mega item links */
+.site-header .sm-sub-link {
+  color: var(--color-nav-sub-link);
+  background: transparent;
+}
+
+.site-header .sm-sub-link:hover,
+.site-header .sm-sub-link:focus,
+.site-header .sm-sub-link--current {
+  background: var(--color-nav-sub-hover-bg);
+  color: var(--color-nav-sub-link);
+}
+
+/* ============================================================
+   MOBILE NAV (<= 768px)
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+  /* Top-level items become solid primary (same as desktop active) */
+  .site-header .sm-nav-link {
+    display: block;
+    background: var(--color-nav-link-hover);
+    color: #ffffff;
+    border-radius: 0.375rem; /* MATCH DESKTOP "ABOUT" RADIUS */
+    padding: 0.75rem 1rem;
+  }
+
+  .site-header .sm-nav-link:hover,
+  .site-header .sm-nav-link:focus,
+  .site-header .sm-nav-link--current,
+  .site-header .sm-nav-link--active {
+    background: var(--color-nav-link-hover);
+    color: #ffffff;
+    border-radius: 0.375rem; /* keep consistent */
+  }
+
+  /* Dropdown / mega panels */
+  .site-header .sm-sub,
+  .site-header .sm-sub--mega {
+    background: var(--color-nav-sub-bg);
+    border-radius: 0.375rem; /* keep consistent with top-level */
+  }
+
+  .site-header .sm-sub-link {
+    background: transparent;
+    color: var(--color-nav-sub-link);
+    border-radius: 0.375rem;
+  }
+
+  .site-header .sm-sub-link:hover,
+  .site-header .sm-sub-link:focus,
+  .site-header .sm-sub-link--current {
+    background: var(--color-nav-sub-hover-bg);
+    color: var(--color-nav-sub-link);
+  }
+}
+
+
+
+
+
+
+
+
+/* ============================================================
+   Mega menu parent arrow (Services)
+   Mobile-only tweaks – desktop uses default SmartMenus styles
+   ------------------------------------------------------------ */
 @media (max-width: 768px) {
 
+  /* Target <a class="sm-nav-link sm-sub-toggler sm-has-sub"> on "Services" */
+  .site-header .sm-nav-item--has-mega > .sm-nav-link.sm-sub-toggler {
+    position: relative;
+    padding-right: 3rem; /* space for divider + arrow */
+  }
 
-  .sm-nav-link, .sm-sub-link {
-        font-family: var(--font-sans);
-        color: var(--color-body);
-        margin-right: 0 !important;
-        background: var(--color-nav-sub-hover-bg);
-        margin-bottom:5px;
-    }
+  /* Divider like the projects split button */
+  .site-header .sm-nav-item--has-mega > .sm-nav-link.sm-sub-toggler::before {
+    content: "";
+    position: absolute;
+
+    /* Match height + vertical position of split-button divider */
+    top: 22%;
+    bottom: 22%;
+
+    /* Divider position */
+    right: 3.35rem;
+
+    width: 1px;
+    background-color: rgba(255, 255, 255, 0.25);
+  }
+
+  /* Custom arrow, right-aligned */
+  .site-header .sm-nav-item--has-mega > .sm-nav-link.sm-sub-toggler::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    width: 0.65rem;          /* match split arrow */
+    height: 0.65rem;
+
+    border-style: solid;
+    border-width: 0 0 2px 2px;
+    border-color: currentColor;
+    opacity: 0.7;
+    transform: translateY(-10%) rotate(-45deg);  /* pointing down, centred */
+  }
+
+  /* When mega is open, flip the arrow up (still centred) */
+  .site-header .sm-nav-item--has-mega
+    > .sm-nav-link.sm-sub-toggler[aria-expanded="true"]::after {
+    transform: translateY(-50%) rotate(135deg);
+  }
 }
+
+
+
+/* ============================================================
+   Mega menu – mobile card layout (match desktop feel)
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+  /* Stack columns vertically */
+  .site-header .sm-sub--mega .mega-grid {
+    display: block;
+    padding: 0.75rem 0.75rem 1rem;
+  }
+
+  /* Each mega column becomes a card */
+  .site-header .sm-sub--mega .mega-col {
+    background-color: var(--color-surface-soft); /* same dark card bg as desktop */
+    border-radius: 0.9rem;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.55);
+  }
+
+  .site-header .sm-sub--mega .mega-col:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Title + links aligned to same left edge */
+  .site-header .sm-sub--mega .mega-col-title {
+    display: block;
+    margin: 0 0 0.5rem;
+    padding: 0;                 /* remove any extra padding */
+  }
+
+  .site-header .sm-sub--mega .mega-col-links {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-header .sm-sub--mega .mega-col-links .sm-sub-link {
+    display: block;
+    padding: 0;                 /* kill SmartMenus left padding */
+    margin: 0.1rem 0;
+  }
+
+
+
+   /* Make each link appear as a pill */
+  .site-header .sm-sub--mega .mega-col-links .sm-sub-link {
+    display: block;
+    width: 100%;
+    background-color: var(--color-nav-sub-hover-bg);
+    color: #fff;
+    border-radius: 0.75rem;
+    padding: 0.35rem 0.75rem;
+    margin: 0.35rem 0;
+    text-decoration: none;
+  }
+
+  /* Hover/focus/active effect to match desktop behaviour */
+  .site-header .sm-sub--mega .mega-col-links .sm-sub-link:hover,
+  .site-header .sm-sub--mega .mega-col-links .sm-sub-link:focus {
+    background-color: color-mix(in srgb, var(--color-nav-sub-hover-bg) 75%, black);
+  }
+
+  /* Remove SmartMenus default left padding completely */
+  .site-header .sm-sub--mega .mega-col-links .sm-sub-item {
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+  }
 }
 
 
+
+
+
+/* ============================================================
+   Mega menu column titles
+   ------------------------------------------------------------ */
+
+/* Desktop + mobile – titles inside mega columns */
+.site-header .mega-col-title {
+  color: var(--color-nav-sub-link);    /* same as dropdown link colour (orange) */
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.5rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ============================================================
+   MOBILE – Only highlight ACTIVE / EXPANDED submenu items
+   Uses Customizer variable: --color-nav-sub-hover-bg
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+
+  /* Default: ALL submenu links remain transparent */
+  .site-header .sm-sub-link {
+    background: transparent;
+    color: var(--color-nav-sub-link);
+  }
+
+  /* ------------------------------------------------------------
+     1) ACTIVE LEAF PAGE (the current actual page)
+     ------------------------------------------------------------ */
+  .site-header .sm-sub-link--current,
+  .site-header .sm-sub-link[aria-current="page"] {
+    background: var(--color-nav-sub-hover-bg) !important;
+    color: #fff;
+    border-radius: 0.75rem;
+    padding: 0.55rem 1rem;
+    margin-bottom: 5px;
+    margin-right: 0 !important;
+    display: block;
+  }
+
+  /* ------------------------------------------------------------
+     2) OPEN PARENT (expanded = child menu visible)
+     This is the pill you wanted — ONLY for the expanded parent.
+     ------------------------------------------------------------ */
+  .site-header .sm-sub-link--split.sm-has-sub.sm-expanded {
+    background: var(--color-nav-sub-hover-bg) !important;
+    color: #fff;
+    border-radius: 0.75rem;
+    padding: 0.55rem 1rem;
+    margin-bottom: 5px;
+    margin-right: 0 !important;
+    display: block;
+  }
+
+  /* ------------------------------------------------------------
+     3) Clean the toggler button that sits to the right
+     (prevents duplicate arrows & keeps layout tidy)
+     ------------------------------------------------------------ */
+  .site-header .sm-sub-link--split.sm-sub-toggler {
+    background: transparent !important;
+    border-radius: 0;
+    margin: 0;
+    padding: 0.55rem 0.75rem;
+  }
+}
+
+
+
+
+
+
+
+
+/* Global CTA button font fix */
+.menu-item-cta a,
+a.menu-item-cta,
+.cta-button,
+.btn-primary,
+.start-project-btn {
+  font-family: var(--font-sans) !important; /* Cabin everywhere */
+  text-decoration:none;
+}
+
+
+/* Hide desktop CTA on tablet portrait, keep it on real desktop */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .site-header .menu-item-cta--desktop {
+    display: none;
+  }
+}
+
+
+/* Hide the *mobile* CTA menu item on tablet portrait (768–1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .site-header .menu-item-cta {
+    display: none;
+  }
+}
+
+
+
+/* Footer widgets */
+.site-footer .widget {
+  color: var(--color-footer-widget-text);
+}
+
+.site-footer .widget a {
+  color: var(--color-footer-widget-link);
+}
+
+.site-footer .widget h2,
+.site-footer .widget .wp-block-heading {
+  color: var(--color-footer-widget-heading);
+}
+
+
+
+
+/* Footer widget base text colour */
+.site-footer .widget {
+  color: var(--color-footer-widget-text);
+}
+
+/* Belt-and-braces for common text elements inside footer widgets */
+.site-footer .widget p,
+.site-footer .widget li,
+.site-footer .widget span,
+.site-footer .widget div {
+  color: var(--color-footer-widget-text);
+}

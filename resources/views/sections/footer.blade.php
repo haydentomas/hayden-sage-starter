@@ -1,4 +1,4 @@
-<footer class="site-footer footer  content-info border-t border-white/10">
+<footer class="site-footer  content-info border-t border-white/10">
   <div class="site-container mx-auto px-4 py-8">
     @php
       $footer_columns = (int) get_theme_mod('hayden_footer_columns', 3);
@@ -16,7 +16,7 @@
     <div class="grid gap-8 {{ $grid_class }}">
       @for ($i = 1; $i <= $footer_columns; $i++)
         @if (is_active_sidebar("sidebar-footer-{$i}"))
-          <div class="footer-column text-sm text-slate-200/80">
+          <div class="footer-column text-sm">
             @php(dynamic_sidebar("sidebar-footer-{$i}"))
           </div>
         @endif
@@ -24,13 +24,16 @@
     </div>
 
     {{-- Optional bottom bar --}}
-    <div class="mt-8 pt-4 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400">
-      <div>
-        &copy; {{ date('Y') }} {{ get_bloginfo('name') }}
-      </div>
-      <div class="flex flex-wrap gap-4">
-        {{-- You can add a small menu or text here later --}}
-      </div>
-    </div>
+ <div class="mt-8 pt-4 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs"
+     style="color: var(--color-footer-text);">
+  <div>
+    &copy; {{ date('Y') }} {{ get_bloginfo('name') }}
+  </div>
+
+  <div class="flex flex-wrap gap-4">
+    {{-- small menu / text later --}}
+  </div>
+</div>
+
   </div>
 </footer>

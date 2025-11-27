@@ -47,7 +47,7 @@
 
 @layer components {
 
-  footer {
+  .site-footer {
     background:var(--color-footer);
   }
 
@@ -192,12 +192,25 @@
 
 
 
-.footer {
+/* AFTER – only the main site footer */
+.site-footer {
   background: var(--color-footer);
   color: var(--color-footer-text);
-  border-top: 1px solid color-mix(in srgb, var(--color-footer-border) 10%, transparent);
+}
+
+.site-footer a {
+  color: inherit;
 }
 
 .footer .footer-bottom {
   border-top: 1px solid var(--color-footer-border);
+}
+
+
+
+/* Kill widget background ONLY inside the footer */
+.site-footer .widget_block,
+.site-footer .widget {
+    background: none !important;
+    border: none !important;
 }
