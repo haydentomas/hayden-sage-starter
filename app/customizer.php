@@ -199,7 +199,7 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
     // Primary colour → --color-primary
     $wp_customize->add_setting('hayden_primary_color', [
         'default'           => '#f97316',
-        'transport'         => 'refresh',
+        'transport'         => 'postMessage',
         'sanitize_callback' => 'sanitize_hex_color',
     ]);
 
@@ -232,7 +232,7 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
 
     // Heading colour → --color-headings
     $wp_customize->add_setting('hayden_heading_color', [
-        'default'           => '#ffffff',
+        'default'           => '#f97316',
         'transport'         => 'refresh',
         'sanitize_callback' => 'sanitize_hex_color',
     ]);
@@ -913,8 +913,23 @@ add_action('customize_controls_enqueue_scripts', function () {
         wp_get_theme()->get('Version')
     );
 
-    // Inline JS to keep the container width value in sync with the slider
-    $js = <<<JS
+
+
+
+    // Inject CSS variable for Customizer hover colours
+    $primary = get_theme_mod('hayden_primary_color', '#f97316');
+
+    $accent_css = sprintf(
+        ':root { --color-primary: %s; }',
+        esc_attr($primary)
+    );
+
+    wp_add_inline_style('hayden-customizer-style', $accent_css);
+
+
+
+
+$js = <<<JS
 (function(api) {
   function updateWidthValue(val) {
     var el = document.getElementById('hayden-container-width-value');
@@ -923,6 +938,7 @@ add_action('customize_controls_enqueue_scripts', function () {
     }
   }
 
+  // Live label for container width
   api('hayden_container_width', function(setting) {
     updateWidthValue(setting.get());
     setting.bind(function(newVal) {
@@ -935,8 +951,36 @@ add_action('customize_controls_enqueue_scripts', function () {
       updateWidthValue(e.target.value);
     }
   });
+
+  // 🔴 Live primary colour for Customizer UI hover
+  api('hayden_primary_color', function(setting) {
+    function applyPrimary(val) {
+      if (!val) {
+        val = '#f97316';
+      }
+
+      var styleEl = document.getElementById('hayden-customizer-primary');
+      if (!styleEl) {
+        styleEl = document.createElement('style');
+        styleEl.id = 'hayden-customizer-primary';
+        document.head.appendChild(styleEl);
+      }
+
+      styleEl.textContent = ':root { --color-primary: ' + val + '; }';
+    }
+
+    // Initial value (so it matches when the controls first load)
+    applyPrimary(setting.get());
+
+    // Update as the colour picker changes
+    setting.bind(function(newVal) {
+      applyPrimary(newVal);
+    });
+  });
+
 })(wp.customize);
 JS;
+
 
     wp_add_inline_script('customize-controls', $js);
 });
