@@ -19,7 +19,6 @@
     // Footer colours
     hayden_footer_color: '--color-footer',
     hayden_footer_text_color: '--color-footer-text',
-    hayden_footer_border_color: '--color-footer-border',
 
     // Widget colours
     hayden_widget_bg_color: '--color-widget-bg',
