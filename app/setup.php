@@ -259,3 +259,15 @@ add_filter('upload_mimes', function ($mimes) {
 
     return $mimes;
 });
+
+
+
+add_action('customize_preview_init', function () {
+    wp_enqueue_script(
+        'hayden-customizer-preview',
+        get_theme_file_uri('resources/scripts/customizer-preview.js'),
+        ['customize-preview'],
+        wp_get_theme()->get('Version'),
+        true
+    );
+});
