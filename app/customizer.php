@@ -161,6 +161,212 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
         ]
     ));
 
+
+
+
+
+    /**
+     * ------------------------------------------------------------
+     * GLOBAL SPACING SECTION
+     * ------------------------------------------------------------
+     */
+    $wp_customize->add_section('hayden_spacing_section', [
+        'title'       => __('Global Spacing', 'hayden'),
+        'description' => __('Controls vertical spacing between sections and blocks.', 'hayden'),
+        'priority'    => 28,
+        'panel'       => 'hayden_theme_panel',
+    ]);
+
+    // Global spacing scale: compact / comfortable / spacious
+    $wp_customize->add_setting('hayden_spacing_scale', [
+        'default'           => 'comfortable',
+        'transport'         => 'refresh',
+        'sanitize_callback' => function ($value) {
+            $allowed = ['compact', 'comfortable', 'spacious'];
+            return in_array($value, $allowed, true) ? $value : 'comfortable';
+        },
+    ]);
+
+    $wp_customize->add_control('hayden_spacing_scale_control', [
+        'label'       => __('Vertical spacing scale', 'hayden'),
+        'section'     => 'hayden_spacing_section',
+        'settings'    => 'hayden_spacing_scale',
+        'type'        => 'select',
+        'choices'     => [
+            'compact'      => __('Compact', 'hayden'),
+            'comfortable'  => __('Comfortable (default)', 'hayden'),
+            'spacious'     => __('Spacious', 'hayden'),
+        ],
+        'description' => __('Affects global section/block spacing via CSS variables.', 'hayden'),
+    ]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Typography section
+$wp_customize->add_section('hayden_typography_section', [
+    'title'       => __('Typography', 'hayden'),
+    'description' => __('Upload custom fonts. Leave empty to use the default theme fonts.', 'hayden'),
+    'panel'       => 'hayden_theme_panel',
+    'priority'    => 40,
+]);
+
+
+// Heading (serif) font file
+$wp_customize->add_setting('hayden_font_serif_file', [
+    'default'           => '',
+    'transport'         => 'refresh',
+    'sanitize_callback' => function ($value) {
+        return absint($value);
+    },
+]);
+
+$wp_customize->add_control(new \WP_Customize_Media_Control(
+    $wp_customize,
+    'hayden_font_serif_file',
+    [
+        'label'       => __('Heading font (serif)', 'hayden'),
+        'description' => __('Upload a WOFF2/WOFF/TTF file. This will replace the default --font-serif stack.', 'hayden'),
+        'section'     => 'hayden_typography_section',
+        'mime_type'   => '',
+    ]
+));
+
+// Body (sans) font file
+$wp_customize->add_setting('hayden_font_sans_file', [
+    'default'           => '',
+    'transport'         => 'refresh',
+    'sanitize_callback' => function ($value) {
+        return absint($value);
+    },
+]);
+
+$wp_customize->add_control(new \WP_Customize_Media_Control(
+    $wp_customize,
+    'hayden_font_sans_file',
+    [
+        'label'       => __('Body font (sans-serif)', 'hayden'),
+        'description' => __('Upload a WOFF2/WOFF/TTF file. This will replace the default --font-sans stack.', 'hayden'),
+        'section'     => 'hayden_typography_section',
+        'mime_type'   => '', // leave blank or use "application" – fonts are allowed via upload_mimes
+    ]
+));
+
+
+
+
+
+
+    // -----------------------------
+    // Typography: font sizes (Tailwind scale)
+    // -----------------------------
+
+    // Allowed Tailwind size keys we support
+    $tw_font_sizes = [
+        'text-sm'   => __('Small (Tailwind text-sm)', 'hayden'),
+        'text-base' => __('Base (Tailwind text-base)', 'hayden'),
+        'text-lg'   => __('Large (Tailwind text-lg)', 'hayden'),
+        'text-xl'   => __('XL (Tailwind text-xl)', 'hayden'),
+        'text-2xl'  => __('2XL (Tailwind text-2xl)', 'hayden'),
+        'text-3xl'  => __('3XL (Tailwind text-3xl)', 'hayden'),
+        'text-4xl'  => __('4XL (Tailwind text-4xl)', 'hayden'),
+    ];
+
+    // Body font size
+    $wp_customize->add_setting('hayden_body_font_size', [
+        'default'           => 'text-lg',
+        'transport'         => 'refresh',
+        'sanitize_callback' => 'App\\hayden_sanitize_font_scale',
+    ]);
+
+    $wp_customize->add_control('hayden_body_font_size_control', [
+        'label'       => __('Body font size', 'hayden'),
+        'section'     => 'hayden_typography_section',
+        'settings'    => 'hayden_body_font_size',
+        'type'        => 'select',
+        'choices'     => $tw_font_sizes,
+        'description' => __('Based on Tailwind font-size scale.', 'hayden'),
+    ]);
+
+    // H1 size
+    $wp_customize->add_setting('hayden_h1_font_size', [
+        'default'           => 'text-4xl',
+        'transport'         => 'refresh',
+        'sanitize_callback' => 'App\\hayden_sanitize_font_scale',
+    ]);
+
+    $wp_customize->add_control('hayden_h1_font_size_control', [
+        'label'    => __('H1 font size', 'hayden'),
+        'section'  => 'hayden_typography_section',
+        'settings' => 'hayden_h1_font_size',
+        'type'     => 'select',
+        'choices'  => $tw_font_sizes,
+    ]);
+
+    // H2 size
+    $wp_customize->add_setting('hayden_h2_font_size', [
+        'default'           => 'text-3xl',
+        'transport'         => 'refresh',
+        'sanitize_callback' => 'App\\hayden_sanitize_font_scale',
+    ]);
+
+    $wp_customize->add_control('hayden_h2_font_size_control', [
+        'label'    => __('H2 font size', 'hayden'),
+        'section'  => 'hayden_typography_section',
+        'settings' => 'hayden_h2_font_size',
+        'type'     => 'select',
+        'choices'  => $tw_font_sizes,
+    ]);
+
+    // H3 size
+    $wp_customize->add_setting('hayden_h3_font_size', [
+        'default'           => 'text-2xl',
+        'transport'         => 'refresh',
+        'sanitize_callback' => 'App\\hayden_sanitize_font_scale',
+    ]);
+
+    $wp_customize->add_control('hayden_h3_font_size_control', [
+        'label'    => __('H3 font size', 'hayden'),
+        'section'  => 'hayden_typography_section',
+        'settings' => 'hayden_h3_font_size',
+        'type'     => 'select',
+        'choices'  => $tw_font_sizes,
+    ]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * ------------------------------------------------------------
      * THEME COLOUR SECTION
@@ -791,7 +997,7 @@ add_action('wp_head', function () {
 
     $primary    = sanitize_hex_color(get_theme_mod('hayden_primary_color', '#f97316')) ?: '#f97316';
     $surface    = sanitize_hex_color(get_theme_mod('hayden_surface_color', '#FFFAF8')) ?: '#FFFAF8';
-    $headings   = sanitize_hex_color(get_theme_mod('hayden_heading_color', '#ffffff')) ?: '#ffffff';
+    $headings   = sanitize_hex_color(get_theme_mod('hayden_heading_color', '#f97316')) ?: '#f97316';
     $body_text  = sanitize_hex_color(get_theme_mod('hayden_body_color', '#111111')) ?: '#111111';
     $body_muted = sanitize_hex_color(get_theme_mod('hayden_body_muted_color', '#262626')) ?: '#262626';
 
@@ -842,6 +1048,108 @@ add_action('wp_head', function () {
     // Site container max width (px)
     $container_width = absint(get_theme_mod('hayden_container_width', 1120));
 
+
+    // Tailwind font-size scale → CSS var references
+    $tw_scale = [
+        'text-sm'   => 'var(--text-sm)',
+        'text-base' => 'var(--text-base)',
+        'text-lg'   => 'var(--text-lg)',
+        'text-xl'   => 'var(--text-xl)',
+        'text-2xl'  => 'var(--text-2xl)',
+        'text-3xl'  => 'var(--text-3xl)',
+        'text-4xl'  => 'var(--text-4xl)',
+    ];
+
+    $tw_keys = array_keys($tw_scale);
+
+    // Given a chosen key (desktop), pick one step smaller for mobile
+    $hayden_font_mobile = function (string $key) use ($tw_keys, $tw_scale): string {
+        $index = array_search($key, $tw_keys, true);
+
+        if ($index === false) {
+            return $tw_scale['text-base']; // sensible fallback
+        }
+
+        $mobile_key = $tw_keys[max(0, $index - 1)];
+
+        return $tw_scale[$mobile_key];
+    };
+
+  // Values saved from Customizer (desktop “target” sizes)
+$body_size_key = get_theme_mod('hayden_body_font_size', 'text-lg');
+$h1_size_key   = get_theme_mod('hayden_h1_font_size', 'text-4xl');
+$h2_size_key   = get_theme_mod('hayden_h2_font_size', 'text-3xl');
+$h3_size_key   = get_theme_mod('hayden_h3_font_size', 'text-2xl');
+
+// Body desktop + mobile
+$body_desktop = $tw_scale[$body_size_key] ?? 'var(--text-lg)';
+$body_mobile  = $hayden_font_mobile($body_size_key);
+
+// Headings desktop sizes
+$h1_desktop = $tw_scale[$h1_size_key] ?? 'var(--text-4xl)';
+$h2_desktop = $tw_scale[$h2_size_key] ?? 'var(--text-3xl)';
+$h3_desktop = $tw_scale[$h3_size_key] ?? 'var(--text-2xl)';
+
+// Headings mobile sizes (one step smaller)
+$h1_mobile = $hayden_font_mobile($h1_size_key);
+$h2_mobile = $hayden_font_mobile($h2_size_key);
+$h3_mobile = $hayden_font_mobile($h3_size_key);
+
+
+
+
+
+    // Tailwind font-size scale → CSS var references
+    $tw_scale = [
+        'text-sm'   => 'var(--text-sm)',
+        'text-base' => 'var(--text-base)',
+        'text-lg'   => 'var(--text-lg)',
+        'text-xl'   => 'var(--text-xl)',
+        'text-2xl'  => 'var(--text-2xl)',
+        'text-3xl'  => 'var(--text-3xl)',
+        'text-4xl'  => 'var(--text-4xl)',
+    ];
+
+    $body_size_key = get_theme_mod('hayden_body_font_size', 'text-lg');
+    $h1_size_key   = get_theme_mod('hayden_h1_font_size', 'text-4xl');
+    $h2_size_key   = get_theme_mod('hayden_h2_font_size', 'text-3xl');
+    $h3_size_key   = get_theme_mod('hayden_h3_font_size', 'text-2xl');
+
+    $body_size = $tw_scale[$body_size_key] ?? 'var(--text-lg)';
+    $h1_size   = $tw_scale[$h1_size_key]   ?? 'var(--text-4xl)';
+    $h2_size   = $tw_scale[$h2_size_key]   ?? 'var(--text-3xl)';
+    $h3_size   = $tw_scale[$h3_size_key]   ?? 'var(--text-2xl)';
+
+
+
+    // ------------------------------------------------------------
+    // Global spacing scale → CSS variables
+    // ------------------------------------------------------------
+    $spacing_choice = get_theme_mod('hayden_spacing_scale', 'comfortable');
+
+    // You can tweak these values to taste
+    $spacing_presets = [
+        'compact' => [
+            'mobile'  => '1.75rem',
+            'desktop' => '3rem',
+        ],
+        'comfortable' => [
+            'mobile'  => '2.5rem',
+            'desktop' => '4rem',
+        ],
+        'spacious' => [
+            'mobile'  => '3.5rem',
+            'desktop' => '6rem',
+        ],
+    ];
+
+    $spacing = $spacing_presets[$spacing_choice] ?? $spacing_presets['comfortable'];
+
+    $section_space_mobile  = $spacing['mobile'];
+    $section_space_desktop = $spacing['desktop'];
+
+
+
     ?>
     <style id="hayden-theme-colors">
       :root {
@@ -885,6 +1193,26 @@ add_action('wp_head', function () {
         --color-footer-widget-heading: <?php echo esc_html($footer_widget_title); ?>;
         --color-footer-widget-text: <?php echo esc_html($footer_widget_text); ?>;
         --color-footer-widget-link: <?php echo esc_html($footer_widget_link); ?>;
+
+
+
+
+/* Typography sizes (Tailwind-based) */
+      --body-font-size-mobile: <?php echo esc_html($body_mobile); ?>;
+      --body-font-size-desktop: <?php echo esc_html($body_desktop); ?>;
+
+      /* Backwards compat – if anything still uses --body-font-size */
+      --body-font-size: <?php echo esc_html($body_desktop); ?>;
+
+      --h1-font-size-mobile: <?php echo esc_html($h1_mobile); ?>;
+      --h1-font-size-desktop: <?php echo esc_html($h1_desktop); ?>;
+
+      --h2-font-size-mobile: <?php echo esc_html($h2_mobile); ?>;
+      --h2-font-size-desktop: <?php echo esc_html($h2_desktop); ?>;
+
+      --h3-font-size-mobile: <?php echo esc_html($h3_mobile); ?>;
+      --h3-font-size-desktop: <?php echo esc_html($h3_desktop); ?>;
+
 
 
 
@@ -1019,3 +1347,193 @@ add_filter('get_custom_logo', function ($html) {
 
     return $html;
 });
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Build the CSS for any custom fonts from the Customizer.
+ *
+ * @return string
+ */
+function hayden_get_custom_font_css(): string
+{
+    // Body font control
+    $body_id    = get_theme_mod('hayden_font_sans_file');
+    // Heading font control
+    $heading_id = get_theme_mod('hayden_font_serif_file');
+
+    if (!$body_id && !$heading_id) {
+        return '';
+    }
+
+    $css = '';
+    $rootVars = '';
+
+    // Heading font → overrides --font-sans (Cabin stack)
+    if ($heading_id) {
+        $heading_url = wp_get_attachment_url($heading_id);
+        if ($heading_url) {
+            $format = hayden_detect_font_format($heading_url);
+
+            $css .= "@font-face{
+                font-family:'HaydenHeading';
+                src:url('{$heading_url}') format('{$format}');
+                font-weight:400;
+                font-style:normal;
+                font-display:swap;
+            }\n";
+
+            // Heading stack (was Cabin / --font-sans)
+            $rootVars .= "--font-sans: 'HaydenHeading', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;";
+        }
+    }
+
+    // Body font → overrides --font-serif (Merriweather stack)
+    if ($body_id) {
+        $body_url = wp_get_attachment_url($body_id);
+        if ($body_url) {
+            $format = hayden_detect_font_format($body_url);
+
+            $css .= "@font-face{
+                font-family:'HaydenBody';
+                src:url('{$body_url}') format('{$format}');
+                font-weight:400;
+                font-style:normal;
+                font-display:swap;
+            }\n";
+
+            // Body stack (was Merriweather / --font-serif)
+            $rootVars .= "--font-serif: 'HaydenBody', 'Times New Roman', Georgia, serif;";
+        }
+    }
+
+    if ($rootVars) {
+        $css .= ":root{{$rootVars}}\n";
+    }
+
+    return trim($css);
+}
+
+
+/**
+ * Rough font format detection from file extension.
+ */
+function hayden_detect_font_format(string $url): string
+{
+    $ext = strtolower(pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION));
+
+    switch ($ext) {
+        case 'woff2':
+            return 'woff2';
+        case 'woff':
+            return 'woff';
+        case 'otf':
+            return 'opentype';
+        case 'ttf':
+        default:
+            return 'truetype';
+    }
+}
+
+
+
+
+
+
+
+
+
+/**
+ * Echo custom font CSS in <head> on front-end + admin.
+ */
+add_action('wp_head', function () {
+    $css = hayden_get_custom_font_css();
+    if (!$css) {
+        return;
+    }
+
+    echo '<style id="hayden-custom-fonts">' . $css . '</style>';
+}, 50);
+
+add_action('admin_head', function () {
+    $css = hayden_get_custom_font_css();
+    if (!$css) {
+        return;
+    }
+
+    echo '<style id="hayden-custom-fonts-admin">' . $css . '</style>';
+}, 50);
+
+/**
+ * Ensure block editor iframe also gets the fonts/variables.
+ */
+add_action('enqueue_block_editor_assets', function () {
+    $css = hayden_get_custom_font_css();
+    if (!$css) {
+        return;
+    }
+
+    // Also tell the editor *where* to use those fonts.
+    $css .= "
+    /* Block editor content canvas */
+    .editor-styles-wrapper {
+        font-family: var(--font-serif);
+    }
+
+    .editor-styles-wrapper p,
+    .editor-styles-wrapper li {
+        font-family: inherit;
+    }
+
+    .editor-styles-wrapper h1,
+    .editor-styles-wrapper h2,
+    .editor-styles-wrapper h3,
+    .editor-styles-wrapper h4,
+    .editor-styles-wrapper h5,
+    .editor-styles-wrapper h6 {
+        font-family: var(--font-sans);
+    }
+
+    /* Post title input in the editor */
+    .edit-post-visual-editor__post-title-wrapper .editor-post-title__input {
+        font-family: var(--font-sans);
+    }
+    ";
+
+    // Attach to ALL editor stylesheets so the iframe consistently picks it up.
+    wp_add_inline_style('wp-block-library', $css);
+    wp_add_inline_style('wp-block-library-theme', $css);
+
+    // If Sage registers its own editor stylesheet:
+    if (wp_style_is('sage/editor', 'registered')) {
+        wp_add_inline_style('sage/editor', $css);
+    }
+});
+
+
+/**
+ * Limit font-size choices to our Tailwind keys.
+ */
+function hayden_sanitize_font_scale(string $value): string
+{
+    $allowed = [
+        'text-sm',
+        'text-base',
+        'text-lg',
+        'text-xl',
+        'text-2xl',
+        'text-3xl',
+        'text-4xl',
+    ];
+
+    return in_array($value, $allowed, true) ? $value : 'text-base';
+}
