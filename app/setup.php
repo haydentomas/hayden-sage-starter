@@ -271,3 +271,21 @@ add_action('customize_preview_init', function () {
         true
     );
 });
+
+
+add_action('customize_register', function( $wp_customize ) {
+    // Remove any stray top-level "Theme Colors"/"Theme colours" sections
+    foreach ( $wp_customize->sections() as $section ) {
+        // Titles we don't want as standalone sections
+        if ( in_array( $section->title, ['Theme Colors', 'Theme colours', 'Colors', 'Colours'], true ) ) {
+
+            // Skip our own section inside the Theme Settings panel
+            if ( $section->id === 'hayden_color_section' ) {
+                continue;
+            }
+
+            // Remove the section
+            $wp_customize->remove_section( $section->id );
+        }
+    }
+}, 999 );
