@@ -925,7 +925,125 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
             $section->title    = sprintf(__('Footer Column %d Widgets', 'hayden'), $index + 1);
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * ------------------------------------------------------------
+     * PANEL FOOTER – CUSTOM HTML (info / link / image)
+     * ------------------------------------------------------------
+     */
+$wp_customize->add_section('hayden_panel_footer_section', [
+    'title'       => __('Need Help?', 'hayden'),
+    'description' => '',
+    'priority'    => 200, // after all the other sections
+    'panel'       => 'hayden_theme_panel',
+]);
+
+
+    // Dummy setting just so we can attach a custom control
+    $wp_customize->add_setting('hayden_panel_footer_note', [
+        'sanitize_callback' => '__return_null',
+    ]);
+
+    $image_url = esc_url( get_theme_file_uri('resources/images/customizer-footer-logo.svg') );
+    $site_url  = esc_url( 'https://wp.bbi.co.uk' );
+
+$html  = '<div class="hayden-customizer-panel-footer" style="margin:16px 0 24px;padding:12px 14px;border-radius:8px;background:#020617;border:1px solid rgba(148,163,184,0.4);color:#e5e7eb;font-size:13px;line-height:1.5;">';
+
+$html .= '  <div style="display:flex;align-items:center;gap:10px;">';
+
+
+$html .= '    <div style="flex:1 1 auto;">';
+$html .= '      <strong style="display:block;margin-bottom:2px;font-weight:600;">Hayden Sage Starter</strong>';
+$html .= '      <span style="display:block;margin-bottom:4px;opacity:.9;">Need help or want a custom build based on this theme?</span>';
+$html .= '      <a href="' . $site_url . '" target="_blank" rel="noopener" style="color:#f97316;text-decoration:none;">Visit bbi.co.uk →</a>';
+$html .= '    </div>';
+$html .= '  </div>'; // end logo/text row
+
+// --------------------------------------------
+// BUTTONS SECTION
+// --------------------------------------------
+$html .= '  <div style="margin-top:16px;display:flex;flex-direction:column;gap:10px;">';
+
+$html .= '    <a href="https://wp.bbi.co.uk/blog"
+                  target="_blank"
+                  rel="noopener"
+                  style="display:block;width:100%;text-align:center;padding:10px 14px;
+                         background:#1e293b;color:#fff;border-radius:6px;text-decoration:none;
+                         font-weight:600;">
+                    Blog
+                </a>';
+
+$html .= '    <a href="https://wp.bbi.co.uk/contact"
+                  target="_blank"
+                  rel="noopener"
+                  style="display:block;width:100%;text-align:center;padding:10px 14px;
+                         background:#f97316;color:#000;border-radius:6px;text-decoration:none;
+                         font-weight:600;">
+                    Contact Us
+                </a>';
+
+$html .= '  </div>'; // end buttons column
+
+$html .= '</div>'; // end wrapper
+
+
+
+
+    $wp_customize->add_control(new \WP_Customize_Control(
+        $wp_customize,
+        'hayden_panel_footer_note_control',
+        [
+            'section'     => 'hayden_panel_footer_section',
+            'settings'    => 'hayden_panel_footer_note',
+            'type'        => 'custom',
+            'description' => $html,
+        ]
+    ));
+
+
+
+
+
+
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /**
  * ------------------------------------------------------------
@@ -1498,3 +1616,5 @@ function hayden_sanitize_font_scale(string $value): string
 
     return in_array($value, $allowed, true) ? $value : 'text-base';
 }
+
+

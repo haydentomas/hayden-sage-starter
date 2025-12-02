@@ -123,3 +123,10 @@ body.wp-customizer #customize-controls #customize-outer-theme-controls .accordio
 .customize-control.customize-control-custom textarea {
   display: none !important;
 }
+
+
+.hayden-customizer-panel-footer a {
+    box-sizing: border-box;
+    width: 100%;
+    display: block;
+}

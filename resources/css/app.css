@@ -627,3 +627,10 @@ a.menu-item-cta,
     --section-space-desktop: 6rem !important;
   }
 }
+
+
+.hayden-customizer-panel-footer a {
+    box-sizing: border-box;
+    width: 100%;
+    display: block;
+}
