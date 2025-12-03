@@ -1027,6 +1027,61 @@ $html .= '</div>'; // end wrapper
 
 
 
+add_action('enqueue_block_editor_assets', function () {
+    // Colours
+    $primary    = sanitize_hex_color( get_theme_mod('hayden_primary_color', '#f97316') ) ?: '#f97316';
+    $surface    = sanitize_hex_color( get_theme_mod('hayden_surface_color', '#FFFAF8') ) ?: '#FFFAF8';
+
+    // Card colours (same defaults as wp_head)
+    $card_bg         = sanitize_hex_color( get_theme_mod('hayden_card_bg', '#000000') ) ?: '#000000';
+    $card_heading    = sanitize_hex_color( get_theme_mod('hayden_card_heading', '#f97316') ) ?: '#f97316';
+    $card_text       = sanitize_hex_color( get_theme_mod('hayden_card_text', '#ffffff') ) ?: '#ffffff';
+    $card_text_muted = sanitize_hex_color( get_theme_mod('hayden_card_text_muted', '#e5e5e5') ) ?: '#e5e5e5';
+
+    // Global spacing scale (same logic as wp_head)
+    $spacing_choice = get_theme_mod('hayden_spacing_scale', 'comfortable');
+
+    $spacing_presets = [
+        'compact' => [
+            'mobile'  => '1.75rem',
+            'desktop' => '3rem',
+        ],
+        'comfortable' => [
+            'mobile'  => '2.5rem',
+            'desktop' => '4rem',
+        ],
+        'spacious' => [
+            'mobile'  => '3.5rem',
+            'desktop' => '6rem',
+        ],
+    ];
+
+    $spacing = $spacing_presets[ $spacing_choice ] ?? $spacing_presets['comfortable'];
+
+    $css = sprintf(
+        ':root {' .
+            '--color-primary:%1$s;' .
+            '--color-surface:%2$s;' .
+            '--card-bg:%3$s;' .
+            '--card-heading:%4$s;' .
+            '--card-text:%5$s;' .
+            '--card-text-muted:%6$s;' .
+            '--section-space-mobile:%7$s;' .
+            '--section-space-desktop:%8$s;' .
+        '}',
+        esc_html( $primary ),
+        esc_html( $surface ),
+        esc_html( $card_bg ),
+        esc_html( $card_heading ),
+        esc_html( $card_text ),
+        esc_html( $card_text_muted ),
+        esc_html( $spacing['mobile'] ),
+        esc_html( $spacing['desktop'] )
+    );
+
+    wp_add_inline_style( 'wp-block-library', $css );
+});
+
 
 
 
@@ -1562,42 +1617,101 @@ add_action('admin_head', function () {
  * Ensure block editor iframe also gets the fonts/variables.
  */
 add_action('enqueue_block_editor_assets', function () {
-    $css = hayden_get_custom_font_css();
-    if (!$css) {
-        return;
+    $css = '';
+
+    // -------------------------------------------------
+    // 1. Custom fonts (same as before)
+    // -------------------------------------------------
+    $font_css = hayden_get_custom_font_css();
+    if ($font_css) {
+        $css .= $font_css;
+
+        $css .= "
+        .editor-styles-wrapper {
+            font-family: var(--font-serif);
+        }
+
+        .editor-styles-wrapper p,
+        .editor-styles-wrapper li {
+            font-family: inherit;
+        }
+
+        .editor-styles-wrapper h1,
+        .editor-styles-wrapper h2,
+        .editor-styles-wrapper h3,
+        .editor-styles-wrapper h4,
+        .editor-styles-wrapper h5,
+        .editor-styles-wrapper h6 {
+            font-family: var(--font-sans);
+        }
+
+        .edit-post-visual-editor__post-title-wrapper .editor-post-title__input {
+            font-family: var(--font-sans);
+        }
+        ";
     }
+
+    // -------------------------------------------------
+    // 2. Global spacing vars (mirror wp_head output)
+    // -------------------------------------------------
+    $spacing_choice = get_theme_mod('hayden_spacing_scale', 'comfortable');
+
+    $spacing_presets = [
+        'compact' => [
+            'mobile'  => '1.75rem',
+            'desktop' => '3rem',
+        ],
+        'comfortable' => [
+            'mobile'  => '2.5rem',
+            'desktop' => '4rem',
+        ],
+        'spacious' => [
+            'mobile'  => '3.5rem',
+            'desktop' => '6rem',
+        ],
+    ];
+
+    $spacing = $spacing_presets[$spacing_choice] ?? $spacing_presets['comfortable'];
+
+    $section_space_mobile  = $spacing['mobile'];
+    $section_space_desktop = $spacing['desktop'];
 
     $css .= "
-    .editor-styles-wrapper {
-        font-family: var(--font-serif);
+    :root {
+        --section-space-mobile: {$section_space_mobile};
+        --section-space-desktop: {$section_space_desktop};
     }
 
-    .editor-styles-wrapper p,
-    .editor-styles-wrapper li {
-        font-family: inherit;
+    /* Only apply global section spacing to our Smart hero block
+       in the editor, not all blocks. */
+    .editor-styles-wrapper .wp-block-smart-hero-primary {
+        margin-top: var(--section-space-mobile);
+        margin-bottom: var(--section-space-mobile);
     }
 
-    .editor-styles-wrapper h1,
-    .editor-styles-wrapper h2,
-    .editor-styles-wrapper h3,
-    .editor-styles-wrapper h4,
-    .editor-styles-wrapper h5,
-    .editor-styles-wrapper h6 {
-        font-family: var(--font-sans);
-    }
-
-    .edit-post-visual-editor__post-title-wrapper .editor-post-title__input {
-        font-family: var(--font-sans);
+    @media (min-width: 768px) {
+        .editor-styles-wrapper .wp-block-smart-hero-primary {
+            margin-top: var(--section-space-desktop);
+            margin-bottom: var(--section-space-desktop);
+        }
     }
     ";
 
-    wp_add_inline_style('wp-block-library', $css);
-    wp_add_inline_style('wp-block-library-theme', $css);
+    // -------------------------------------------------
+    // 3. Inject into editor styles
+    // -------------------------------------------------
+    if (trim($css) !== '') {
+        wp_add_inline_style('wp-block-library', $css);
+        wp_add_inline_style('wp-block-library-theme', $css);
 
-    if (wp_style_is('sage/editor', 'registered')) {
-        wp_add_inline_style('sage/editor', $css);
+        if (wp_style_is('sage/editor', 'registered')) {
+            wp_add_inline_style('sage/editor', $css);
+        }
     }
 });
+
+
+
 
 /**
  * Limit font-size choices to our Tailwind keys.
