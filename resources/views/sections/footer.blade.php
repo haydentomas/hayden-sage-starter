@@ -1,39 +1,48 @@
-<footer class="site-footer  content-info border-t border-white/10">
-  <div class="site-container mx-auto px-4 py-8">
-    @php
-      $footer_columns = (int) get_theme_mod('hayden_footer_columns', 3);
+@php
+  // theme-default | footer-a | footer-b | footer-c | none
+  $variant = get_theme_mod('hayden_footer_variant', 'theme-default');
+@endphp
 
-      $grid_classes = [
-        1 => 'grid-cols-1',
-        2 => 'grid-cols-1 md:grid-cols-2',
-        3 => 'grid-cols-1 md:grid-cols-3',
-        4 => 'grid-cols-1 md:grid-cols-4',
-      ];
+@if ($variant === 'none')
+  @php
+    // 1) Get the footer page ID (Customizer setting first, then activation fallback)
+    $page_id = absint(get_theme_mod(
+      'hayden_footer_content_page_id',
+      absint(get_option('hayden_footer_page_id', 0))
+    ));
 
-      $grid_class = $grid_classes[$footer_columns] ?? $grid_classes[3];
-    @endphp
+    // 2) Get raw block content from that page
+    $raw = $page_id ? (string) get_post_field('post_content', $page_id) : '';
 
-    <div class="grid gap-8 {{ $grid_class }}">
-      @for ($i = 1; $i <= $footer_columns; $i++)
-        @if (is_active_sidebar("sidebar-footer-{$i}"))
-          <div class="footer-column text-sm">
-            @php(dynamic_sidebar("sidebar-footer-{$i}"))
-          </div>
-        @endif
-      @endfor
-    </div>
+    // 3) Render blocks (do_blocks returns HTML)
+    $html = $raw ? do_blocks($raw) : '';
+  @endphp
 
-    {{-- Optional bottom bar --}}
- <div class="mt-8 pt-4 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs"
-     style="color: var(--color-footer-text);">
-  <div>
-    &copy; {{ date('Y') }} {{ get_bloginfo('name') }}
-  </div>
+  @if (!empty(trim($html)))
+    <footer id="site-footer">
+     <div class="mx-auto px-4 py-12" style="max-width: var(--site-max-width);">
+      {!! $html !!}
+      </div>
+    </footer>
+  @else
+    {{-- Show a hint only inside the Customizer preview --}}
+    @if (is_customize_preview())
+      <footer id="site-footer">
+        <div style="padding:16px;border:1px dashed rgba(148,163,184,.5);border-radius:12px;">
+          Footer is set to <strong>None (Footer Page)</strong> but no footer content was found.
+          <br>
+          Page ID: <strong>{{ $page_id ?: 'not set' }}</strong>
+        </div>
+      </footer>
+    @endif
+  @endif
 
-  <div class="flex flex-wrap gap-4">
-    {{-- small menu / text later --}}
-  </div>
-</div>
+@elseif ($variant === 'theme-default')
+  @include('sections.footers.theme-default')
 
-  </div>
-</footer>
+@else
+  @includeFirst([
+    "sections.footers.$variant",
+    'sections.footers.footer-a',
+  ])
+@endif

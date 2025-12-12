@@ -289,3 +289,41 @@ add_action('customize_register', function( $wp_customize ) {
         }
     }
 }, 999 );
+
+
+
+add_action('after_switch_theme', function () {
+    $slug  = 'site-footer';
+    $title = 'Footer';
+
+    // Already exists?
+    $existing = get_page_by_path($slug);
+    if ($existing instanceof \WP_Post) {
+        update_option('hayden_footer_page_id', (int) $existing->ID);
+        return;
+    }
+
+    // Create it
+    $page_id = wp_insert_post([
+        'post_type'    => 'page',
+        'post_title'   => $title,
+        'post_name'    => $slug,
+        'post_status'  => 'publish',
+        'post_content' => '', // leave empty; user adds blocks
+    ]);
+
+    if (! is_wp_error($page_id) && $page_id) {
+        update_option('hayden_footer_page_id', (int) $page_id);
+        update_post_meta((int) $page_id, '_hayden_is_footer_content', '1');
+    }
+});
+
+
+add_action('template_redirect', function () {
+    $footer_page_id = (int) get_option('hayden_footer_page_id', 0);
+
+    if ($footer_page_id && is_page($footer_page_id)) {
+        wp_safe_redirect(home_url('/'), 302);
+        exit;
+    }
+});
