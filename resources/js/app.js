@@ -193,3 +193,26 @@ document.addEventListener('DOMContentLoaded', () => {
   tocContainer.innerHTML = '';
   tocContainer.appendChild(list);
 });
+
+
+
+
+(() => {
+  const header = document.getElementById('site-header');
+  if (!header) return;
+  if (!header.classList.contains('is-sticky')) return;
+
+  const offset = 10; // px before we consider it "scrolled"
+
+  const setState = () => {
+    if (window.scrollY > offset) {
+      header.classList.add('is-sticky-scrolled');
+    } else {
+      header.classList.remove('is-sticky-scrolled');
+    }
+  };
+
+  // init + update
+  setState();
+  window.addEventListener('scroll', setState, { passive: true });
+})();

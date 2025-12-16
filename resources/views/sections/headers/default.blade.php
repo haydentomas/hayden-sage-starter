@@ -1,13 +1,23 @@
 {{-- resources/views/sections/headers/default.blade.php --}}
 
 @php
-    // Pull logo height from Customizer (default 80px)
-    $logo_height = absint(get_theme_mod('hayden_logo_max_height', 80));
-    $inline_logo_style = $logo_height ? "max-height:{$logo_height}px; height:auto; width:auto;" : '';
+  // Pull logo height from Customizer (default 80px)
+  $logo_height = absint(get_theme_mod('hayden_logo_max_height', 80));
+  $inline_logo_style = $logo_height ? "max-height:{$logo_height}px; height:auto; width:auto;" : '';
+
+  // Full-width toggle
+  $full_width = (bool) get_theme_mod('hayden_header_full_width', 0);
+
+  // Container classes
+  // - Not full width: constrain to site max width + normal gutter
+  // - Full width: span the viewport, keep gutter
+  $wrap_classes = $full_width
+    ? 'w-full'
+    : 'mx-auto max-w-[var(--site-max-width)]';
 @endphp
 
 <header class="site-header header border-b border-white">
-  <div class="site-container mx-auto px-4 py-4">
+  <div class="{{ $wrap_classes }} py-4">
     <nav id="navbar1" class="sm-navbar">
 
       {{-- Brand --}}
@@ -53,6 +63,7 @@
           @endphp
         @endif
       </div>
+
     </nav>
   </div>
 </header>

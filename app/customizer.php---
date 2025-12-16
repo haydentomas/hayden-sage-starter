@@ -19,7 +19,7 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
         };
     };
 
-    $active_when = function (string $setting_id, $equals) {
+    $active_when = function ($setting_id, $equals) {
         return function ($control) use ($setting_id, $equals) {
             $setting = $control->manager->get_setting($setting_id);
             $value   = $setting ? $setting->value() : null;
@@ -28,11 +28,12 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
     };
 
     $active_when_footer_variant = function (string $variant) {
-        return function ($control) use ($variant) {
-            $setting = $control->manager->get_setting('hayden_footer_variant');
-            return $setting && $setting->value() === $variant;
-        };
+    return function ($control) use ($variant) {
+        $setting = $control->manager->get_setting('hayden_footer_variant');
+        return $setting && $setting->value() === $variant;
     };
+};
+
 
     /**
      * MASTER PANEL
@@ -55,11 +56,10 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
         'panel'       => 'hayden_theme_panel',
     ]);
 
-    // Header layout (now includes "none")
     $wp_customize->add_setting('hayden_header_layout', [
         'default'           => 'default',
         'transport'         => 'refresh',
-        'sanitize_callback' => $sanitize_select(['default', 'logo-top', 'nav-center-cta', 'none'], 'default'),
+        'sanitize_callback' => $sanitize_select(['default', 'logo-top', 'nav-center-cta'], 'default'),
     ]);
 
     $wp_customize->add_control('hayden_header_layout_control', [
@@ -71,77 +71,6 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
             'default'        => __('Default – logo left, nav right', 'hayden'),
             'logo-top'       => __('Logo top, nav below', 'hayden'),
             'nav-center-cta' => __('Logo left, nav centre, CTA right', 'hayden'),
-            'none'           => __('None (disable theme header)', 'hayden'),
-        ],
-    ]);
-
-    // Header content page (used when header layout = none)
-    $wp_customize->add_setting('hayden_header_content_page_id', [
-        'default'           => (int) get_option('hayden_header_page_id', 0),
-        'transport'         => 'refresh',
-        'sanitize_callback' => 'absint',
-    ]);
-
-    $wp_customize->add_control('hayden_header_content_page_id_control', [
-        'label'           => __('Header content page (blocks)', 'hayden'),
-        'description'     => __('Choose the page whose blocks will render as the header when Header Layout is set to “None”.', 'hayden'),
-        'section'         => 'hayden_header_section',
-        'settings'        => 'hayden_header_content_page_id',
-        'type'            => 'dropdown-pages',
-        'active_callback' => $active_when('hayden_header_layout', 'none'),
-    ]);
-
-
-// Sticky header
-$wp_customize->add_setting('hayden_header_sticky', [
-  'default'           => 0,
-  'sanitize_callback' => 'absint',
-  'transport'         => 'refresh', // switch to postMessage later if you want live preview
-]);
-
-$wp_customize->add_control('hayden_header_sticky', [
-  'type'        => 'checkbox',
-  'section'     => 'hayden_header_section',
-  'label'       => __('Sticky header', 'hayden'),
-  'description' => __('Keep the header visible while scrolling (works with any header layout).', 'hayden'),
-]);
-
-// Full-width header
-$wp_customize->add_setting('hayden_header_full_width', [
-  'default'           => 0,
-  'sanitize_callback' => 'absint',
-  'transport'         => 'refresh',
-]);
-
-$wp_customize->add_control('hayden_header_full_width', [
-  'type'        => 'checkbox',
-  'section'     => 'hayden_header_section',
-  'label'       => __('Full-width header', 'hayden'),
-  'description' => __('Header spans full width (navigation container becomes fluid).', 'hayden'),
-]);
-
-
-
-    /**
-     * Navigation link style (parent only)
-     * Adds body class: nav-style-basic | nav-style-pill | nav-style-underline
-     */
-    $wp_customize->add_setting('hayden_nav_link_style', [
-        'default'           => 'basic',
-        'transport'         => 'refresh',
-        'sanitize_callback' => $sanitize_select(['basic', 'pill', 'underline'], 'basic'),
-    ]);
-
-    $wp_customize->add_control('hayden_nav_link_style_control', [
-        'label'       => __('Navigation link style', 'hayden'),
-        'description' => __('Applies to top-level menu links only (dropdown styling stays consistent).', 'hayden'),
-        'section'     => 'hayden_header_section',
-        'settings'    => 'hayden_nav_link_style',
-        'type'        => 'radio',
-        'choices'     => [
-            'basic'     => __('Basic (text hover)', 'hayden'),
-            'pill'      => __('Pilled (background hover)', 'hayden'),
-            'underline' => __('Underlined (underline hover)', 'hayden'),
         ],
     ]);
 
@@ -415,7 +344,7 @@ $wp_customize->add_control('hayden_header_full_width', [
         ]
     ));
 
-    // Widget background → --color-widget-bg
+    // Widget background → --color-surface-soft / --color-widget-bg
     $wp_customize->add_setting('hayden_widget_bg_color', [
         'default'           => '#000000',
         'transport'         => 'postMessage',
@@ -457,7 +386,6 @@ $wp_customize->add_control('hayden_header_full_width', [
         'transport'         => 'postMessage',
         'sanitize_callback' => 'sanitize_hex_color',
     ]);
-
     $wp_customize->add_control(new \WP_Customize_Color_Control(
         $wp_customize,
         'hayden_widget_title_color_control',
@@ -473,7 +401,6 @@ $wp_customize->add_control('hayden_header_full_width', [
         'transport'         => 'postMessage',
         'sanitize_callback' => 'sanitize_hex_color',
     ]);
-
     $wp_customize->add_control(new \WP_Customize_Color_Control(
         $wp_customize,
         'hayden_widget_text_color_control',
@@ -489,7 +416,6 @@ $wp_customize->add_control('hayden_header_full_width', [
         'transport'         => 'postMessage',
         'sanitize_callback' => 'sanitize_hex_color',
     ]);
-
     $wp_customize->add_control(new \WP_Customize_Color_Control(
         $wp_customize,
         'hayden_widget_link_color_control',
@@ -524,7 +450,6 @@ $wp_customize->add_control('hayden_header_full_width', [
         'transport'         => 'postMessage',
         'sanitize_callback' => 'sanitize_hex_color',
     ]);
-
     $wp_customize->add_control(new \WP_Customize_Color_Control(
         $wp_customize,
         'hayden_footer_widget_title_color_control',
@@ -540,7 +465,6 @@ $wp_customize->add_control('hayden_header_full_width', [
         'transport'         => 'postMessage',
         'sanitize_callback' => 'sanitize_hex_color',
     ]);
-
     $wp_customize->add_control(new \WP_Customize_Color_Control(
         $wp_customize,
         'hayden_footer_widget_text_color_control',
@@ -556,7 +480,6 @@ $wp_customize->add_control('hayden_header_full_width', [
         'transport'         => 'postMessage',
         'sanitize_callback' => 'sanitize_hex_color',
     ]);
-
     $wp_customize->add_control(new \WP_Customize_Color_Control(
         $wp_customize,
         'hayden_footer_widget_link_color_control',
@@ -592,7 +515,6 @@ $wp_customize->add_control('hayden_header_full_width', [
         'transport'         => 'postMessage',
         'sanitize_callback' => 'sanitize_hex_color',
     ]);
-
     $wp_customize->add_control(new \WP_Customize_Color_Control(
         $wp_customize,
         'hayden_nav_link_color_control',
@@ -608,7 +530,6 @@ $wp_customize->add_control('hayden_header_full_width', [
         'transport'         => 'postMessage',
         'sanitize_callback' => 'sanitize_hex_color',
     ]);
-
     $wp_customize->add_control(new \WP_Customize_Color_Control(
         $wp_customize,
         'hayden_nav_link_hover_color_control',
@@ -624,7 +545,6 @@ $wp_customize->add_control('hayden_header_full_width', [
         'transport'         => 'postMessage',
         'sanitize_callback' => 'sanitize_hex_color',
     ]);
-
     $wp_customize->add_control(new \WP_Customize_Color_Control(
         $wp_customize,
         'hayden_nav_sub_bg_color_control',
@@ -640,7 +560,6 @@ $wp_customize->add_control('hayden_header_full_width', [
         'transport'         => 'postMessage',
         'sanitize_callback' => 'sanitize_hex_color',
     ]);
-
     $wp_customize->add_control(new \WP_Customize_Color_Control(
         $wp_customize,
         'hayden_nav_sub_link_color_control',
@@ -656,7 +575,6 @@ $wp_customize->add_control('hayden_header_full_width', [
         'transport'         => 'postMessage',
         'sanitize_callback' => 'sanitize_hex_color',
     ]);
-
     $wp_customize->add_control(new \WP_Customize_Color_Control(
         $wp_customize,
         'hayden_nav_sub_hover_bg_color_control',
@@ -684,7 +602,6 @@ $wp_customize->add_control('hayden_header_full_width', [
         'transport'         => 'postMessage',
         'sanitize_callback' => 'sanitize_hex_color',
     ]);
-
     $wp_customize->add_control(new \WP_Customize_Color_Control(
         $wp_customize,
         'hayden_card_bg_control',
@@ -700,7 +617,6 @@ $wp_customize->add_control('hayden_header_full_width', [
         'transport'         => 'postMessage',
         'sanitize_callback' => 'sanitize_hex_color',
     ]);
-
     $wp_customize->add_control(new \WP_Customize_Color_Control(
         $wp_customize,
         'hayden_card_heading_control',
@@ -716,7 +632,6 @@ $wp_customize->add_control('hayden_header_full_width', [
         'transport'         => 'postMessage',
         'sanitize_callback' => 'sanitize_hex_color',
     ]);
-
     $wp_customize->add_control(new \WP_Customize_Color_Control(
         $wp_customize,
         'hayden_card_text_control',
@@ -732,7 +647,6 @@ $wp_customize->add_control('hayden_header_full_width', [
         'transport'         => 'postMessage',
         'sanitize_callback' => 'sanitize_hex_color',
     ]);
-
     $wp_customize->add_control(new \WP_Customize_Color_Control(
         $wp_customize,
         'hayden_card_text_muted_control',
@@ -859,7 +773,6 @@ $wp_customize->add_control('hayden_header_full_width', [
         'transport'         => 'refresh',
         'sanitize_callback' => __NAMESPACE__ . '\\hayden_sanitize_font_scale',
     ]);
-
     $wp_customize->add_control('hayden_h1_font_size_control', [
         'label'    => __('H1 font size', 'hayden'),
         'section'  => 'hayden_typography_section',
@@ -873,7 +786,6 @@ $wp_customize->add_control('hayden_header_full_width', [
         'transport'         => 'refresh',
         'sanitize_callback' => __NAMESPACE__ . '\\hayden_sanitize_font_scale',
     ]);
-
     $wp_customize->add_control('hayden_h2_font_size_control', [
         'label'    => __('H2 font size', 'hayden'),
         'section'  => 'hayden_typography_section',
@@ -887,7 +799,6 @@ $wp_customize->add_control('hayden_header_full_width', [
         'transport'         => 'refresh',
         'sanitize_callback' => __NAMESPACE__ . '\\hayden_sanitize_font_scale',
     ]);
-
     $wp_customize->add_control('hayden_h3_font_size_control', [
         'label'    => __('H3 font size', 'hayden'),
         'section'  => 'hayden_typography_section',
@@ -899,6 +810,7 @@ $wp_customize->add_control('hayden_header_full_width', [
     /**
      * ------------------------------------------------------------
      * FOOTER LAYOUT SECTION
+     * Adds: Footer Variant + Footer Columns
      * ------------------------------------------------------------
      */
     $wp_customize->add_section('hayden_footer_section', [
@@ -908,6 +820,7 @@ $wp_customize->add_control('hayden_header_full_width', [
         'panel'       => 'hayden_theme_panel',
     ]);
 
+    // Footer variant (A/B/C/Default) - you will later wire this to your Blade includes
     $wp_customize->add_setting('hayden_footer_variant', [
         'default'           => 'theme-default',
         'transport'         => 'refresh',
@@ -930,71 +843,78 @@ $wp_customize->add_control('hayden_header_full_width', [
     ]);
 
     // Footer content page (used when footer variant = none)
-    $wp_customize->add_setting('hayden_footer_content_page_id', [
-        'default'           => (int) get_option('hayden_footer_page_id', 0),
-        'transport'         => 'refresh',
-        'sanitize_callback' => 'absint',
-    ]);
+$wp_customize->add_setting('hayden_footer_content_page_id', [
+    'default'           => (int) get_option('hayden_footer_page_id', 0),
+    'transport'         => 'refresh',
+    'sanitize_callback' => 'absint',
+]);
 
-    $wp_customize->add_control('hayden_footer_content_page_id_control', [
-        'label'           => __('Footer content page (blocks)', 'hayden'),
-        'description'     => __('Choose the page whose blocks will render as the footer when Footer Variant is set to “None”.', 'hayden'),
-        'section'         => 'hayden_footer_section',
-        'settings'        => 'hayden_footer_content_page_id',
-        'type'            => 'dropdown-pages',
-        'active_callback' => $active_when('hayden_footer_variant', 'none'),
-    ]);
+$wp_customize->add_control('hayden_footer_content_page_id_control', [
+    'label'           => __('Footer content page (blocks)', 'hayden'),
+    'description'     => __('Choose the page whose blocks will render as the footer when Footer Variant is set to “None”.', 'hayden'),
+    'section'         => 'hayden_footer_section',
+    'settings'        => 'hayden_footer_content_page_id',
+    'type'            => 'dropdown-pages',
+    'active_callback' => function ($control) {
+        // Adjust this if your setting name differs:
+        $variant = $control->manager->get_setting('hayden_footer_variant')?->value();
+        return $variant === 'none';
+    },
+]);
 
-    // Footer C – CTA controls
-    $wp_customize->add_setting('hayden_footer_c_cta_enabled', [
-        'default'           => true,
-        'transport'         => 'refresh',
-        'sanitize_callback' => function ($v) { return (bool) $v; },
-    ]);
 
-    $wp_customize->add_control('hayden_footer_c_cta_enabled_control', [
-        'label'           => __('Footer C: Enable CTA panel', 'hayden'),
-        'section'         => 'hayden_footer_section',
-        'settings'        => 'hayden_footer_c_cta_enabled',
-        'type'            => 'checkbox',
-        'active_callback' => $active_when_footer_variant('footer-c'),
-    ]);
 
-    $fields = [
-        'kicker'     => ['Footer C: CTA kicker', 'Ready when you are'],
-        'title'      => ['Footer C: CTA title', "Want a WordPress build that's fast, tidy, and easy to manage?"],
-        'text'       => ['Footer C: CTA text', "Let's turn your design into a lightweight, high-performing site — with a clean editor experience for clients."],
-        'btn1_label' => ['Footer C: Button 1 label', 'Start a project'],
-        'btn1_url'   => ['Footer C: Button 1 URL', home_url('/contact')],
-        'btn2_label' => ['Footer C: Button 2 label', 'View work'],
-        'btn2_url'   => ['Footer C: Button 2 URL', home_url('/projects')],
-    ];
+// Footer C – CTA controls
+$wp_customize->add_setting('hayden_footer_c_cta_enabled', [
+  'default'           => true,
+  'transport'         => 'refresh',
+  'sanitize_callback' => fn($v) => (bool) $v,
+]);
 
-    foreach ($fields as $key => [$label, $default]) {
-        $setting_id = "hayden_footer_c_cta_{$key}";
-        $is_url     = (substr($key, -4) === '_url');
+$wp_customize->add_control('hayden_footer_c_cta_enabled_control', [
+  'label'           => __('Footer C: Enable CTA panel', 'hayden'),
+  'section'         => 'hayden_footer_section',
+  'settings'        => 'hayden_footer_c_cta_enabled',
+  'type'            => 'checkbox',
+  'active_callback' => $active_when_footer_variant('footer-c'),
+]);
 
-        $wp_customize->add_setting($setting_id, [
-            'default'           => $default,
-            'transport'         => 'refresh',
-            'sanitize_callback' => $is_url ? 'esc_url_raw' : 'sanitize_text_field',
-        ]);
 
-        $wp_customize->add_control("{$setting_id}_control", [
-            'label'           => __($label, 'hayden'),
-            'section'         => 'hayden_footer_section',
-            'settings'        => $setting_id,
-            'type'            => $is_url ? 'url' : 'text',
-            'active_callback' => function ($control) use ($active_when_footer_variant) {
-                $is_footer_c = $active_when_footer_variant('footer-c')($control);
+$fields = [
+  'kicker'     => ['Footer C: CTA kicker', 'Ready when you are'],
+  'title'      => ['Footer C: CTA title', "Want a WordPress build that's fast, tidy, and easy to manage?"],
+  'text'       => ['Footer C: CTA text', "Let's turn your design into a lightweight, high-performing site — with a clean editor experience for clients."],
+  'btn1_label' => ['Footer C: Button 1 label', 'Start a project'],
+  'btn1_url'   => ['Footer C: Button 1 URL', home_url('/contact')],
+  'btn2_label' => ['Footer C: Button 2 label', 'View work'],
+  'btn2_url'   => ['Footer C: Button 2 URL', home_url('/projects')],
+];
 
-                $cta_setting = $control->manager->get_setting('hayden_footer_c_cta_enabled');
-                $cta_on      = $cta_setting ? (bool) $cta_setting->value() : false;
+foreach ($fields as $key => [$label, $default]) {
+  $setting_id = "hayden_footer_c_cta_{$key}";
 
-                return $is_footer_c && $cta_on;
-            },
-        ]);
-    }
+  $wp_customize->add_setting($setting_id, [
+    'default'           => $default,
+    'transport'         => 'refresh',
+    'sanitize_callback' => str_ends_with($key, '_url') ? 'esc_url_raw' : 'sanitize_text_field',
+  ]);
+
+$wp_customize->add_control("{$setting_id}_control", [
+  'label'           => __($label, 'hayden'),
+  'section'         => 'hayden_footer_section',
+  'settings'        => $setting_id,
+  'type'            => str_ends_with($key, '_url') ? 'url' : 'text',
+  'active_callback' => function ($control) use ($active_when_footer_variant) {
+      // Only when Footer C is selected AND CTA enabled
+      $is_footer_c = $active_when_footer_variant('footer-c')($control);
+      $cta_on = (bool) $control->manager->get_setting('hayden_footer_c_cta_enabled')?->value();
+      return $is_footer_c && $cta_on;
+  },
+]);
+
+}
+
+
 
     // Footer columns (widgets) 1–4
     $wp_customize->add_setting('hayden_footer_columns', [
@@ -1036,9 +956,8 @@ $wp_customize->add_control('hayden_header_full_width', [
 
     foreach ($footer_sidebars as $index => $sidebar_id) {
         $section_id = 'sidebar-widgets-' . $sidebar_id;
-        $section    = $wp_customize->get_section($section_id);
 
-        if ($section) {
+        if ($section = $wp_customize->get_section($section_id)) {
             $section->panel    = 'hayden_theme_panel';
             $section->priority = $priority + $index;
             $section->title    = sprintf(__('Footer Column %d Widgets', 'hayden'), $index + 1);
@@ -1061,7 +980,7 @@ $wp_customize->add_control('hayden_header_full_width', [
         'sanitize_callback' => '__return_null',
     ]);
 
-    $site_url = esc_url('https://wp.bbi.co.uk');
+    $site_url  = esc_url('https://wp.bbi.co.uk');
 
     $html  = '<div class="hayden-customizer-panel-footer" style="margin:16px 0 24px;padding:12px 14px;border-radius:8px;background:#020617;border:1px solid rgba(148,163,184,0.4);color:#e5e7eb;font-size:13px;line-height:1.5;">';
     $html .= '  <div style="display:flex;align-items:center;gap:10px;">';
@@ -1091,20 +1010,6 @@ $wp_customize->add_control('hayden_header_full_width', [
 
 /**
  * ------------------------------------------------------------
- * Body class: nav style
- * ------------------------------------------------------------
- */
-add_filter('body_class', function (array $classes) {
-    $style = get_theme_mod('hayden_nav_link_style', 'basic');
-    if (!in_array($style, ['basic', 'pill', 'underline'], true)) {
-        $style = 'basic';
-    }
-    $classes[] = 'nav-style-' . $style;
-    return $classes;
-});
-
-/**
- * ------------------------------------------------------------
  * Editor: inject theme CSS vars (basic subset)
  * ------------------------------------------------------------
  */
@@ -1120,9 +1025,9 @@ add_action('enqueue_block_editor_assets', function () {
     $spacing_choice = get_theme_mod('hayden_spacing_scale', 'comfortable');
 
     $spacing_presets = [
-        'compact'     => ['mobile' => '1.75rem', 'desktop' => '3rem'],
+        'compact' => ['mobile' => '1.75rem', 'desktop' => '3rem'],
         'comfortable' => ['mobile' => '2.5rem', 'desktop' => '4rem'],
-        'spacious'    => ['mobile' => '3.5rem', 'desktop' => '6rem'],
+        'spacious' => ['mobile' => '3.5rem', 'desktop' => '6rem'],
     ];
 
     $spacing = $spacing_presets[$spacing_choice] ?? $spacing_presets['comfortable'];
@@ -1233,11 +1138,13 @@ add_action('wp_head', function () {
     $h3_mobile = $hayden_font_mobile($h3_size_key);
 
     $spacing_choice = get_theme_mod('hayden_spacing_scale', 'comfortable');
+
     $spacing_presets = [
-        'compact'     => ['mobile' => '1.75rem', 'desktop' => '3rem'],
+        'compact' => ['mobile' => '1.75rem', 'desktop' => '3rem'],
         'comfortable' => ['mobile' => '2.5rem', 'desktop' => '4rem'],
-        'spacious'    => ['mobile' => '3.5rem', 'desktop' => '6rem'],
+        'spacious' => ['mobile' => '3.5rem', 'desktop' => '6rem'],
     ];
+
     $spacing = $spacing_presets[$spacing_choice] ?? $spacing_presets['comfortable'];
 
     ?>
@@ -1275,8 +1182,8 @@ add_action('wp_head', function () {
 
         --color-nav-toggle: <?php echo esc_html($nav_toggle); ?>;
 
-        --site-max-width: <?php echo (int) $container_width; ?>px;
-        --site-logo-max-height: <?php echo (int) $logo_height; ?>px;
+        --site-max-width: <?php echo $container_width; ?>px;
+        --site-logo-max-height: <?php echo $logo_height; ?>px;
 
         --body-font-size-mobile: <?php echo esc_html($body_mobile); ?>;
         --body-font-size-desktop: <?php echo esc_html($body_desktop); ?>;
@@ -1307,12 +1214,9 @@ add_action('wp_head', function () {
 });
 
 /**
- * ------------------------------------------------------------
  * Customizer controls styling + JS (controls frame)
- * ------------------------------------------------------------
  */
 add_action('customize_controls_enqueue_scripts', function () {
-
     wp_enqueue_style(
         'hayden-customizer-style',
         get_theme_file_uri('resources/css/customizer.css'),
@@ -1321,15 +1225,9 @@ add_action('customize_controls_enqueue_scripts', function () {
     );
 
     $primary = get_theme_mod('hayden_primary_color', '#f97316');
+
     $accent_css = sprintf(':root { --color-primary: %s; }', esc_attr($primary));
     wp_add_inline_style('hayden-customizer-style', $accent_css);
-
-    // Scope text colours for labels + descriptions (your working selectors, scoped to Customizer UI)
-    $controls_css = <<<CSS
-#customize-controls .customize-control .customize-inside-control-row { color:#fff !important; }
-#customize-controls .customize-control .description { color:#fafafa !important; }
-CSS;
-    wp_add_inline_style('hayden-customizer-style', $controls_css);
 
     $js = <<<JS
 (function(api) {
@@ -1384,23 +1282,7 @@ add_action('customize_controls_print_styles', function () {
 });
 
 /**
- * ------------------------------------------------------------
- * Body class: nav style
- * ------------------------------------------------------------
- */
-add_filter('body_class', function (array $classes) {
-    $style = get_theme_mod('hayden_nav_link_style', 'basic');
-    if (!in_array($style, ['basic', 'pill', 'underline'], true)) {
-        $style = 'basic';
-    }
-    $classes[] = 'nav-style-' . $style;
-    return $classes;
-});
-
-/**
- * ------------------------------------------------------------
  * Live preview script – updates CSS variables in the PREVIEW frame
- * ------------------------------------------------------------
  */
 add_action('customize_preview_init', function () {
     wp_enqueue_script('customize-preview');
@@ -1517,14 +1399,14 @@ function hayden_get_custom_font_css(): string
         return '';
     }
 
-    $css      = '';
+    $css = '';
     $rootVars = '';
 
-    // NOTE: Keeping your existing variable mapping as-is (matches your original file).
     if ($heading_id) {
         $heading_url = wp_get_attachment_url($heading_id);
         if ($heading_url) {
             $format = hayden_detect_font_format($heading_url);
+
             $css .= "@font-face{font-family:'HaydenHeading';src:url('{$heading_url}') format('{$format}');font-weight:400;font-style:normal;font-display:swap;}\n";
             $rootVars .= "--font-sans:'HaydenHeading',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;";
         }
@@ -1534,6 +1416,7 @@ function hayden_get_custom_font_css(): string
         $body_url = wp_get_attachment_url($body_id);
         if ($body_url) {
             $format = hayden_detect_font_format($body_url);
+
             $css .= "@font-face{font-family:'HaydenBody';src:url('{$body_url}') format('{$format}');font-weight:400;font-style:normal;font-display:swap;}\n";
             $rootVars .= "--font-serif:'HaydenBody','Times New Roman',Georgia,serif;";
         }
@@ -1548,8 +1431,7 @@ function hayden_get_custom_font_css(): string
 
 function hayden_detect_font_format(string $url): string
 {
-    $path = parse_url($url, PHP_URL_PATH);
-    $ext  = strtolower(pathinfo($path ?? '', PATHINFO_EXTENSION));
+    $ext = strtolower(pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION));
 
     switch ($ext) {
         case 'woff2':
@@ -1579,43 +1461,14 @@ add_action('admin_head', function () {
 }, 50);
 
 /**
- * Editor: inject theme CSS vars (basic subset) + fonts + spacing vars.
+ * Ensure editor also gets font CSS + spacing vars.
  */
 add_action('enqueue_block_editor_assets', function () {
-
-    $primary = sanitize_hex_color(get_theme_mod('hayden_primary_color', '#f97316')) ?: '#f97316';
-    $surface = sanitize_hex_color(get_theme_mod('hayden_surface_color', '#FFFAF8')) ?: '#FFFAF8';
-
-    $card_bg         = sanitize_hex_color(get_theme_mod('hayden_card_bg', '#000000')) ?: '#000000';
-    $card_heading    = sanitize_hex_color(get_theme_mod('hayden_card_heading', '#f97316')) ?: '#f97316';
-    $card_text       = sanitize_hex_color(get_theme_mod('hayden_card_text', '#ffffff')) ?: '#ffffff';
-    $card_text_muted = sanitize_hex_color(get_theme_mod('hayden_card_text_muted', '#e5e5e5')) ?: '#e5e5e5';
-
-    $spacing_choice = get_theme_mod('hayden_spacing_scale', 'comfortable');
-
-    $spacing_presets = [
-        'compact'     => ['mobile' => '1.75rem', 'desktop' => '3rem'],
-        'comfortable' => ['mobile' => '2.5rem', 'desktop' => '4rem'],
-        'spacious'    => ['mobile' => '3.5rem', 'desktop' => '6rem'],
-    ];
-
-    $spacing = $spacing_presets[$spacing_choice] ?? $spacing_presets['comfortable'];
-
-    $css = sprintf(
-        ':root{--color-primary:%1$s;--color-surface:%2$s;--card-bg:%3$s;--card-heading:%4$s;--card-text:%5$s;--card-text-muted:%6$s;--section-space-mobile:%7$s;--section-space-desktop:%8$s;}',
-        esc_html($primary),
-        esc_html($surface),
-        esc_html($card_bg),
-        esc_html($card_heading),
-        esc_html($card_text),
-        esc_html($card_text_muted),
-        esc_html($spacing['mobile']),
-        esc_html($spacing['desktop'])
-    );
+    $css = '';
 
     $font_css = hayden_get_custom_font_css();
     if ($font_css) {
-        $css .= "\n" . $font_css;
+        $css .= $font_css;
         $css .= "
         .editor-styles-wrapper{font-family:var(--font-serif);}
         .editor-styles-wrapper p,
@@ -1630,7 +1483,18 @@ add_action('enqueue_block_editor_assets', function () {
         ";
     }
 
+    $spacing_choice = get_theme_mod('hayden_spacing_scale', 'comfortable');
+
+    $spacing_presets = [
+        'compact' => ['mobile' => '1.75rem', 'desktop' => '3rem'],
+        'comfortable' => ['mobile' => '2.5rem', 'desktop' => '4rem'],
+        'spacious' => ['mobile' => '3.5rem', 'desktop' => '6rem'],
+    ];
+
+    $spacing = $spacing_presets[$spacing_choice] ?? $spacing_presets['comfortable'];
+
     $css .= "
+    :root{--section-space-mobile:{$spacing['mobile']};--section-space-desktop:{$spacing['desktop']};}
     .editor-styles-wrapper .wp-block-smart-hero-primary{margin-top:var(--section-space-mobile);margin-bottom:var(--section-space-mobile);}
     @media (min-width:768px){
       .editor-styles-wrapper .wp-block-smart-hero-primary{margin-top:var(--section-space-desktop);margin-bottom:var(--section-space-desktop);}

@@ -10,7 +10,7 @@
   </header>
 
   {{-- Content --}}
-  <div class="e-content prose prose-invert max-w-none">
+  <div class="e-content prose max-w-none">
     {!! get_the_content() !!}
   </div>
 

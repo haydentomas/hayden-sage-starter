@@ -5,7 +5,9 @@ namespace App;
 use Illuminate\Support\Facades\Vite;
 
 /**
- * Inject styles into the block editor.
+ * -------------------------------------------------------------------------
+ * Editor assets (Vite) — inject editor.css + editor.js into block editor only
+ * -------------------------------------------------------------------------
  */
 add_filter('block_editor_settings_all', function ($settings) {
     $style = Vite::asset('resources/css/editor.css');
@@ -17,19 +19,16 @@ add_filter('block_editor_settings_all', function ($settings) {
     return $settings;
 });
 
-/**
- * Inject scripts into the block editor.
- */
-add_filter('admin_head', function () {
-    if (! get_current_screen()?->is_block_editor()) {
+add_action('admin_head', function () {
+    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+    if (! $screen || ! method_exists($screen, 'is_block_editor') || ! $screen->is_block_editor()) {
         return;
     }
 
-    $dependencies = json_decode(Vite::content('editor.deps.json'));
-
-    foreach ($dependencies as $dependency) {
-        if (! wp_script_is($dependency)) {
-            wp_enqueue_script($dependency);
+    $deps = json_decode(Vite::content('editor.deps.json'), true) ?: [];
+    foreach ($deps as $dep) {
+        if ($dep && ! wp_script_is($dep, 'enqueued')) {
+            wp_enqueue_script($dep);
         }
     }
 
@@ -39,7 +38,9 @@ add_filter('admin_head', function () {
 });
 
 /**
- * Use the generated theme.json file.
+ * -------------------------------------------------------------------------
+ * theme.json — use generated build/assets/theme.json
+ * -------------------------------------------------------------------------
  */
 add_filter('theme_file_path', function ($path, $file) {
     return $file === 'theme.json'
@@ -48,7 +49,9 @@ add_filter('theme_file_path', function ($path, $file) {
 }, 10, 2);
 
 /**
- * Register the initial theme setup.
+ * -------------------------------------------------------------------------
+ * Theme setup
+ * -------------------------------------------------------------------------
  */
 add_action('after_setup_theme', function () {
     // Disable FSE block templates.
@@ -79,41 +82,33 @@ add_action('after_setup_theme', function () {
 
     // Customizer selective refresh for widgets.
     add_theme_support('customize-selective-refresh-widgets');
+
+    // Allow a custom logo via Customizer → Site Identity
+    add_theme_support('custom-logo', [
+        'height'               => 80,
+        'width'                => 240,
+        'flex-width'           => true,
+        'flex-height'          => true,
+        'unlink-homepage-logo' => true,
+    ]);
 }, 20);
 
-
-// Allow a custom logo via Customizer → Site Identity
-add_theme_support('custom-logo', [
-    'height'               => 80,
-    'width'                => 240,
-    'flex-width'           => true,
-    'flex-height'          => true,
-    'unlink-homepage-logo' => true,
-]);
-
-
 /**
- * Register the theme sidebars.
+ * -------------------------------------------------------------------------
+ * Sidebars
+ * -------------------------------------------------------------------------
  */
 add_action('widgets_init', function () {
-    $config = [
-        'before_widget' => '<section class="widget %1$s %2$s">',
+    // Primary (blog/sidebar)
+    register_sidebar([
+        'name'          => __('Primary Sidebar', 'hayden'),
+        'id'            => 'sidebar-primary',
+        'description'   => __('Main sidebar shown on blog posts and archives.', 'hayden'),
+        'before_widget' => '<section id="%1$s" class="widget %2$s sidebar-card bg-surface-soft border border-white/5 rounded-2xl p-5 mb-6">',
         'after_widget'  => '</section>',
-        'before_title'  => '<h3>',
-        'after_title'   => '</h3>',
-    ];
-
- // Primary (blog/sidebar)
-register_sidebar([
-    'name'          => __('Primary Sidebar', 'hayden'),
-    'id'            => 'sidebar-primary',
-    'description'   => __('Main sidebar shown on blog posts and archives.', 'hayden'),
-    'before_widget' => '<section id="%1$s" class="widget %2$s sidebar-card bg-surface-soft border border-white/5 rounded-2xl p-5 mb-6">',
-    'after_widget'  => '</section>',
-    'before_title'  => '<h2 class="widget-title text-sm font-semibold tracking-wide uppercase text-white mb-3">',
-    'after_title'   => '</h2>',
-] + $config);
-
+        'before_title'  => '<h2 class="widget-title text-sm font-semibold tracking-wide uppercase text-white mb-3">',
+        'after_title'   => '</h2>',
+    ]);
 
     // Footer columns 1–4
     $footer_base = [
@@ -131,37 +126,34 @@ register_sidebar([
     }
 });
 
-
-
-
-
-namespace App;
-
-use Walker_Nav_Menu;
-
 /**
- * 1) Extra fields in Appearance → Menus
- * -------------------------------------------------------------- */
-add_action('wp_nav_menu_item_custom_fields', function ($item_id, $item, $depth, $args) {
-    // Only show on top-level items
+ * -------------------------------------------------------------------------
+ * Mega menu fields (top-level items)
+ * -------------------------------------------------------------------------
+ */
+add_action('wp_nav_menu_item_custom_fields', function ($item_id, $item, $depth) {
     if ($depth !== 0) {
         return;
     }
 
-    $is_mega  = get_post_meta($item_id, '_menu_item_mega_parent', true) === '1';
-    $columns  = (int) get_post_meta($item_id, '_menu_item_mega_columns', true);
+    $is_mega = get_post_meta($item_id, '_menu_item_mega_parent', true) === '1';
+
+    $columns = (int) get_post_meta($item_id, '_menu_item_mega_columns', true);
     if ($columns < 1 || $columns > 4) {
         $columns = 3;
     }
     ?>
-    <div class="field-mega-menu description description-wide" style="margin-top: 10px; border-top: 1px solid #ddd; padding-top: 10px;">
+    <div class="field-mega-menu description description-wide" style="margin-top:10px;border-top:1px solid #ddd;padding-top:10px;">
         <strong>Mega menu</strong>
 
         <p>
             <label>
-                <input type="checkbox"
-                       name="menu-item-mega-parent[<?php echo esc_attr($item_id); ?>]"
-                       value="1" <?php checked($is_mega); ?> />
+                <input
+                    type="checkbox"
+                    name="menu-item-mega-parent[<?php echo esc_attr($item_id); ?>]"
+                    value="1"
+                    <?php checked($is_mega); ?>
+                />
                 Enable this item as a mega menu parent
             </label>
         </p>
@@ -170,8 +162,8 @@ add_action('wp_nav_menu_item_custom_fields', function ($item_id, $item, $depth, 
             <label>Columns:&nbsp;
                 <select name="menu-item-mega-columns[<?php echo esc_attr($item_id); ?>]">
                     <?php foreach ([1, 2, 3, 4] as $col) : ?>
-                        <option value="<?php echo $col; ?>" <?php selected($columns, $col); ?>>
-                            <?php echo $col; ?> column<?php echo $col > 1 ? 's' : ''; ?>
+                        <option value="<?php echo (int) $col; ?>" <?php selected($columns, $col); ?>>
+                            <?php echo (int) $col; ?> column<?php echo $col > 1 ? 's' : ''; ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -184,17 +176,12 @@ add_action('wp_nav_menu_item_custom_fields', function ($item_id, $item, $depth, 
         </p>
     </div>
     <?php
-}, 10, 4);
+}, 10, 3);
 
-/**
- * 2) Save the extra fields when the menu is saved
- * -------------------------------------------------------------- */
-add_action('wp_update_nav_menu_item', function ($menu_id, $menu_item_db_id, $args) {
-    // Mega parent toggle
+add_action('wp_update_nav_menu_item', function ($menu_id, $menu_item_db_id) {
     $is_mega = isset($_POST['menu-item-mega-parent'][$menu_item_db_id]) ? '1' : '0';
     update_post_meta($menu_item_db_id, '_menu_item_mega_parent', $is_mega);
 
-    // Column count
     if (isset($_POST['menu-item-mega-columns'][$menu_item_db_id])) {
         $cols = (int) $_POST['menu-item-mega-columns'][$menu_item_db_id];
         if ($cols < 1 || $cols > 4) {
@@ -202,128 +189,134 @@ add_action('wp_update_nav_menu_item', function ($menu_id, $menu_item_db_id, $arg
         }
         update_post_meta($menu_item_db_id, '_menu_item_mega_columns', $cols);
     }
-}, 10, 3);
+}, 10, 2);
 
-
-
-
-add_action('customize_register', function ($wp_customize) {
-
-    // Section
-    $wp_customize->add_section('bbi_colors', [
-        'title'    => __('Theme Colors', 'sage'),
-        'priority' => 30,
-    ]);
-
-    // Setting
-    $wp_customize->add_setting('color_surface', [
-        'default'           => '#FFFAF8',
-        'transport'         => 'refresh',
-        'sanitize_callback' => 'sanitize_hex_color',
-    ]);
-
-    // Control
-// Control
-$wp_customize->add_control(
-    new \WP_Customize_Color_Control(
-        $wp_customize,
-        'color_surface',
-        [
-            'label'   => __('Background Surface Color', 'sage'),
-            'section' => 'bbi_colors',
-            'settings'=> 'color_surface',
-        ]
-    )
-);
-});
-
-
-
-add_action('wp_head', function () {
-    $color_surface = get_theme_mod('color_surface', '#FFFAF8');
-
-    echo "<style>
-        :root {
-            --color-surface: {$color_surface};
-        }
-    </style>";
-});
-
-
+/**
+ * -------------------------------------------------------------------------
+ * Upload mimes (fonts)
+ * -------------------------------------------------------------------------
+ */
 add_filter('upload_mimes', function ($mimes) {
-
     $mimes['woff']  = 'font/woff';
     $mimes['woff2'] = 'font/woff2';
     $mimes['ttf']   = 'font/ttf';
     $mimes['otf']   = 'font/otf';
-
     return $mimes;
 });
 
-
-
-add_action('customize_preview_init', function () {
-    wp_enqueue_script(
-        'hayden-customizer-preview',
-        get_theme_file_uri('resources/scripts/customizer-preview.js'),
-        ['customize-preview'],
-        wp_get_theme()->get('Version'),
-        true
-    );
-});
-
-
-add_action('customize_register', function( $wp_customize ) {
-    // Remove any stray top-level "Theme Colors"/"Theme colours" sections
-    foreach ( $wp_customize->sections() as $section ) {
-        // Titles we don't want as standalone sections
-        if ( in_array( $section->title, ['Theme Colors', 'Theme colours', 'Colors', 'Colours'], true ) ) {
-
-            // Skip our own section inside the Theme Settings panel
-            if ( $section->id === 'hayden_color_section' ) {
+/**
+ * -------------------------------------------------------------------------
+ * Customizer cleanup (remove stray "Theme Colors" sections)
+ * -------------------------------------------------------------------------
+ */
+add_action('customize_register', function ($wp_customize) {
+    foreach ($wp_customize->sections() as $section) {
+        if (in_array($section->title, ['Theme Colors', 'Theme colours', 'Colors', 'Colours'], true)) {
+            if ($section->id === 'hayden_color_section') {
                 continue;
             }
-
-            // Remove the section
-            $wp_customize->remove_section( $section->id );
+            $wp_customize->remove_section($section->id);
         }
     }
-}, 999 );
+}, 999);
 
-
-
+/**
+ * -------------------------------------------------------------------------
+ * Auto-create special block pages on theme activation (Footer + Header)
+ * -------------------------------------------------------------------------
+ */
 add_action('after_switch_theme', function () {
-    $slug  = 'site-footer';
-    $title = 'Footer';
 
-    // Already exists?
-    $existing = get_page_by_path($slug);
-    if ($existing instanceof \WP_Post) {
-        update_option('hayden_footer_page_id', (int) $existing->ID);
-        return;
+    // ----- Footer page -----
+    if (! get_option('hayden_footer_page_id')) {
+        $slug  = 'site-footer';
+        $title = 'Footer';
+
+        $existing = get_page_by_path($slug);
+        if ($existing instanceof \WP_Post) {
+            update_option('hayden_footer_page_id', (int) $existing->ID);
+        } else {
+            $page_id = wp_insert_post([
+                'post_type'    => 'page',
+                'post_title'   => $title,
+                'post_name'    => $slug,
+                'post_status'  => 'publish',
+                'post_content' => '',
+            ]);
+
+            if (! is_wp_error($page_id) && $page_id) {
+                update_option('hayden_footer_page_id', (int) $page_id);
+                update_post_meta((int) $page_id, '_hayden_is_footer_content', '1');
+            }
+        }
     }
 
-    // Create it
-    $page_id = wp_insert_post([
-        'post_type'    => 'page',
-        'post_title'   => $title,
-        'post_name'    => $slug,
-        'post_status'  => 'publish',
-        'post_content' => '', // leave empty; user adds blocks
-    ]);
+    // ----- Header page -----
+    if (! get_option('hayden_header_page_id')) {
+        $slug  = 'site-header';
+        $title = 'Header';
 
-    if (! is_wp_error($page_id) && $page_id) {
-        update_option('hayden_footer_page_id', (int) $page_id);
-        update_post_meta((int) $page_id, '_hayden_is_footer_content', '1');
+        $existing = get_page_by_path($slug);
+        if ($existing instanceof \WP_Post) {
+            update_option('hayden_header_page_id', (int) $existing->ID);
+        } else {
+            $page_id = wp_insert_post([
+                'post_type'    => 'page',
+                'post_title'   => $title,
+                'post_name'    => $slug,
+                'post_status'  => 'publish',
+                'post_content' => '',
+            ]);
+
+            if (! is_wp_error($page_id) && $page_id) {
+                update_option('hayden_header_page_id', (int) $page_id);
+                update_post_meta((int) $page_id, '_hayden_is_header_content', '1');
+            }
+        }
     }
 });
 
-
+/**
+ * -------------------------------------------------------------------------
+ * Prevent viewing header/footer content pages directly (redirect to home)
+ * -------------------------------------------------------------------------
+ */
 add_action('template_redirect', function () {
     $footer_page_id = (int) get_option('hayden_footer_page_id', 0);
+    $header_page_id = (int) get_option('hayden_header_page_id', 0);
 
-    if ($footer_page_id && is_page($footer_page_id)) {
+    if (($footer_page_id && is_page($footer_page_id)) || ($header_page_id && is_page($header_page_id))) {
         wp_safe_redirect(home_url('/'), 302);
         exit;
     }
+});
+
+
+add_action('enqueue_block_editor_assets', function () {
+
+    // 1) Load your default theme fonts into the editor iframe
+    wp_enqueue_style(
+        'hayden-editor-fonts',
+        get_theme_file_uri('resources/css/fonts.css'),
+        [],
+        wp_get_theme()->get('Version')
+    );
+
+    // 2) Ensure default font vars exist even when no uploads are set
+    $defaults = "
+      :root{
+        --font-serif:'Merriweather',Georgia,'Times New Roman',serif;
+        --font-sans:'Cabin',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Ubuntu,Cantarell,'Helvetica Neue',sans-serif;
+      }
+      .editor-styles-wrapper{font-family:var(--font-serif);}
+      .editor-styles-wrapper h1,
+      .editor-styles-wrapper h2,
+      .editor-styles-wrapper h3,
+      .editor-styles-wrapper h4,
+      .editor-styles-wrapper h5,
+      .editor-styles-wrapper h6{font-family:var(--font-sans);}
+    ";
+
+    // Put it onto a handle that exists in the editor
+    wp_add_inline_style('wp-block-library', $defaults);
 });

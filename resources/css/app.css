@@ -9,6 +9,8 @@
 @import "./fonts.css";
 @import "./parts/theme.css";
 
+@plugin "@tailwindcss/typography";
+
 /* -----------------------------------------------------
    Tell Tailwind to scan theme + plugin files
 ----------------------------------------------------- */
@@ -629,3 +631,52 @@ a.menu-item-cta,
 }
 
 
+.site-header.is-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: transparent;
+  transition:
+    box-shadow 150ms ease,
+    background-color 150ms ease;
+}
+
+/* Only AFTER scroll */
+.site-header.is-sticky.is-sticky-scrolled {
+  background: var(--color-surface);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+
+
+
+
+
+/* Make Tailwind Typography follow theme customizer sizing */
+.prose {
+  font-size: var(--body-font-size-desktop);
+  line-height: 1.75;
+}
+
+@media (max-width: 767px) {
+  .prose {
+    font-size: var(--body-font-size-mobile);
+  }
+}
+
+/* Headings inside prose */
+.prose :where(h1):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  font-size: var(--h1-font-size-desktop);
+}
+.prose :where(h2):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  font-size: var(--h2-font-size-desktop);
+}
+.prose :where(h3):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  font-size: var(--h3-font-size-desktop);
+}
+
+@media (max-width: 767px) {
+  .prose :where(h1):not(:where([class~="not-prose"], [class~="not-prose"] *)) { font-size: var(--h1-font-size-mobile); }
+  .prose :where(h2):not(:where([class~="not-prose"], [class~="not-prose"] *)) { font-size: var(--h2-font-size-mobile); }
+  .prose :where(h3):not(:where([class~="not-prose"], [class~="not-prose"] *)) { font-size: var(--h3-font-size-mobile); }
+}

@@ -130,3 +130,18 @@ body.wp-customizer #customize-controls #customize-outer-theme-controls .accordio
     width: 100%;
     display: block;
 }
+
+
+#customize-theme-controls
+  [id^="accordion-panel-hayden_theme_panel"]
+  .customize-inside-control-row {
+    color: #fff !important;
+}
+
+
+#customize-controls
+  [id^="accordion-panel-hayden_theme_panel"]
+  .description {
+    color: #fafafa !important;
+}
+

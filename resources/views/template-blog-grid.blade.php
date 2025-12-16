@@ -23,7 +23,10 @@
 
   <section>
     <div class="max-w-7xl mx-auto px-4 space-y-8">
-      <h1 class="text-4xl font-bold">Blog</h1>
+    <h1 class="text-4xl font-bold">
+  {{ get_the_title() }}
+</h1>
+  {{ the_content() }}
 
       {{-- Filter buttons --}}
       <div class="flex flex-wrap gap-3">

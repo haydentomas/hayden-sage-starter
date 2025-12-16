@@ -1,26 +1,25 @@
 {{-- resources/views/sections/headers/nav-center-cta.blade.php --}}
 
 @php
-    // Logo height from Customizer
-    $logo_height       = absint(get_theme_mod('hayden_logo_max_height', 80));
-    $inline_logo_style = $logo_height
-        ? "max-height:{$logo_height}px; height:auto; width:auto;"
-        : '';
+  // Logo height from Customizer
+  $logo_height       = absint(get_theme_mod('hayden_logo_max_height', 80));
+  $inline_logo_style = $logo_height ? "max-height:{$logo_height}px; height:auto; width:auto;" : '';
 
-    // CTA settings (desktop header)
-    $cta_label = get_theme_mod(
-        'hayden_header_cta_label',
-        __('Start a Project', 'hayden')
-    );
+  // Full-width toggle
+  $full_width = (bool) get_theme_mod('hayden_header_full_width', 0);
 
-    $cta_url = get_theme_mod(
-        'hayden_header_cta_url',
-        home_url('/start-a-project')
-    );
+  // Container classes (match default header behaviour)
+  $wrap_classes = $full_width
+    ? 'w-full'
+    : 'mx-auto max-w-[var(--site-max-width)]';
+
+  // CTA settings (desktop header)
+  $cta_label = get_theme_mod('hayden_header_cta_label', __('Start a Project', 'hayden'));
+  $cta_url   = get_theme_mod('hayden_header_cta_url', home_url('/start-a-project'));
 @endphp
 
 <header class="site-header header">
-  <div class="site-container mx-auto px-4 py-4">
+  <div class="{{ $wrap_classes }} py-4">
     <nav id="navbar1" class="sm-navbar flex w-full items-center justify-between gap-6">
 
       {{-- Brand / logo (left) --}}
@@ -72,7 +71,7 @@
         @endif
       </div>
 
-      {{-- Desktop CTA (hidden on mobile, target with CSS for tablet if needed) --}}
+      {{-- Desktop CTA --}}
       <div class="header-cta-desktop shrink-0 hidden lg:block">
         <a
           href="{{ esc_url($cta_url) }}"
