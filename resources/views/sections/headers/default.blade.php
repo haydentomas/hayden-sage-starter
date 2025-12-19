@@ -12,7 +12,7 @@
   // - Not full width: constrain to site max width + normal gutter
   // - Full width: span the viewport, keep gutter
   $wrap_classes = $full_width
-    ? 'w-full'
+    ? 'w-full px-4'
     : 'mx-auto max-w-[var(--site-max-width)]';
 @endphp
 

@@ -1,16 +1,21 @@
-{{-- resources/views/partials/site-logo.blade.php --}}
+<a href="{{ esc_url(home_url('/')) }}"
+   class="site-logo inline-flex items-center"
+   aria-label="{{ esc_attr(get_bloginfo('name')) }}">
 
-@php
-  $logo_id = get_theme_mod('custom_logo');
-@endphp
+  @if (has_custom_logo())
+    {!! wp_get_attachment_image(
+      get_theme_mod('custom_logo'),
+      'full',
+      false,
+      [
+        'class' => $logo_classes ?? '',
+        'style' => $logo_style ?? '',
+      ]
+    ) !!}
+  @else
+    <span class="{{ $fallback_classes ?? 'font-semibold' }}">
+      {{ get_bloginfo('name') }}
+    </span>
+  @endif
 
-@if ($logo_id)
-  {!! wp_get_attachment_image($logo_id, 'full', false, [
-      'class' => $logo_classes ?? 'w-auto object-contain',
-      'style' => $logo_style ?? '',
-  ]) !!}
-@else
-  <div class="{{ $fallback_classes ?? '' }}">
-    {{ get_bloginfo('name') }}
-  </div>
-@endif
+</a>

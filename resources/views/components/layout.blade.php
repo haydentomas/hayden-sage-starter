@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    @php(wp_head())
+
 
     <script>
       window.SageGridSettings = {
@@ -15,6 +15,8 @@
     </script>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+     @php(wp_head())
   </head>
 
   <body @php(body_class('site bg-surface text-body antialiased'))>

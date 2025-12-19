@@ -349,3 +349,29 @@
     font-weight: 600;
   }
 }
+
+
+
+
+/* ------------------------------------------------------------------
+   SmartMenus radius tokens -> Hayden global radius tokens
+------------------------------------------------------------------ */
+@media (min-width: 768px) {
+
+  /* PILL style: parents should be pill-shaped */
+  body.nav-style-pill .sm-navbar {
+    --sm-dropdowns-nav-link-border-radius: var(--radius-pill);
+  }
+
+  /* Dropdown items can be slightly rounded (optional, but nice) */
+  body.nav-style-pill .sm-navbar {
+    --sm-dropdowns-sub-link-border-radius: var(--radius-lg);
+  }
+
+  /* Basic + Underline: keep square */
+  body.nav-style-basic .sm-navbar,
+  body.nav-style-underline .sm-navbar {
+    --sm-dropdowns-nav-link-border-radius: 0rem;
+    --sm-dropdowns-sub-link-border-radius: 0rem;
+  }
+}

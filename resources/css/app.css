@@ -23,6 +23,8 @@
 /* -----------------------------------------------------
    BASE STYLES — typography, spacing, structure
 ----------------------------------------------------- */
+
+
 @layer base {
 body {
   @apply font-serif leading-relaxed text-body;
@@ -679,4 +681,53 @@ a.menu-item-cta,
   .prose :where(h1):not(:where([class~="not-prose"], [class~="not-prose"] *)) { font-size: var(--h1-font-size-mobile); }
   .prose :where(h2):not(:where([class~="not-prose"], [class~="not-prose"] *)) { font-size: var(--h2-font-size-mobile); }
   .prose :where(h3):not(:where([class~="not-prose"], [class~="not-prose"] *)) { font-size: var(--h3-font-size-mobile); }
+}
+
+
+
+:root{
+  --radius-sm: 0.125rem; /* rounded-sm (2px) */
+  --radius-md: 0.375rem; /* rounded-md (6px) */
+  --radius-lg: 0.5rem;   /* rounded-lg (8px) */
+  --radius-xl: 0.75rem;  /* rounded-xl (12px) */
+  --radius-2xl: 1rem;    /* rounded-2xl (16px) */
+  --radius-pill: 9999px; /* rounded-full */
+}
+
+@layer utilities {
+  .h-radius-sm   { border-radius: var(--radius-sm) !important; }
+  .h-radius-md   { border-radius: var(--radius-md) !important; }
+  .h-radius-lg   { border-radius: var(--radius-lg) !important; }
+  .h-radius-xl   { border-radius: var(--radius-xl) !important; }
+  .h-radius-2xl  { border-radius: var(--radius-2xl) !important; }
+  .h-radius-pill { border-radius: var(--radius-pill) !important; }
+}
+
+.rounded-sm  { border-radius: var(--radius-sm) !important; }
+.rounded-md  { border-radius: var(--radius-md) !important; }
+.rounded-lg  { border-radius: var(--radius-lg) !important; }
+.rounded-xl  { border-radius: var(--radius-xl) !important; }
+.rounded-2xl { border-radius: var(--radius-2xl) !important; }
+.rounded-full { border-radius: var(--radius-pill) !important; }
+
+
+
+/* NAV: pill link style should respect global radius token */
+.nav-style-pill .menu > li > a,
+.nav-style-pill .sm-navbar .menu > li > a,
+.nav-style-pill .site-header .menu > li > a {
+  border-radius: var(--radius-pill) !important;
+}
+
+
+/* Dropdown panel + items */
+.nav-style-pill .sub-menu,
+.nav-style-pill .dropdown-menu {
+  border-radius: var(--radius-lg) !important;
+  overflow: hidden;
+}
+
+.nav-style-pill .sub-menu a,
+.nav-style-pill .dropdown-menu a {
+  border-radius: 0 !important; /* keeps the panel clean */
 }

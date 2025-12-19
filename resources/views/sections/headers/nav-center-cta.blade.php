@@ -10,7 +10,7 @@
 
   // Container classes (match default header behaviour)
   $wrap_classes = $full_width
-    ? 'w-full'
+    ? 'w-full px-4'
     : 'mx-auto max-w-[var(--site-max-width)]';
 
   // CTA settings (desktop header)
