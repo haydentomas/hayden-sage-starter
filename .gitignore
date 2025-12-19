@@ -4,3 +4,17 @@
 !/public/.gitkeep
 .env
 npm-debug.log
+
+
+# Editor / OS
+.vscode/
+.DS_Store
+
+# Never ship git internals in theme zips
+.git/
+
+# Stray backups
+*~
+*.bak
+*.orig
+*---
