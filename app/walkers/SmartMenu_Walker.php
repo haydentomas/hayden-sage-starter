@@ -274,6 +274,8 @@ class SmartMenu_Walker extends Walker_Nav_Menu
             $attributes .= " {$attr}=\"{$value}\"";
         }
 
-        return "<a{$attributes}>{$title}</a>";
+        $safe_title = esc_html($title);
+return "<a{$attributes}>{$safe_title}</a>";
+
     }
 }
