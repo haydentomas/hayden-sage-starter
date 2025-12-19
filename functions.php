@@ -61,3 +61,4 @@ collect(['setup', 'filters', 'customizer', 'post-types'])
 
 
 
+require_once get_theme_file_path('app/customizer/customizer.php');

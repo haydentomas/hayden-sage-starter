@@ -4,6 +4,9 @@ namespace App;
 
 use Illuminate\Support\Facades\Vite;
 
+
+
+
 /**
  * -------------------------------------------------------------------------
  * Theme Setup / Globals
@@ -27,6 +30,8 @@ const HAYDEN_TEXT_DOMAIN = 'hayden';
  * Helpers
  * -------------------------------------------------------------------------
  */
+
+
 
 if (! function_exists(__NAMESPACE__ . '\\hayden_int_range')) {
     /**

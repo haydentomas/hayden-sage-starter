@@ -8,8 +8,7 @@ class SmartMenu_Walker extends Walker_Nav_Menu
 {
     /**
      * ID of the mega parent currently being processed.
-     * When not null, children are buffered into $megaBuffer
-     * instead of being output as normal dropdowns.
+     * When not null, children are buffered into $megaBuffer instead of output.
      */
     protected ?int $currentMegaParent = null;
 
@@ -36,7 +35,7 @@ class SmartMenu_Walker extends Walker_Nav_Menu
             return;
         }
 
-        $indent = str_repeat("\t", $depth);
+        $indent = str_repeat("\t", (int) $depth);
         $output .= "\n{$indent}<ul class=\"sm-sub\">\n";
     }
 
@@ -46,7 +45,7 @@ class SmartMenu_Walker extends Walker_Nav_Menu
             return;
         }
 
-        $indent = str_repeat("\t", $depth);
+        $indent = str_repeat("\t", (int) $depth);
         $output .= "{$indent}</ul>\n";
     }
 
@@ -55,25 +54,37 @@ class SmartMenu_Walker extends Walker_Nav_Menu
      */
     public function start_el(&$output, $item, $depth = 0, $args = [], $id = 0)
     {
+        $depth = (int) $depth;
+
+        // Title can be filtered by WP/plugins.
         $title = apply_filters('the_title', $item->title, $item->ID);
         $url   = $item->url ?: '#';
 
-        $classes      = empty($item->classes) ? [] : (array) $item->classes;
-        $has_children = in_array('menu-item-has-children', $classes, true);
+        // Prefer WP's has_children when provided, else fall back to class check.
+        $has_children = false;
+        if (is_object($args) && property_exists($args, 'has_children')) {
+            $has_children = (bool) $args->has_children;
+        } else {
+            $classes      = empty($item->classes) ? [] : (array) $item->classes;
+            $has_children = in_array('menu-item-has-children', $classes, true);
+        }
 
         // Is this item marked as a mega parent (top-level only)?
         $is_mega_parent = ($depth === 0 && get_post_meta($item->ID, '_menu_item_mega_parent', true) === '1');
 
-        // ---------- MEGA SUBTREE HANDLING ----------
-
-        // If we're inside a mega parent (depth > 0), we do NOT output normal
-        // SmartMenus markup. Instead, we push into $megaBuffer.
+        /**
+         * ----------------------------
+         * MEGA SUBTREE HANDLING
+         * ----------------------------
+         *
+         * When inside a mega parent (depth > 0), we buffer into $megaBuffer.
+         */
         if ($this->currentMegaParent !== null && $depth > 0) {
+
             // Depth 1 under mega: column wrapper + title + links list
             if ($depth === 1) {
                 $this->megaBuffer .= '<div class="mega-col">';
 
-                // Column title can be clickable if we want
                 if (! empty($url) && $url !== '#') {
                     $this->megaBuffer .= sprintf(
                         '<div class="mega-col-title"><a href="%s">%s</a></div>',
@@ -88,31 +99,33 @@ class SmartMenu_Walker extends Walker_Nav_Menu
                 }
 
                 $this->megaBuffer .= '<ul class="mega-col-links">';
-                // We don't render a link for the column item itself beyond the title.
                 return;
             }
 
-            // Depth 2+ under mega: simple list items inside the column
+            // Depth 2+ under mega: list items inside the column
             if ($depth >= 2) {
                 $this->megaBuffer .= '<li class="sm-sub-item">';
 
                 $atts = [
-                    'href'  => $url,
-                    'title' => $item->attr_title ?: '',
-                    'target'=> $item->target ?: '',
-                    'rel'   => $item->xfn ?: '',
-                    'class' => 'sm-sub-link',
+                    'href'   => $url,
+                    'title'  => $item->attr_title ?: '',
+                    'target' => $item->target ?: '',
+                    'rel'    => $item->xfn ?: '',
+                    'class'  => 'sm-sub-link',
                 ];
 
-                $this->megaBuffer .= $this->build_link($title, $atts);
+                $this->megaBuffer .= $this->build_link($title, $atts, $item, $args, $depth);
 
-                // Children at depth >= 3 could be handled here if needed,
-                // but for now we assume 2 levels inside mega is enough.
+                // We assume 2 levels inside mega is enough for now.
                 return;
             }
         }
 
-        // ---------- NORMAL (NON-MEGA) FLOW ----------
+        /**
+         * ----------------------------
+         * NORMAL (NON-MEGA) FLOW
+         * ----------------------------
+         */
 
         // Build <li> classes
         if ($depth === 0) {
@@ -124,10 +137,9 @@ class SmartMenu_Walker extends Walker_Nav_Menu
             $li_classes = ['sm-sub-item'];
         }
 
-        $li_class_attr = ' class="' . esc_attr(implode(' ', $li_classes)) . '"';
-        $output       .= "<li{$li_class_attr}>";
+        $output .= '<li class="' . esc_attr(implode(' ', $li_classes)) . '">';
 
-        // Common attributes (title, target, rel)
+        // Common attributes
         $atts = [
             'title'  => $item->attr_title ?: '',
             'target' => $item->target ?: '',
@@ -135,16 +147,7 @@ class SmartMenu_Walker extends Walker_Nav_Menu
         ];
 
         /**
-         * MEGA PARENT (top level only)
-         * ----------------------------
-         * <li class="sm-nav-item sm-nav-item--has-mega">
-         *   <a class="sm-nav-link sm-sub-toggler" href="#">Mega</a>
-         *   <div class="sm-sub sm-sub--mega" data-mega-cols="X">
-         *     <div class="mega-grid mega-cols-X">
-         *       <!-- columns from depth-1 children -->
-         *     </div>
-         *   </div>
-         * </li>
+         * MEGA PARENT (top-level only)
          */
         if ($is_mega_parent && $depth === 0) {
             $this->currentMegaParent = (int) $item->ID;
@@ -156,12 +159,12 @@ class SmartMenu_Walker extends Walker_Nav_Menu
             }
             $this->megaColumns = $cols;
 
-            // Mega parent link acts as pure toggle (no real destination)
-            $link_atts = $atts;
+            // Mega parent link acts as toggle only (no destination)
+            $link_atts          = $atts;
             $link_atts['href']  = '#';
             $link_atts['class'] = 'sm-nav-link sm-sub-toggler';
 
-            $output .= $this->build_link($title, $link_atts);
+            $output .= $this->build_link($title, $link_atts, $item, $args, $depth);
 
             // Open mega wrapper; children will fill $megaBuffer
             $output .= sprintf(
@@ -178,20 +181,22 @@ class SmartMenu_Walker extends Walker_Nav_Menu
         if ($depth === 0) {
             if ($has_children) {
                 // Split parent
-                $link_atts = $atts;
+                $link_atts          = $atts;
                 $link_atts['href']  = $url;
                 $link_atts['class'] = 'sm-nav-link sm-nav-link--split';
 
-                $output .= $this->build_link($title, $link_atts);
+                $output .= $this->build_link($title, $link_atts, $item, $args, $depth);
 
-                $output .= '<button class="sm-nav-link sm-nav-link--split sm-sub-toggler" aria-label="Toggle sub menu"></button>';
+                $output .= '<button class="sm-nav-link sm-nav-link--split sm-sub-toggler" aria-label="' .
+                    esc_attr__('Toggle sub menu', 'hayden') .
+                    '"></button>';
             } else {
                 // Simple single link
-                $link_atts = $atts;
+                $link_atts          = $atts;
                 $link_atts['href']  = $url;
                 $link_atts['class'] = 'sm-nav-link';
 
-                $output .= $this->build_link($title, $link_atts);
+                $output .= $this->build_link($title, $link_atts, $item, $args, $depth);
             }
 
             return;
@@ -202,20 +207,22 @@ class SmartMenu_Walker extends Walker_Nav_Menu
          */
         if ($has_children) {
             // Split sub-parent
-            $link_atts = $atts;
+            $link_atts          = $atts;
             $link_atts['href']  = $url;
             $link_atts['class'] = 'sm-sub-link sm-sub-link--split';
 
-            $output .= $this->build_link($title, $link_atts);
+            $output .= $this->build_link($title, $link_atts, $item, $args, $depth);
 
-            $output .= '<button class="sm-sub-link sm-sub-link--split sm-sub-toggler" aria-label="Toggle sub menu"></button>';
+            $output .= '<button class="sm-sub-link sm-sub-link--split sm-sub-toggler" aria-label="' .
+                esc_attr__('Toggle sub menu', 'hayden') .
+                '"></button>';
         } else {
             // Simple sub-link
-            $link_atts = $atts;
+            $link_atts          = $atts;
             $link_atts['href']  = $url;
             $link_atts['class'] = 'sm-sub-link';
 
-            $output .= $this->build_link($title, $link_atts);
+            $output .= $this->build_link($title, $link_atts, $item, $args, $depth);
         }
     }
 
@@ -224,22 +231,23 @@ class SmartMenu_Walker extends Walker_Nav_Menu
      */
     public function end_el(&$output, $item, $depth = 0, $args = [])
     {
+        $depth = (int) $depth;
+
         // Inside mega subtree:
         if ($this->currentMegaParent !== null && $depth > 0) {
             if ($depth === 1) {
-                // Closing a column (we opened <div class="mega-col"><ul...>)
-                $this->megaBuffer .= '</ul></div>'; // close .mega-col-links and .mega-col
+                // Closing a column
+                $this->megaBuffer .= '</ul></div>';
             } elseif ($depth >= 2) {
                 // Close a link item
                 $this->megaBuffer .= '</li>';
             }
-
             return;
         }
 
         // Closing the mega parent: inject buffered columns and close wrappers
         if ($this->currentMegaParent !== null && $depth === 0 && $this->currentMegaParent === (int) $item->ID) {
-            $output .= $this->megaBuffer . '</div></div></li>'; // close .mega-grid, .sm-sub--mega, and <li>
+            $output .= $this->megaBuffer . '</div></div></li>';
 
             // Reset mega state
             $this->currentMegaParent = null;
@@ -254,28 +262,52 @@ class SmartMenu_Walker extends Walker_Nav_Menu
     }
 
     /**
-     * Helper to build an <a> tag from attributes.
+     * Build an <a> tag from attributes.
+     *
+     * Adds WP compatibility filters and rel=noopener when target=_blank.
      */
-    protected function build_link(string $title, array $atts): string
+    protected function build_link(string $title, array $atts, $item = null, $args = null, int $depth = 0): string
     {
-        $attributes = '';
+        // Ensure rel is safe for external targets.
+        if (! empty($atts['target']) && $atts['target'] === '_blank') {
+            $rel = trim((string) ($atts['rel'] ?? ''));
+            if ($rel === '') {
+                $rel = 'noopener noreferrer';
+            } elseif (! str_contains($rel, 'noopener')) {
+                $rel .= ' noopener noreferrer';
+            }
+            $atts['rel'] = trim($rel);
+        }
 
+        /**
+         * Allow plugins to adjust link attributes.
+         */
+        $atts = apply_filters('nav_menu_link_attributes', $atts, $item, $args, $depth);
+
+        $attributes = '';
         foreach ($atts as $attr => $value) {
-            if ($value === '') {
+            if ($value === '' || $value === null) {
                 continue;
             }
+
+            $attr = (string) $attr;
 
             if ($attr === 'href') {
                 $value = esc_url($value);
             } else {
-                $value = esc_attr($value);
+                $value = esc_attr((string) $value);
             }
 
             $attributes .= " {$attr}=\"{$value}\"";
         }
 
         $safe_title = esc_html($title);
-return "<a{$attributes}>{$safe_title}</a>";
 
+        $link_html = "<a{$attributes}>{$safe_title}</a>";
+
+        /**
+         * Allow plugins to filter the final <a> output.
+         */
+        return apply_filters('walker_nav_menu_start_el', $link_html, $item, $depth, $args);
     }
 }
