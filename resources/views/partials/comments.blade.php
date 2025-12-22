@@ -6,7 +6,7 @@
     @if ($responses())
       <div>
         <h2 class="text-xl font-semibold mb-6">
-          {!! $title !!}
+          {{ $title }}
         </h2>
 
         <ol class="space-y-6">
@@ -40,7 +40,7 @@
     @endif
 
     {{-- Comment form --}}
-    <div class="bg-surface-soft/60 border border-white/5 rounded-2xl p-6">
+    <div class="">
       <h3 class="text-lg font-semibold mb-4">
         {{ __('Leave a comment', 'hayden') }}
       </h3>

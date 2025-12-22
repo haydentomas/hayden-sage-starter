@@ -262,6 +262,50 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
         'description' => __('Affects global section/block spacing via CSS variables.', 'hayden'),
     ]);
 
+
+
+
+
+
+
+
+
+    /**
+     * BLOG (Archive + Single globals)
+     */
+    $wp_customize->add_section('hayden_blog_section', [
+        'title'       => __('Blog', 'hayden'),
+        'description' => __('Blog archive and single post options.', 'hayden'),
+        'priority'    => 29,
+        'panel'       => 'hayden_theme_panel',
+    ]);
+
+    $wp_customize->add_setting('hayden_single_show_featured', [
+        'default'           => true,
+        'sanitize_callback' => static fn($v) => (bool) $v,
+        'transport'         => 'refresh',
+    ]);
+
+    $wp_customize->add_control('hayden_single_show_featured', [
+        'label'       => __('Show featured image (single posts)', 'hayden'),
+        'description' => __('If enabled, the featured image appears near the top of single posts.', 'hayden'),
+        'section'     => 'hayden_blog_section',
+        'type'        => 'checkbox',
+    ]);
+
+    $wp_customize->add_setting('hayden_single_show_sidebar', [
+        'default'           => false,
+        'sanitize_callback' => static fn($v) => (bool) $v,
+        'transport'         => 'refresh',
+    ]);
+
+    $wp_customize->add_control('hayden_single_show_sidebar', [
+        'label'       => __('Show sidebar (single posts)', 'hayden'),
+        'description' => __('If enabled, single posts use a 2-column layout with a sidebar.', 'hayden'),
+        'section'     => 'hayden_blog_section',
+        'type'        => 'checkbox',
+    ]);
+
     /**
      * THEME COLOURS
      */

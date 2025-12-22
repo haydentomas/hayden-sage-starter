@@ -207,7 +207,7 @@ body {
   /* Links inside mega columns */
   .sm-navbar .sm-sub--mega .mega-col .sm-sub-link {
     display: block;
-    padding: 0.25rem 0;
+    padding: 0.25rem 20px;
   }
 }
 
@@ -730,4 +730,407 @@ a.menu-item-cta,
 .nav-style-pill .sub-menu a,
 .nav-style-pill .dropdown-menu a {
   border-radius: 0 !important; /* keeps the panel clean */
+}
+
+
+
+
+
+
+
+/* ---------------------------------------------------------------------
+   Comments (scoped) — keep neutral and readable regardless of customizer
+--------------------------------------------------------------------- */
+.hayden-comments,
+.hayden-comments * {
+  box-sizing: border-box;
+}
+
+.hayden-comments .comments-title,
+.hayden-comments .comment-reply-title {
+  margin: 0 0 1rem;
+}
+
+.hayden-comments .comment-respond,
+.hayden-comments .comment-list > li,
+.hayden-comments .comment-list .children > li {
+  background: #fff;
+  color: #111;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.hayden-comments .comment-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+  display: grid;
+  gap: 16px;
+}
+
+.hayden-comments .comment-list .children {
+  list-style: none;
+  margin: 16px 0 0;
+  padding-left: 16px;
+  border-left: 2px solid rgba(15, 23, 42, 0.08);
+}
+
+.hayden-comments .comment-meta a,
+.hayden-comments a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.hayden-comments .comment-content {
+  margin-top: 12px;
+}
+
+.hayden-comments .comment-respond {
+  margin-top: 24px;
+}
+
+.hayden-comments .comment-form {
+  margin: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.hayden-comments .comment-form label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.hayden-comments .comment-form input[type="text"],
+.hayden-comments .comment-form input[type="email"],
+.hayden-comments .comment-form input[type="url"],
+.hayden-comments .comment-form textarea {
+  width: 100%;
+  background: #fff;
+  color: #111;
+  border: 1px solid rgba(15, 23, 42, 0.18);
+  border-radius: 12px;
+  padding: 12px 14px;
+  outline: none;
+}
+
+.hayden-comments .comment-form textarea {
+  min-height: 160px;
+  resize: vertical;
+}
+
+.hayden-comments .comment-form input:focus,
+.hayden-comments .comment-form textarea:focus {
+  border-color: rgba(249, 115, 22, 0.65); /* your orange */
+  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.18);
+}
+
+.hayden-comments .comment-form .comment-form-cookies-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.hayden-comments .comment-form .comment-form-cookies-consent label {
+  margin: 0;
+  font-weight: 400;
+}
+
+.hayden-comments .form-submit {
+  margin: 0;
+}
+
+.hayden-comments .form-submit input[type="submit"] {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 16px;
+  font-weight: 700;
+  cursor: pointer;
+  background: #111;
+  color: #fff;
+}
+
+.hayden-comments .form-submit input[type="submit"]:hover {
+  opacity: 0.92;
+}
+
+
+/* Remove any orange highlight/glow on comment cards */
+.hayden-comments .comment-body {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.hayden-comments .bypostauthor > .comment-body {
+  border-color: rgba(15, 23, 42, 0.10) !important;
+  box-shadow: none !important;
+}
+
+
+
+
+/* ==========================================================================
+   Threaded comments (WordPress default markup)
+   Targets: li.comment > article.comment-body > footer.comment-meta, ol.children
+   ========================================================================== */
+
+/* Reset list formatting */
+.comment-list,
+.comment-list .children,
+ol.children {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Spacing between top-level comments */
+.comment-list {
+  display: grid;
+  gap: 24px;
+  margin: 0 0 28px;
+}
+
+/* Each comment LI should not carry default margins */
+.comment-list > li.comment,
+.comment-list .children > li.comment {
+  margin: 0;
+}
+
+/* Base card */
+.comment-body {
+  position: relative;
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  border-radius: 18px;
+  padding: 18px 20px;
+  background: #fff;
+}
+
+/* Meta header layout */
+.comment-meta {
+  margin-bottom: 12px;
+}
+
+.comment-author.vcard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.comment-author .avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  flex: 0 0 auto;
+  background: rgba(15, 23, 42, 0.06);
+}
+
+.comment-author .fn,
+.comment-author b.fn {
+  font-weight: 800;
+}
+
+.comment-author .says {
+  opacity: 0.6;
+  margin-left: 6px;
+}
+
+/* Date/edit line */
+.comment-metadata {
+  margin: 6px 0 0;
+  font-size: 13px;
+  opacity: 0.68;
+}
+
+.comment-metadata a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.comment-metadata .edit-link a {
+  margin-left: 8px;
+  opacity: 0.85;
+}
+
+/* Content */
+.comment-content {
+  margin-top: 10px;
+}
+
+.comment-content p {
+  margin: 10px 0 0;
+}
+
+/* Reply button-link (subtle) */
+.reply {
+  margin-top: 14px;
+}
+
+.reply .comment-reply-link {
+  display: inline-flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: rgba(15, 23, 42, 0.02);
+}
+
+.reply .comment-reply-link:hover {
+  background: rgba(15, 23, 42, 0.05);
+}
+
+/* --------------------------------------------------------------------------
+   Threading: indentation + connector + tinted levels
+   -------------------------------------------------------------------------- */
+
+/* Children container: indentation + connector line */
+.comment-list .children,
+ol.children {
+  margin-top: 16px;
+  padding-left: 26px;
+  position: relative;
+  display: grid;
+  gap: 16px;
+}
+
+.comment-list .children::before,
+ol.children::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(15, 23, 42, 0.07);
+  border-radius: 999px;
+}
+
+/* Connector dot per child comment */
+.comment-list .children > li.comment,
+ol.children > li.comment {
+  position: relative;
+}
+
+.comment-list .children > li.comment::before,
+ol.children > li.comment::before {
+  content: "";
+  position: absolute;
+  left: -16px;
+  top: 26px;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #fff;
+  border: 2px solid rgba(15, 23, 42, 0.12);
+}
+
+/* Level shading based on WP depth classes */
+.depth-1 > .comment-body { background: #fff; }
+.depth-2 > .comment-body { background: rgba(15, 23, 42, 0.02); }
+.depth-3 > .comment-body { background: rgba(15, 23, 42, 0.035); }
+.depth-4 > .comment-body,
+.depth-5 > .comment-body { background: rgba(15, 23, 42, 0.05); }
+
+/* Slightly tighter padding deeper down */
+.depth-2 > .comment-body,
+.depth-3 > .comment-body,
+.depth-4 > .comment-body,
+.depth-5 > .comment-body {
+  padding: 16px 18px;
+}
+
+/* --------------------------------------------------------------------------
+   Kill any orange outlines / glows (common culprit: bypostauthor highlight)
+   -------------------------------------------------------------------------- */
+
+.comment-body,
+.comment-body:focus-within {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Keep bypostauthor subtle (no orange border). */
+.bypostauthor > .comment-body {
+  border-color: rgba(15, 23, 42, 0.12) !important;
+  box-shadow: none !important;
+}
+
+/* Optional: tiny "Author" badge instead of outline */
+.bypostauthor > .comment-body .comment-author.vcard::after {
+  content: "Author";
+  font-size: 11px;
+  font-weight: 800;
+  margin-left: 10px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: rgba(15, 23, 42, 0.02);
+  opacity: 0.85;
+}
+
+
+.comment-list .children::before,
+ol.children::before {
+  background: rgba(15, 23, 42, 0.05);
+}
+
+.comment-list .children > li.comment::before,
+ol.children > li.comment::before {
+  border-color: rgba(15, 23, 42, 0.10);
+  background: #fff;
+}
+
+
+.comment-list .children,
+ol.children {
+  margin-top: 18px;
+  gap: 18px;
+  padding-left: 30px; /* slightly clearer indentation */
+}
+
+
+
+
+
+.depth-2 > .comment-body { background: rgba(15, 23, 42, 0.012); }
+.depth-3 > .comment-body { background: rgba(15, 23, 42, 0.02); }
+.depth-4 > .comment-body,
+.depth-5 > .comment-body { background: rgba(15, 23, 42, 0.028); }
+
+
+
+.reply .comment-reply-link {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  border-radius: 0;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  opacity: 0.85;
+}
+
+.reply .comment-reply-link:hover {
+  background: transparent;
+  opacity: 1;
+}
+
+
+
+/* Spacing only: opt-in rhythm between stacked sections */
+.hayden-section-space {
+  margin-block: var(--section-space-mobile);
+}
+
+@media (min-width: 768px) {
+  .hayden-section-space {
+    margin-block: var(--section-space-desktop);
+  }
 }

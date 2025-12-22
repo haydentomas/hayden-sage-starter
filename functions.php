@@ -14,7 +14,7 @@ use Roots\Acorn\Application;
 */
 
 if (! file_exists($composer = __DIR__.'/vendor/autoload.php')) {
-    wp_die(__('Error locating autoloader. Please run <code>composer install</code>.', 'sage'));
+    wp_die(__('Error locating autoloader. Please run <code>composer install</code>.', 'hayden'));
 }
 
 require $composer;
@@ -53,7 +53,7 @@ collect(['setup', 'filters', 'customizer', 'post-types'])
     ->each(function ($file) {
         if (! locate_template($file = "app/{$file}.php", true, true)) {
             wp_die(
-                sprintf(__('Error locating <code>%s</code> for inclusion.', 'sage'), $file)
+                sprintf(__('Error locating <code>%s</code> for inclusion.', 'hayden'), $file)
             );
         }
     });
@@ -61,4 +61,4 @@ collect(['setup', 'filters', 'customizer', 'post-types'])
 
 
 
-require_once get_theme_file_path('app/customizer/customizer.php');
+

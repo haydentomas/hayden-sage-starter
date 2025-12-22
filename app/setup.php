@@ -4,21 +4,19 @@ namespace App;
 
 use Illuminate\Support\Facades\Vite;
 
-
-
-
 /**
  * -------------------------------------------------------------------------
  * Theme Setup / Globals
  * -------------------------------------------------------------------------
  *
- * This file intentionally contains only:
+ * Keep this file focused on:
  * - theme supports + menus
  * - widget areas
  * - editor assets (Vite)
  * - mega menu admin fields + saving
  * - activation helpers (header/footer content pages)
- * - small safe filters (mimes etc.)
+ * - small safe filters (mimes, excerpts, etc.)
+ * - single post per-post overrides (meta boxes)
  *
  * Keep template logic out of here.
  */
@@ -31,26 +29,26 @@ const HAYDEN_TEXT_DOMAIN = 'hayden';
  * -------------------------------------------------------------------------
  */
 
-
-
 if (! function_exists(__NAMESPACE__ . '\\hayden_int_range')) {
     /**
-     * Clamp an integer into a min/max range.
+     * Clamp an integer into a min/max range (inclusive).
      */
     function hayden_int_range($value, int $min, int $max, int $fallback): int
     {
         $value = (int) $value;
+
         if ($value < $min || $value > $max) {
             return $fallback;
         }
+
         return $value;
     }
 }
 
 if (! function_exists(__NAMESPACE__ . '\\hayden_get_or_create_page_by_slug')) {
     /**
-     * Create or fetch a page by slug, store its ID in an option.
-     * Adds a marker post meta so you can detect it later.
+     * Create or fetch a page by slug and store its ID in an option.
+     * Adds a marker post meta so the theme can identify it later.
      */
     function hayden_get_or_create_page_by_slug(
         string $option_key,
@@ -89,8 +87,8 @@ if (! function_exists(__NAMESPACE__ . '\\hayden_get_or_create_page_by_slug')) {
  * Inject editor.css + editor.js into block editor only.
  * -------------------------------------------------------------------------
  */
+
 add_filter('block_editor_settings_all', function (array $settings): array {
-    // Add editor stylesheet to the iframe via @import
     $style = Vite::asset('resources/css/editor.css');
 
     $settings['styles'][] = [
@@ -107,8 +105,7 @@ add_action('admin_head', function (): void {
         return;
     }
 
-    // Enqueue any dependencies that Vite recorded.
-    $deps = json_decode(Vite::content('editor.deps.json'), true);
+    $deps = json_decode((string) Vite::content('editor.deps.json'), true);
     $deps = is_array($deps) ? $deps : [];
 
     foreach ($deps as $dep) {
@@ -118,8 +115,7 @@ add_action('admin_head', function (): void {
         }
     }
 
-    // Output Vite entrypoint tags.
-    // Note: Vite::toHtml() returns safe HTML tags; keep output restricted to editor only.
+    // Vite::toHtml() returns safe HTML tags; keep output restricted to editor only.
     echo Vite::withEntryPoints([
         'resources/js/editor.js',
     ])->toHtml();
@@ -130,6 +126,7 @@ add_action('admin_head', function (): void {
  * theme.json — use generated build/assets/theme.json
  * -------------------------------------------------------------------------
  */
+
 add_filter('theme_file_path', function (string $path, string $file): string {
     return $file === 'theme.json'
         ? public_path('build/assets/theme.json')
@@ -141,6 +138,7 @@ add_filter('theme_file_path', function (string $path, string $file): string {
  * Theme setup
  * -------------------------------------------------------------------------
  */
+
 add_action('after_setup_theme', function (): void {
     // Disable FSE block templates.
     remove_theme_support('block-templates');
@@ -171,7 +169,7 @@ add_action('after_setup_theme', function (): void {
     // Customizer selective refresh for widgets.
     add_theme_support('customize-selective-refresh-widgets');
 
-    // Allow a custom logo via Customizer → Site Identity
+    // Allow a custom logo via Customizer → Site Identity.
     add_theme_support('custom-logo', [
         'height'               => 80,
         'width'                => 240,
@@ -186,8 +184,8 @@ add_action('after_setup_theme', function (): void {
  * Sidebars
  * -------------------------------------------------------------------------
  */
+
 add_action('widgets_init', function (): void {
-    // Primary (blog/sidebar)
     register_sidebar([
         'name'          => __('Primary Sidebar', HAYDEN_TEXT_DOMAIN),
         'id'            => 'sidebar-primary',
@@ -198,7 +196,6 @@ add_action('widgets_init', function (): void {
         'after_title'   => '</h2>',
     ]);
 
-    // Footer columns 1–4
     $footer_base = [
         'before_widget' => '<section id="%1$s" class="widget %2$s">',
         'after_widget'  => '</section>',
@@ -219,6 +216,7 @@ add_action('widgets_init', function (): void {
  * Mega menu fields (top-level items)
  * -------------------------------------------------------------------------
  */
+
 add_action('wp_nav_menu_item_custom_fields', function (int $item_id, $item, int $depth): void {
     if ($depth !== 0) {
         return;
@@ -255,9 +253,7 @@ add_action('wp_nav_menu_item_custom_fields', function (int $item_id, $item, int 
                     <?php foreach ([1, 2, 3, 4] as $col) : ?>
                         <option value="<?php echo (int) $col; ?>" <?php selected($columns, $col); ?>>
                             <?php
-                            echo (int) $col;
-                            echo ' ';
-                            echo esc_html(_n('column', 'columns', $col, HAYDEN_TEXT_DOMAIN));
+                            echo (int) $col . ' ' . esc_html(_n('column', 'columns', $col, HAYDEN_TEXT_DOMAIN));
                             ?>
                         </option>
                     <?php endforeach; ?>
@@ -273,8 +269,6 @@ add_action('wp_nav_menu_item_custom_fields', function (int $item_id, $item, int 
 }, 10, 3);
 
 add_action('wp_update_nav_menu_item', function (int $menu_id, int $menu_item_db_id): void {
-
-    // Hardening: only allow menu-capable users saving via valid nonce.
     if (! current_user_can('edit_theme_options')) {
         return;
     }
@@ -289,16 +283,17 @@ add_action('wp_update_nav_menu_item', function (int $menu_id, int $menu_item_db_
         return;
     }
 
-    // Checkbox
+    // Checkbox.
     $is_mega = isset($_POST['menu-item-mega-parent'][$menu_item_db_id]) ? '1' : '0';
     update_post_meta($menu_item_db_id, '_menu_item_mega_parent', $is_mega);
 
-    // Columns
+    // Columns.
     if (isset($_POST['menu-item-mega-columns'][$menu_item_db_id])) {
         $raw  = wp_unslash($_POST['menu-item-mega-columns'][$menu_item_db_id]);
         $cols = hayden_int_range($raw, 1, 4, 3);
-
         update_post_meta($menu_item_db_id, '_menu_item_mega_columns', $cols);
+    } else {
+        delete_post_meta($menu_item_db_id, '_menu_item_mega_columns');
     }
 }, 10, 2);
 
@@ -307,6 +302,7 @@ add_action('wp_update_nav_menu_item', function (int $menu_id, int $menu_item_db_
  * Upload mimes (fonts)
  * -------------------------------------------------------------------------
  */
+
 add_filter('upload_mimes', function (array $mimes): array {
     $mimes['woff']  = 'font/woff';
     $mimes['woff2'] = 'font/woff2';
@@ -320,6 +316,7 @@ add_filter('upload_mimes', function (array $mimes): array {
  * Customizer cleanup (remove stray "Theme Colors" sections)
  * -------------------------------------------------------------------------
  */
+
 add_action('customize_register', function ($wp_customize): void {
     foreach ($wp_customize->sections() as $section) {
         if (in_array($section->title, ['Theme Colors', 'Theme colours', 'Colors', 'Colours'], true)) {
@@ -336,18 +333,19 @@ add_action('customize_register', function ($wp_customize): void {
  * Auto-create special block pages on theme activation (Footer + Header)
  * -------------------------------------------------------------------------
  */
+
 add_action('after_switch_theme', function (): void {
     hayden_get_or_create_page_by_slug(
         'hayden_footer_page_id',
         'site-footer',
-        'Footer',
+        __('Footer', HAYDEN_TEXT_DOMAIN),
         '_hayden_is_footer_content'
     );
 
     hayden_get_or_create_page_by_slug(
         'hayden_header_page_id',
         'site-header',
-        'Header',
+        __('Header', HAYDEN_TEXT_DOMAIN),
         '_hayden_is_header_content'
     );
 });
@@ -357,6 +355,7 @@ add_action('after_switch_theme', function (): void {
  * Prevent viewing header/footer content pages directly (redirect to home)
  * -------------------------------------------------------------------------
  */
+
 add_action('template_redirect', function (): void {
     $footer_page_id = (int) get_option('hayden_footer_page_id', 0);
     $header_page_id = (int) get_option('hayden_header_page_id', 0);
@@ -372,9 +371,8 @@ add_action('template_redirect', function (): void {
  * Block editor: load default fonts + ensure vars exist for editor styles
  * -------------------------------------------------------------------------
  */
-add_action('enqueue_block_editor_assets', function (): void {
 
-    // Load your default theme fonts into the editor iframe.
+add_action('enqueue_block_editor_assets', function (): void {
     wp_enqueue_style(
         'hayden-editor-fonts',
         get_theme_file_uri('resources/css/fonts.css'),
@@ -382,7 +380,6 @@ add_action('enqueue_block_editor_assets', function (): void {
         wp_get_theme()->get('Version')
     );
 
-    // Ensure default font vars exist even when no uploads are set.
     $defaults = "
       :root{
         --font-serif:'Merriweather',Georgia,'Times New Roman',serif;
@@ -397,6 +394,154 @@ add_action('enqueue_block_editor_assets', function (): void {
       .editor-styles-wrapper h6{font-family:var(--font-sans);}
     ";
 
-    // Attach to a handle that is reliably present in the editor.
     wp_add_inline_style('wp-block-library', $defaults);
+});
+
+/**
+ * -------------------------------------------------------------------------
+ * Excerpts
+ * -------------------------------------------------------------------------
+ */
+
+add_filter('excerpt_length', function (): int {
+    return 32;
+}, 999);
+
+add_filter('excerpt_more', function (): string {
+    return '…';
+});
+
+/**
+ * -------------------------------------------------------------------------
+ * Single post overrides (meta boxes) — Sidebar + Featured Image
+ * Values stored: global|show|hide
+ * -------------------------------------------------------------------------
+ */
+
+add_action('add_meta_boxes', function (): void {
+    // Sidebar override
+    add_meta_box(
+        'hayden_sidebar_override',
+        __('Single Post: Sidebar', HAYDEN_TEXT_DOMAIN),
+        function (\WP_Post $post): void {
+            $value = get_post_meta($post->ID, '_hayden_single_sidebar', true) ?: 'global';
+            wp_nonce_field('hayden_single_overrides_save', 'hayden_single_overrides_nonce');
+
+            $choices = [
+                'global' => __('Use theme default', HAYDEN_TEXT_DOMAIN),
+                'show'   => __('Force show sidebar', HAYDEN_TEXT_DOMAIN),
+                'hide'   => __('Force hide sidebar', HAYDEN_TEXT_DOMAIN),
+            ];
+            ?>
+            <fieldset>
+                <?php foreach ($choices as $key => $label) : ?>
+                    <label style="display:block;margin:6px 0;">
+                        <input
+                            type="radio"
+                            name="hayden_single_sidebar"
+                            value="<?php echo esc_attr($key); ?>"
+                            <?php checked($value, $key); ?>
+                        />
+                        <?php echo esc_html($label); ?>
+                    </label>
+                <?php endforeach; ?>
+            </fieldset>
+            <?php
+        },
+        'post',
+        'side'
+    );
+
+    // Featured image override
+    add_meta_box(
+        'hayden_featured_override',
+        __('Single Post: Featured Image', HAYDEN_TEXT_DOMAIN),
+        function (\WP_Post $post): void {
+            $value = get_post_meta($post->ID, '_hayden_single_featured', true) ?: 'global';
+            wp_nonce_field('hayden_single_overrides_save', 'hayden_single_overrides_nonce');
+
+            $choices = [
+                'global' => __('Use theme default', HAYDEN_TEXT_DOMAIN),
+                'show'   => __('Force show featured image', HAYDEN_TEXT_DOMAIN),
+                'hide'   => __('Force hide featured image', HAYDEN_TEXT_DOMAIN),
+            ];
+            ?>
+            <fieldset>
+                <?php foreach ($choices as $key => $label) : ?>
+                    <label style="display:block;margin:6px 0;">
+                        <input
+                            type="radio"
+                            name="hayden_single_featured"
+                            value="<?php echo esc_attr($key); ?>"
+                            <?php checked($value, $key); ?>
+                        />
+                        <?php echo esc_html($label); ?>
+                    </label>
+                <?php endforeach; ?>
+            </fieldset>
+            <?php
+        },
+        'post',
+        'side'
+    );
+});
+
+add_action('save_post', function (int $post_id): void {
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+
+    if (
+        ! isset($_POST['hayden_single_overrides_nonce']) ||
+        ! wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['hayden_single_overrides_nonce'])), 'hayden_single_overrides_save')
+    ) {
+        return;
+    }
+
+    if (! current_user_can('edit_post', $post_id)) {
+        return;
+    }
+
+    $allowed = ['global', 'show', 'hide'];
+
+    // Sidebar
+    $sidebar = isset($_POST['hayden_single_sidebar'])
+        ? sanitize_text_field(wp_unslash($_POST['hayden_single_sidebar']))
+        : 'global';
+    if (! in_array($sidebar, $allowed, true)) {
+        $sidebar = 'global';
+    }
+
+    if ($sidebar === 'global') {
+        delete_post_meta($post_id, '_hayden_single_sidebar');
+    } else {
+        update_post_meta($post_id, '_hayden_single_sidebar', $sidebar);
+    }
+
+    // Featured image
+    $featured = isset($_POST['hayden_single_featured'])
+        ? sanitize_text_field(wp_unslash($_POST['hayden_single_featured']))
+        : 'global';
+    if (! in_array($featured, $allowed, true)) {
+        $featured = 'global';
+    }
+
+    if ($featured === 'global') {
+        delete_post_meta($post_id, '_hayden_single_featured');
+    } else {
+        update_post_meta($post_id, '_hayden_single_featured', $featured);
+    }
+});
+
+
+
+
+add_filter('body_class', function (array $classes): array {
+  if ((bool) get_theme_mod('hayden_spacing_apply_smart', 1)) {
+    $classes[] = 'has-hayden-spacing-smart';
+  }
+  if ((bool) get_theme_mod('hayden_spacing_apply_core', 0)) {
+    $classes[] = 'has-hayden-spacing-core';
+  }
+  return $classes;
 });
