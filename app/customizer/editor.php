@@ -16,13 +16,19 @@ namespace App\Customizer;
 
 add_action('enqueue_block_editor_assets', function (): void {
 
-    $vars = build_css_vars();
+    // Global design tokens (colours/spacing/radius etc.)
+    $vars     = build_css_vars();
+    $vars_css = empty($vars) ? '' : vars_to_css($vars, ':root');
 
-    if (empty($vars)) {
+    // Custom uploaded fonts + :root font stacks (if set)
+    $font_css = get_custom_font_css();
+
+    // Nothing to output.
+    if ($vars_css === '' && $font_css === '') {
         return;
     }
 
-    $css = vars_to_css($vars, ':root');
+    $css = trim($vars_css . "\n" . $font_css);
 
     // Add to a handle that reliably exists in the editor.
     // wp-block-library is present; wp-block-library-theme may or may not be.
