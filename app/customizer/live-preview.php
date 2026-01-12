@@ -35,7 +35,6 @@ add_action('customize_preview_init', function (): void {
     hayden_surface_color: '--color-surface',
     hayden_heading_color: '--color-headings',
     hayden_body_color: '--color-body',
-    hayden_body_muted_color: '--color-body-muted',
 
     hayden_footer_color: '--color-footer',
     hayden_footer_text_color: '--color-footer-text',
@@ -60,6 +59,8 @@ add_action('customize_preview_init', function (): void {
     hayden_nav_sub_link_color: '--color-nav-sub-link',
     hayden_nav_sub_hover_bg_color: '--color-nav-sub-hover-bg'
   };
+
+  // Footer widget colours update live when their specific settings change
 
   function setVar(name, value){
     if (!name || value === undefined || value === null) return;
@@ -97,7 +98,7 @@ add_action('customize_preview_init', function (): void {
   }
 
   function applySpacing(choice){
-    var p = spacingPresets[choice] || spacingPresets.comfortable;
+    var p = spacingPresets[choice] || spacingPresets.medium;
     if (!p) return;
 
     setVar('--section-space-mobile',  p.mobile);

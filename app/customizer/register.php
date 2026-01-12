@@ -130,7 +130,7 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
     ]);
 
     $wp_customize->add_control('hayden_header_cta_label_control', [
-        'label'           => __('CTA Button Text', 'hayden'),
+        'label'           => __('CTA button text', 'hayden'),
         'section'         => 'hayden_header_section',
         'settings'        => 'hayden_header_cta_label',
         'type'            => 'text',
@@ -144,7 +144,7 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
     ]);
 
     $wp_customize->add_control('hayden_header_cta_url_control', [
-        'label'           => __('CTA Button URL', 'hayden'),
+        'label'           => __('CTA button URL', 'hayden'),
         'section'         => 'hayden_header_section',
         'settings'        => 'hayden_header_cta_url',
         'type'            => 'url',
@@ -167,12 +167,12 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
     ]);
 
     /**
-     * GLOBAL DESIGN (Radius)
+     * BORDER RADIUS
      */
     $wp_customize->add_section('hayden_design_section', [
-        'title'       => __('Global Design', 'hayden'),
-        'description' => __('Global design tokens like border radius.', 'hayden'),
-        'priority'    => 27,
+        'title'       => __('Border Radius', 'hayden'),
+        'description' => __('Control rounded corners across buttons, cards, widgets, and other elements.', 'hayden'),
+        'priority'    => 25,
         'panel'       => 'hayden_theme_panel',
     ]);
 
@@ -199,9 +199,9 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
      * LAYOUT / CONTAINER
      */
     $wp_customize->add_section('hayden_layout_section', [
-        'title'       => __('Layout & Container', 'hayden'),
-        'description' => __('Control the maximum width of the main content container.', 'hayden'),
-        'priority'    => 25,
+        'title'       => __('Site Width', 'hayden'),
+        'description' => __('Control the maximum width of the main content.', 'hayden'),
+        'priority'    => 23,
         'panel'       => 'hayden_theme_panel',
     ]);
 
@@ -225,7 +225,7 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
             'type'        => 'range',
             'input_attrs' => [
                 'min'   => 960,
-                'max'   => 1440,
+                'max'   => 1920,
                 'step'  => 10,
                 'class' => 'hayden-container-width-range',
             ],
@@ -237,82 +237,64 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
      * GLOBAL SPACING
      */
     $wp_customize->add_section('hayden_spacing_section', [
-        'title'       => __('Global Spacing', 'hayden'),
-        'description' => __('Controls vertical spacing between sections and blocks.', 'hayden'),
-        'priority'    => 28,
+        'title'       => __('Block Spacing', 'hayden'),
+        'description' => __('Controls vertical spacing between blocks and internal padding.', 'hayden'),
+        'priority'    => 24,
         'panel'       => 'hayden_theme_panel',
     ]);
 
     $wp_customize->add_setting('hayden_spacing_scale', [
-        'default'           => 'comfortable',
+        'default'           => 'medium',
         'transport'         => 'postMessage',
-        'sanitize_callback' => $sanitize_select(['compact', 'comfortable', 'spacious'], 'comfortable'),
+        'sanitize_callback' => $sanitize_select(['none', 'small', 'medium', 'large'], 'medium'),
     ]);
 
     $wp_customize->add_control('hayden_spacing_scale_control', [
         'label'       => __('Vertical spacing scale', 'hayden'),
         'section'     => 'hayden_spacing_section',
         'settings'    => 'hayden_spacing_scale',
-        'type'        => 'select',
+        'type'        => 'radio',
         'choices'     => [
-            'compact'     => __('Compact', 'hayden'),
-            'comfortable' => __('Comfortable (default)', 'hayden'),
-            'spacious'    => __('Spacious', 'hayden'),
+            'none'   => __('None', 'hayden'),
+            'small'  => __('Small', 'hayden'),
+            'medium' => __('Medium', 'hayden'),
+            'large'  => __('Large', 'hayden'),
         ],
         'description' => __('Affects global section/block spacing via CSS variables.', 'hayden'),
     ]);
 
+/**
+ * Block inner spacing (padding)
+ */
+$wp_customize->add_setting('hayden_block_padding', [
+    'default'           => 'default',
+    'transport'         => 'refresh',
+    'sanitize_callback' => $sanitize_select(['compact', 'default', 'spacious'], 'default'),
+]);
+
+$wp_customize->add_control('hayden_block_padding_control', [
+    'label'       => __('Block inner spacing', 'hayden'),
+    'description' => __('Controls internal padding for blocks such as hero sections and content cards.', 'hayden'),
+    'section'     => 'hayden_spacing_section',
+    'settings'    => 'hayden_block_padding',
+    'type'        => 'radio',
+    'choices'     => [
+        'compact'  => __('Compact', 'hayden'),
+        'default'  => __('Default (recommended)', 'hayden'),
+        'spacious' => __('Spacious', 'hayden'),
+    ],
+]);
 
 
 
-
-
-
-
-
-    /**
-     * BLOG (Archive + Single globals)
-     */
-    $wp_customize->add_section('hayden_blog_section', [
-        'title'       => __('Blog', 'hayden'),
-        'description' => __('Blog archive and single post options.', 'hayden'),
-        'priority'    => 29,
-        'panel'       => 'hayden_theme_panel',
-    ]);
-
-    $wp_customize->add_setting('hayden_single_show_featured', [
-        'default'           => true,
-        'sanitize_callback' => static fn($v) => (bool) $v,
-        'transport'         => 'refresh',
-    ]);
-
-    $wp_customize->add_control('hayden_single_show_featured', [
-        'label'       => __('Show featured image (single posts)', 'hayden'),
-        'description' => __('If enabled, the featured image appears near the top of single posts.', 'hayden'),
-        'section'     => 'hayden_blog_section',
-        'type'        => 'checkbox',
-    ]);
-
-    $wp_customize->add_setting('hayden_single_show_sidebar', [
-        'default'           => false,
-        'sanitize_callback' => static fn($v) => (bool) $v,
-        'transport'         => 'refresh',
-    ]);
-
-    $wp_customize->add_control('hayden_single_show_sidebar', [
-        'label'       => __('Show sidebar (single posts)', 'hayden'),
-        'description' => __('If enabled, single posts use a 2-column layout with a sidebar.', 'hayden'),
-        'section'     => 'hayden_blog_section',
-        'type'        => 'checkbox',
-    ]);
 
     /**
      * THEME COLOURS
      */
     $wp_customize->add_section('hayden_color_section', [
-        'title'       => __('Theme Colours', 'hayden'),
+        'title'       => __('Theme Palette', 'hayden'),
         'description' => '',
-        'priority'    => 30,
+        'priority'    => 27,
         'panel'       => 'hayden_theme_panel',
     ]);
 
@@ -325,12 +307,12 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
             'settings'    => 'hayden_color_intro',
             'type'        => 'custom',
             'description' => '<p class="hayden-customizer-intro" style="margin:0 0 8px;color:#ffffff;">'
-                . esc_html__('Control global brand colours.', 'hayden')
+                . esc_html__('Control global brand styling.', 'hayden')
                 . '</p>',
         ]
     ));
 
-    $add_color = function (string $id, string $label, string $default) use ($wp_customize) {
+    $add_color = function (string $id, string $label, string $default, array $args = []) use ($wp_customize) {
         $wp_customize->add_setting($id, [
             'default'           => $default,
             'transport'         => 'postMessage',
@@ -340,22 +322,18 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
         $wp_customize->add_control(new \WP_Customize_Color_Control(
             $wp_customize,
             "{$id}_control",
-            [
+            array_merge([
                 'label'    => __($label, 'hayden'),
                 'section'  => 'hayden_color_section',
                 'settings' => $id,
-            ]
+            ], $args)
         ));
     };
 
-    $add_color('hayden_primary_color',        'Primary Colour',                 '#f97316');
-    $add_color('hayden_surface_color',        'Background Colour',              '#FFFAF8');
-    $add_color('hayden_heading_color',        'Heading Text Colour',            '#f97316');
-    $add_color('hayden_body_color',           'Body Text Colour',               '#111111');
-    $add_color('hayden_body_muted_color',     'Body Muted Text Colour',         '#262626');
-    $add_color('hayden_footer_color',         'Footer Background Colour',       '#020617');
-    $add_color('hayden_footer_text_color',    'Footer Text Colour',             '#94a3b8');
-    $add_color('hayden_widget_bg_color',      'Widget Background Colour',       '#000000');
+    $add_color('hayden_primary_color',        'Primary',                 '#f97316');
+    $add_color('hayden_surface_color',        'Background',              '#FFFAF8');
+    $add_color('hayden_heading_color',        'Heading text',            '#f97316');
+    $add_color('hayden_body_color',           'Body text',               '#111111');
 
     $wp_customize->add_setting('hayden_color_heading_widgets', ['sanitize_callback' => '__return_null']);
     $wp_customize->add_control(new \WP_Customize_Control(
@@ -367,14 +345,15 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
             'type'        => 'custom',
             'description' => '<hr style="margin:10px 0;border-color:rgba(255,255,255,0.2);">'
                 . '<h3 style="margin:4px 0 4px;font-weight:600;color:#ffffff;">'
-                . esc_html__('Widget colours', 'hayden')
+                . esc_html__('Widgets', 'hayden')
                 . '</h3>',
         ]
     ));
 
-    $add_color('hayden_widget_title_color',   'Widget Title Colour',            '#f97316');
-    $add_color('hayden_widget_text_color',    'Widget Text Colour',             '#ffffff');
-    $add_color('hayden_widget_link_color',    'Widget Link Colour',             '#f97316');
+    $add_color('hayden_widget_bg_color',      'Widget background',       '#000000');
+    $add_color('hayden_widget_title_color',   'Widget title',            '#f97316');
+    $add_color('hayden_widget_text_color',    'Widget text',             '#ffffff');
+    $add_color('hayden_widget_link_color',    'Widget link',             '#f97316');
 
     $wp_customize->add_setting('hayden_color_heading_footer_widgets', ['sanitize_callback' => '__return_null']);
     $wp_customize->add_control(new \WP_Customize_Control(
@@ -386,14 +365,18 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
             'type'        => 'custom',
             'description' => '<hr style="margin:10px 0;border-color:rgba(255,255,255,0.2);">'
                 . '<h3 style="margin:4px 0 4px;font-weight:600;color:#ffffff;">'
-                . esc_html__('Footer widget colours', 'hayden')
+                . esc_html__('Footer', 'hayden')
                 . '</h3>',
         ]
     ));
 
-    $add_color('hayden_footer_widget_title_color', 'Footer Widget Title Colour', '#f97316');
-    $add_color('hayden_footer_widget_text_color',  'Footer Widget Text Colour',  '#ffffff');
-    $add_color('hayden_footer_widget_link_color',  'Footer Widget Link Colour',  '#f97316');
+    // Footer colours (global)
+    $add_color('hayden_footer_color',         'Footer background',       '#020617');
+    $add_color('hayden_footer_text_color',    'Legal text',              '#94a3b8');
+
+    $add_color('hayden_footer_widget_title_color', 'Footer widget title', '#f97316');
+    $add_color('hayden_footer_widget_text_color',  'Footer widget text',  '#ffffff');
+    $add_color('hayden_footer_widget_link_color',  'Footer widget link',  '#f97316');
 
     $wp_customize->add_setting('hayden_color_heading_nav', ['sanitize_callback' => '__return_null']);
     $wp_customize->add_control(new \WP_Customize_Control(
@@ -405,32 +388,32 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
             'type'        => 'custom',
             'description' => '<hr style="margin:10px 0;border-color:rgba(255,255,255,0.2);">'
                 . '<h3 style="margin:4px 0 4px;font-weight:600;color:#ffffff;">'
-                . esc_html__('Navigation colours', 'hayden')
+                . esc_html__('Navigation', 'hayden')
                 . '</h3>',
         ]
     ));
 
-    $add_color('hayden_nav_link_color',         'Nav Parent Link Colour',         '#111111');
-    $add_color('hayden_nav_link_hover_color',   'Nav Link Hover/Active Colour',   '#f97316');
-    $add_color('hayden_nav_sub_bg_color',       'Dropdown Background Colour',     '#020617');
-    $add_color('hayden_nav_sub_link_color',     'Dropdown Link Colour',           '#f97316');
-    $add_color('hayden_nav_sub_hover_bg_color', 'Dropdown Link Hover Background', '#3b1d08');
+    $add_color('hayden_nav_link_color',         'Nav parent link',         '#111111');
+    $add_color('hayden_nav_link_hover_color',   'Nav link hover/active',   '#f97316');
+    $add_color('hayden_nav_sub_bg_color',       'Dropdown background',     '#020617');
+    $add_color('hayden_nav_sub_link_color',     'Dropdown link',           '#f97316');
+    $add_color('hayden_nav_sub_hover_bg_color', 'Dropdown link hover background', '#3b1d08');
 
     /**
-     * CONTENT CARDS
+     * CARDS & GRID
      */
-    $wp_customize->add_section('hayden_cards_section', [
-        'title'       => __('Content Cards', 'hayden'),
-        'description' => __('Colours for blog, portfolio and other content cards.', 'hayden'),
-        'priority'    => 32,
+    $wp_customize->add_section('hayden_cards_grid_section', [
+        'title'       => __('Cards & Grid', 'hayden'),
+        'description' => __('Card styling and grid display controls for blog, portfolio and other content.', 'hayden'),
+        'priority'    => 28,
         'panel'       => 'hayden_theme_panel',
     ]);
 
     $card_colors = [
-        'hayden_card_bg'         => ['Card Background Colour', '#000000'],
-        'hayden_card_heading'    => ['Card Heading Colour',    '#f97316'],
-        'hayden_card_text'       => ['Card Text Colour',       '#ffffff'],
-        'hayden_card_text_muted' => ['Card Muted Text Colour', '#e5e5e5'],
+        'hayden_card_bg'         => ['Card Background', '#000000'],
+        'hayden_card_heading'    => ['Card Heading',    '#f97316'],
+        'hayden_card_text'       => ['Card Text',       '#ffffff'],
+        'hayden_card_text_muted' => ['Card Muted Text', '#e5e5e5'],
     ];
 
     foreach ($card_colors as $id => [$label, $default]) {
@@ -445,21 +428,11 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
             "{$id}_control",
             [
                 'label'    => __($label, 'hayden'),
-                'section'  => 'hayden_cards_section',
+                'section'  => 'hayden_cards_grid_section',
                 'settings' => $id,
             ]
         ));
     }
-
-    /**
-     * GRID DISPLAY
-     */
-    $wp_customize->add_section('grid_display_section', [
-        'title'       => __('Grid Display', 'hayden'),
-        'description' => __('Controls how many posts/projects show initially.', 'hayden'),
-        'priority'    => 35,
-        'panel'       => 'hayden_theme_panel',
-    ]);
 
     $wp_customize->add_setting('grid_projects_initial_items', [
         'default'           => 6,
@@ -469,7 +442,7 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
 
     $wp_customize->add_control('grid_projects_initial_items_control', [
         'label'       => __('Projects: initial items', 'hayden'),
-        'section'     => 'grid_display_section',
+        'section'     => 'hayden_cards_grid_section',
         'settings'    => 'grid_projects_initial_items',
         'type'        => 'number',
         'input_attrs' => ['min' => 1, 'max' => 48],
@@ -483,7 +456,7 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
 
     $wp_customize->add_control('grid_blog_initial_items_control', [
         'label'       => __('Blog: initial items', 'hayden'),
-        'section'     => 'grid_display_section',
+        'section'     => 'hayden_cards_grid_section',
         'settings'    => 'grid_blog_initial_items',
         'type'        => 'number',
         'input_attrs' => ['min' => 1, 'max' => 48],
@@ -496,7 +469,7 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
         'title'       => __('Typography', 'hayden'),
         'description' => __('Upload custom fonts. Leave empty to use the default theme fonts.', 'hayden'),
         'panel'       => 'hayden_theme_panel',
-        'priority'    => 40,
+        'priority'    => 26,
     ]);
 
     $wp_customize->add_setting('hayden_font_serif_file', [
@@ -510,7 +483,7 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
         'hayden_font_serif_file',
         [
             'label'       => __('Heading font (serif)', 'hayden'),
-            'description' => __('Upload a WOFF2/WOFF/TTF file. This will replace the default --font-sans stack (your current theme mapping).', 'hayden'),
+            'description' => __('Upload a WOFF2/WOFF/TTF file. This will replace the default --font-serif stack (your heading fonts).', 'hayden'),
             'section'     => 'hayden_typography_section',
             'mime_type'   => '',
         ]
@@ -527,7 +500,7 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
         'hayden_font_sans_file',
         [
             'label'       => __('Body font (sans-serif)', 'hayden'),
-            'description' => __('Upload a WOFF2/WOFF/TTF file. This will replace the default --font-serif stack (your current theme mapping).', 'hayden'),
+            'description' => __('Upload a WOFF2/WOFF/TTF file. This will replace the default --font-sans stack (your body text fonts).', 'hayden'),
             'section'     => 'hayden_typography_section',
             'mime_type'   => '',
         ]
@@ -570,7 +543,7 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
     $wp_customize->add_section('hayden_footer_section', [
         'title'       => __('Footer Layout', 'hayden'),
         'description' => __('Choose a footer variant or use the widget-column layout.', 'hayden'),
-        'priority'    => 45,
+        'priority'    => 21,
         'panel'       => 'hayden_theme_panel',
     ]);
 

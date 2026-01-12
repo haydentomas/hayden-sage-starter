@@ -16,9 +16,17 @@ body.wp-customizer #customize-controls .customize-info {
 }
 
 /* Header title + theme name */
-body.wp-customizer #customize-controls .customize-info .panel-title,
-body.wp-customizer #customize-controls .customize-info .theme-name {
-  color: #fff !important;
+#customize-controls .customize-info .panel-title {
+  display: block;
+  color: #1a1a1a;
+  font-weight: 400;
+}
+
+#customize-controls .customize-info .theme-name {
+  display: inline;
+  color: #fff;
+  margin-left: 8px;
+  font-weight: 400;
 }
 
 /* ================================
@@ -143,5 +151,34 @@ body.wp-customizer #customize-controls #customize-outer-theme-controls .accordio
   [id^="accordion-panel-hayden_theme_panel"]
   .description {
     color: #fafafa !important;
+}
+
+/* Theme Colours: compact two-column layout */
+#accordion-section-hayden_color_section .accordion-section-content > ul,
+#accordion-section-hayden_color_section .customize-section-content > ul,
+#sub-accordion-section-hayden_color_section {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+#accordion-section-hayden_color_section .customize-control,
+#sub-accordion-section-hayden_color_section .customize-control {
+  margin: 0;
+  list-style: none;
+}
+
+#accordion-section-hayden_color_section .customize-control-color,
+#sub-accordion-section-hayden_color_section .customize-control-color {
+  min-width: 0;
+}
+
+/* Keep heading/custom blocks full width for readability */
+#accordion-section-hayden_color_section .customize-control-custom,
+#sub-accordion-section-hayden_color_section .customize-control-custom {
+  grid-column: 1 / -1;
 }
 

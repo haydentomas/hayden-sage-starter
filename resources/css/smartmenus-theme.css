@@ -360,7 +360,7 @@
 
   /* PILL style: parents should be pill-shaped */
   body.nav-style-pill .sm-navbar {
-    --sm-dropdowns-nav-link-border-radius: var(--radius-pill);
+    --sm-dropdowns-nav-link-border-radius: var(--radius-xl);
   }
 
   /* Dropdown items can be slightly rounded (optional, but nice) */

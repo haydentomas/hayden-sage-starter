@@ -14,7 +14,6 @@
     hayden_surface_color: '--color-surface',
     hayden_heading_color: '--color-headings',
     hayden_body_color: '--color-body',
-    hayden_body_muted_color: '--color-body-muted',
 
     // Footer colours
     hayden_footer_color: '--color-footer',

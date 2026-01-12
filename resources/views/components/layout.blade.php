@@ -25,7 +25,7 @@
 
     <div id="app" class="min-h-screen flex flex-col">
       <a class="sr-only focus:not-sr-only" href="#main">
-        {{ __('Skip to content', 'sage') }}
+        {{ __('Skip to content', 'hayden') }}
       </a>
 
       {{-- Primary navigation / header (wraps sections.header) --}}

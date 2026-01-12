@@ -1,0 +1,455 @@
+================================================================================
+HAYDEN SAGE STARTER - CUSTOMIZER VARIABLES REFERENCE
+================================================================================
+
+This file contains a complete map of all available CSS variables and their
+default values that are generated from the WordPress Customizer settings.
+
+Use these variables when building custom blocks to ensure consistent styling
+with the theme's design system.
+
+================================================================================
+SECTION 1: COLOR VARIABLES
+================================================================================
+
+---
+BRAND COLORS (Primary/Secondary)
+---
+--color-primary          Default: #f97316 (Orange)
+                         Customizer: Theme Palette > Primary
+                         Usage: Main brand color, buttons, accents, headings
+
+--color-surface          Default: #FFFAF8 (Cream/Off-white)
+                         Customizer: Theme Palette > Background
+                         Usage: Main page background, card backgrounds
+
+--color-headings         Default: #f97316 (Orange)
+                         Customizer: Theme Palette > Heading text
+                         Usage: H1, H2, H3, heading elements
+
+--color-body             Default: #111111 (Near-black)
+                         Customizer: Theme Palette > Body text
+                         Usage: Paragraph text, body copy, default text color
+
+---
+FOOTER COLORS
+---
+--color-footer           Default: #020617 (Dark navy)
+                         Customizer: Theme Palette > Footer > Footer background
+                         Usage: Footer section background color
+
+--color-footer-text      Default: #94a3b8 (Slate gray)
+                         Customizer: Theme Palette > Footer > Legal text
+                         Usage: Copyright/legal text at bottom of footer
+
+--color-footer-widget-heading  Default: #f97316 (Orange)
+                              Customizer: Theme Palette > Footer > Footer widget title
+                              Usage: Footer widget titles/headings
+
+--color-footer-widget-text     Default: #ffffff (White)
+                              Customizer: Theme Palette > Footer > Footer widget text
+                              Usage: Footer widget body text
+
+--color-footer-widget-link     Default: #f97316 (Orange)
+                              Customizer: Theme Palette > Footer > Footer widget link
+                              Usage: Links within footer widgets
+
+---
+WIDGET COLORS (Sidebar widgets, global)
+---
+--color-widget-bg        Default: #000000 (Black)
+                         Customizer: Theme Palette > Widgets > Widget background
+                         Usage: Sidebar widget container background
+
+--color-widget-heading   Default: #f97316 (Orange)
+                         Customizer: Theme Palette > Widgets > Widget title
+                         Usage: Sidebar widget titles
+
+--color-widget-text      Default: #ffffff (White)
+                         Customizer: Theme Palette > Widgets > Widget text
+                         Usage: Sidebar widget body text
+
+--color-widget-link      Default: #f97316 (Orange)
+                         Customizer: Theme Palette > Widgets > Widget link
+                         Usage: Links within sidebar widgets
+
+--color-surface-soft     Default: #000000 (Alias for widget bg)
+                         Usage: Alternative name for widget background
+
+---
+CARD COLORS (Blog cards, portfolio cards, content cards)
+---
+--card-bg                Default: #000000 (Black)
+                         Customizer: Cards & Grid > Card Background
+                         Usage: Blog/portfolio card background
+
+--card-heading           Default: #f97316 (Orange)
+                         Customizer: Cards & Grid > Card Heading
+                         Usage: Titles within cards
+
+--card-text              Default: #ffffff (White)
+                         Customizer: Cards & Grid > Card Text
+                         Usage: Main text within cards
+
+--card-text-muted        Default: #e5e5e5 (Light gray)
+                         Customizer: Cards & Grid > Card Muted Text
+                         Usage: Secondary text, metadata, excerpts
+
+---
+NAVIGATION COLORS
+---
+--color-nav-link         Default: #111111 (Near-black)
+                         Customizer: Theme Palette > Navigation > Nav parent link
+                         Usage: Main navigation link text color
+
+--color-nav-link-hover   Default: #f97316 (Orange)
+                         Customizer: Theme Palette > Navigation > Nav link hover/active
+                         Usage: Navigation link hover/active state
+
+--color-nav-sub-bg       Default: #020617 (Dark navy)
+                         Customizer: Theme Palette > Navigation > Dropdown background
+                         Usage: Dropdown menu background color
+
+--color-nav-sub-link     Default: #f97316 (Orange)
+                         Customizer: Theme Palette > Navigation > Dropdown link
+                         Usage: Dropdown menu link text
+
+--color-nav-sub-hover-bg Default: #3b1d08 (Dark brown)
+                         Customizer: Theme Palette > Navigation > Dropdown link hover background
+                         Usage: Dropdown item hover background
+
+--color-nav-toggle       Calculated from --color-surface
+                         Usage: Mobile menu toggle icon color (auto-calculated for contrast)
+
+================================================================================
+SECTION 2: LAYOUT VARIABLES
+================================================================================
+
+--site-max-width         Default: 1120px (configurable from 960px to 1920px)
+                         Customizer: Site Width > Site content max width
+                         Usage: Container max-width for main content area
+                         Note: Use with margin: auto and padding for gutters
+
+--site-logo-max-height   Default: 80px (configurable from 40px to 200px)
+                         Customizer: Header Layout > Logo max height
+                         Usage: Custom logo size constraint
+
+================================================================================
+SECTION 3: TYPOGRAPHY VARIABLES
+================================================================================
+
+---
+BODY TEXT SIZES
+---
+--body-font-size-mobile  Default: var(--text-base)
+--body-font-size-desktop Default: var(--text-lg)
+--body-font-size         Default: var(--text-lg)
+                         Customizer: Typography > Body font size
+                         Options: text-sm, text-base, text-lg, text-xl, text-2xl, text-3xl, text-4xl
+
+---
+HEADING 1 SIZES
+---
+--h1-font-size-mobile    Default: var(--text-2xl)
+--h1-font-size-desktop   Default: var(--text-4xl)
+                         Customizer: Typography > H1 font size
+                         Options: text-sm, text-base, text-lg, text-xl, text-2xl, text-3xl, text-4xl
+
+---
+HEADING 2 SIZES
+---
+--h2-font-size-mobile    Default: var(--text-xl)
+--h2-font-size-desktop   Default: var(--text-3xl)
+                         Customizer: Typography > H2 font size
+                         Options: text-sm, text-base, text-lg, text-xl, text-2xl, text-3xl, text-4xl
+
+---
+HEADING 3 SIZES
+---
+--h3-font-size-mobile    Default: var(--text-lg)
+--h3-font-size-desktop   Default: var(--text-2xl)
+                         Customizer: Typography > H3 font size
+                         Options: text-sm, text-base, text-lg, text-xl, text-2xl, text-3xl, text-4xl
+
+---
+TAILWIND SCALE REFERENCES (Used by typography)
+---
+var(--text-sm)    = 0.875rem (14px)
+var(--text-base)  = 1rem (16px)
+var(--text-lg)    = 1.125rem (18px)
+var(--text-xl)    = 1.25rem (20px)
+var(--text-2xl)   = 1.5rem (24px)
+var(--text-3xl)   = 1.875rem (30px)
+var(--text-4xl)   = 2.25rem (36px)
+
+================================================================================
+SECTION 4: SPACING VARIABLES
+================================================================================
+
+---
+VERTICAL SPACING (Between sections/blocks)
+---
+--section-space-mobile   Default: 6rem (based on medium preset)
+--section-space-desktop  Default: 6rem (based on medium preset)
+                         Customizer: Block Spacing > Vertical spacing scale
+                         Options: 
+                           - none: 0
+                           - small: 4rem
+                           - medium: 6rem
+                           - large: 8rem
+                         Usage: Margin-top/bottom between major sections
+
+---
+BLOCK INNER SPACING (Padding within blocks)
+---
+--block-padding          Default: 4rem (based on default preset)
+                         Customizer: Block Spacing > Block inner spacing
+                         Options:
+                           - compact: 3rem (desktop), 1.75rem (mobile)
+                           - default: 4rem (desktop), 2.5rem (mobile)
+                           - spacious: 6rem (desktop), 3.5rem (mobile)
+                         Usage: Internal padding for hero, cards, content areas
+
+================================================================================
+SECTION 5: BORDER RADIUS VARIABLES
+================================================================================
+
+These adjust based on the selected "Border Radius" style (Sharp, Soft, Round).
+All use Tailwind v4 compatible values.
+
+---
+SHARP PRESET (No rounding)
+---
+--radius-sm:    0rem
+--radius-md:    0rem
+--radius-lg:    0rem
+--radius-xl:    0rem
+--radius-2xl:   0rem
+--radius-full:  0rem
+--radius-pill:  0rem (legacy alias)
+
+---
+SOFT PRESET (Default - subtle rounding)
+---
+--radius-sm:    0.125rem (2px)
+--radius-md:    0.375rem (6px)
+--radius-lg:    0.5rem (8px)
+--radius-xl:    0.75rem (12px)
+--radius-2xl:   1rem (16px)
+--radius-full:  9999px (fully rounded)
+--radius-pill:  9999px (legacy alias)
+
+---
+ROUND PRESET (More rounded)
+---
+--radius-sm:    0.375rem (6px)
+--radius-md:    0.5rem (8px)
+--radius-lg:    0.75rem (12px)
+--radius-xl:    1rem (16px)
+--radius-2xl:   1.25rem (20px)
+--radius-full:  9999px (fully rounded)
+--radius-pill:  9999px (legacy alias)
+
+                         Customizer: Border Radius > Radius style
+                         Usage: border-radius values for buttons, cards, inputs
+
+================================================================================
+SECTION 6: USAGE EXAMPLES
+================================================================================
+
+---
+EXAMPLE 1: Creating a Card Block
+---
+.card {
+  background-color: var(--card-bg);
+  border-radius: var(--radius-md);
+  padding: var(--block-padding);
+  color: var(--card-text);
+}
+
+.card__title {
+  color: var(--card-heading);
+  font-size: var(--h3-font-size-desktop);
+  margin-bottom: 0.5rem;
+}
+
+.card__excerpt {
+  color: var(--card-text-muted);
+  font-size: var(--text-base);
+}
+
+---
+EXAMPLE 2: Creating a Hero Section
+---
+.hero {
+  max-width: var(--site-max-width);
+  margin: var(--section-space-desktop) auto;
+  padding: 0 2rem;
+  background-color: var(--color-surface);
+}
+
+.hero__title {
+  color: var(--color-headings);
+  font-size: var(--h1-font-size-desktop);
+}
+
+---
+EXAMPLE 3: Creating a Button
+---
+.btn {
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1.5rem;
+  font-size: var(--text-base);
+  border: none;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+---
+EXAMPLE 4: Creating a Widget Box
+---
+.widget {
+  background-color: var(--color-widget-bg);
+  padding: var(--block-padding);
+  border-radius: var(--radius-lg);
+}
+
+.widget__title {
+  color: var(--color-widget-heading);
+  font-size: var(--h3-font-size-desktop);
+  margin-bottom: 1rem;
+}
+
+.widget__link {
+  color: var(--color-widget-link);
+  text-decoration: none;
+}
+
+.widget__link:hover {
+  opacity: 0.8;
+}
+
+================================================================================
+SECTION 7: CUSTOMIZER NAVIGATION GUIDE
+================================================================================
+
+Access these settings from:
+WordPress Dashboard > Appearance > Customize > Theme Settings
+
+Header Layout (Priority 20)
+  - Header layout style
+  - Header content page (blocks)
+  - Sticky header
+  - Full-width header
+  - Navigation link style
+  - CTA button text / URL
+  - Logo max height (px)
+
+Footer Layout (Priority 21)
+  - Footer variant
+  - Footer content page (blocks)
+  - Footer C: Enable CTA panel
+  - Footer C CTA fields (kicker, title, buttons, etc.)
+  - Footer columns (widgets)
+
+Site Width (Priority 23)
+  - Site content max width (px)
+
+Block Spacing (Priority 24)
+  - Vertical spacing scale
+  - Block inner spacing
+
+Border Radius (Priority 25)
+  - Radius style (Sharp/Soft/Round)
+
+Typography (Priority 26)
+  - Heading font (serif) - file upload
+  - Body font (sans-serif) - file upload
+  - Body font size
+  - H1 font size
+  - H2 font size
+  - H3 font size
+
+Theme Palette (Priority 27)
+  - Primary
+  - Background
+  - Heading text
+  - Body text
+  - Footer section:
+    - Footer background
+    - Legal text
+    - Footer widget title
+    - Footer widget text
+    - Footer widget link
+  - Widgets section:
+    - Widget background
+    - Widget title
+    - Widget text
+    - Widget link
+  - Navigation section:
+    - Nav parent link
+    - Nav link hover/active
+    - Dropdown background
+    - Dropdown link
+    - Dropdown link hover background
+
+Cards & Grid (Priority 28)
+  - Card Background
+  - Card Heading
+  - Card Text
+  - Card Muted Text
+  - Projects: initial items
+  - Blog: initial items
+
+Footer Column Widgets (Priority 50+)
+  - Sidebar widget areas for footer columns
+
+Need Help? (Priority 200)
+  - Support and contact information
+
+================================================================================
+NOTES FOR DEVELOPERS
+================================================================================
+
+1. RESPONSIVE TYPOGRAPHY
+   Use the -mobile and -desktop variants to apply different sizes on mobile
+   and desktop. Media queries are your responsibility in block CSS.
+
+2. COLOR CALCULATIONS
+   The --color-nav-toggle variable is automatically calculated to ensure
+   contrast with the surface color. Don't hardcode this value.
+
+3. SPACING FLEXIBILITY
+   The --block-padding variable changes globally. Blocks don't need
+   media-specific padding variables; this is already handled.
+
+4. RADIUS CONSISTENCY
+   All rounded elements should use the radius variables, not hardcoded values.
+   This ensures the theme maintains consistency when users change the
+   Border Radius style.
+
+5. CSS CUSTOM PROPERTIES FALLBACKS
+   Always include fallback values in case a variable isn't set:
+   color: var(--color-primary, #f97316);
+
+6. OUTPUTTING VARIABLES IN BLOCKS
+   The customizer automatically outputs these as CSS custom properties in
+   wp_head. No additional PHP is needed to access them in block CSS files.
+
+7. CONTAINER CONSTRAINTS
+   Use --site-max-width with flex/grid and add padding (gutters) as needed.
+   Don't assume the full viewport width without padding.
+
+================================================================================
+END OF REFERENCE
+================================================================================
+
+Last Updated: January 10, 2026
+For questions, refer to:
+  - app/customizer/register.php (settings & controls)
+  - app/customizer/vars.php (CSS variable builder)
+  - app/customizer/defaults.php (defaults & presets)

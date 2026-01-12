@@ -18,7 +18,7 @@
     <div class="grid gap-8 {{ $grid_class }}">
       @for ($i = 1; $i <= $footer_columns; $i++)
         @if (is_active_sidebar("sidebar-footer-{$i}"))
-          <div class="footer-column text-sm text-slate-200/80">
+          <div class="footer-column text-sm">
             @php(dynamic_sidebar("sidebar-footer-{$i}"))
           </div>
         @endif
@@ -26,7 +26,7 @@
     </div>
 
     {{-- Optional bottom bar --}}
-    <div class="mt-8 pt-4 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400">
+    <div class="mt-8 pt-4 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
       <div>
         &copy; {{ date('Y') }} {{ get_bloginfo('name') }}
       </div>
